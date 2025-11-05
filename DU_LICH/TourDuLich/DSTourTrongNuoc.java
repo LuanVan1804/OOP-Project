@@ -54,11 +54,11 @@ public class DSTourTrongNuoc {
     }
 
     // Kiểm tra mã thành phố có hợp lệ trong quốc gia nội địa
-    private boolean isValidCityCode(int maThanhPho) {
+    private boolean isValidCityCode(String maThanhPho) {
         QuocGia domesticCountry = getDomesticCountry();
         if (domesticCountry == null) return false;
         for (ThanhPho city : domesticCountry.getListTPhos()) {
-            if (city.getMaTPho() == maThanhPho) {
+            if (city.getMaTPho() != null && city.getMaTPho().equals(maThanhPho)) {
                 return true;
             }
         }
@@ -84,8 +84,7 @@ public class DSTourTrongNuoc {
         while (!isMaTourUnique(tour.getMaTour())) {
             System.out.println("Ma tour da ton tai. Vui long nhap ma tour khac:");
             System.out.print("Nhap Ma Tour: ");
-            int newMa = sc.nextInt();
-            sc.nextLine();
+            String newMa = sc.nextLine();
             tour.setMaTour(newMa);
         }
 
@@ -93,8 +92,7 @@ public class DSTourTrongNuoc {
         while (!isValidCityCode(tour.getMaThanhPho())) {
             System.out.println("Ma thanh pho khong hop le! Vui long chon lai tu danh sach tren:");
             System.out.print("Nhap Ma Thanh Pho: ");
-            tour.setMaThanhPho(sc.nextInt());
-            sc.nextLine();
+            tour.setMaThanhPho(sc.nextLine());
         }
 
         // Thêm tour vào danh sách
@@ -104,10 +102,11 @@ public class DSTourTrongNuoc {
     }
 
     // Xóa tour theo mã tour
-    public void xoaTour(int maTour) {
+    public void xoaTour(String maTour) {
+        // Kiểm tra mã tour có tồn tại trong danh sách không
         int index = -1;
         for (int i = 0; i < soLuongTour; i++) {
-            if (list[i].getMaTour() == maTour) {
+            if (list[i].getMaTour() != null && list[i].getMaTour().equals(maTour)) {
                 index = i;
                 break;
             }
@@ -128,10 +127,10 @@ public class DSTourTrongNuoc {
     }
 
     // Chỉnh sửa tour theo mã tour
-    public void chinhSuaTour(int maTour) {
+    public void chinhSuaTour(String maTour) {
         int index = -1;
         for (int i = 0; i < soLuongTour; i++) {
-            if (list[i].getMaTour() == maTour) {
+            if (list[i].getMaTour() != null && list[i].getMaTour().equals(maTour)) {
                 index = i;
                 break;
             }
@@ -154,12 +153,19 @@ public class DSTourTrongNuoc {
         TourTrongNuoc newTour = new TourTrongNuoc();
         newTour.nhapThongTin();
 
+        // Kiểm tra mã tour phải là duy nhất
+        while (!isMaTourUnique(newTour.getMaTour())) {
+            System.out.println("Ma tour da ton tai. Vui long nhap ma tour khac:");
+            System.out.print("Nhap Ma Tour: ");
+            String newMa = sc.nextLine();
+            newTour.setMaTour(newMa);
+        }
+
         // Kiểm tra mã thành phố hợp lệ
         while (!isValidCityCode(newTour.getMaThanhPho())) {
             System.out.println("Ma thanh pho khong hop le! Vui long chon lai tu danh sach tren:");
             System.out.print("Nhap Ma Thanh Pho: ");
-            newTour.setMaThanhPho(sc.nextInt());
-            sc.nextLine();
+            newTour.setMaThanhPho(sc.nextLine());
         }
 
         // Cập nhật tour
@@ -186,10 +192,9 @@ public class DSTourTrongNuoc {
     //tim kiem tour theo ma
     public void timKiemTheoMa(){
         System.out.print("Nhap ma can tim: ");
-        int maCanTim = sc.nextInt();
-        sc.nextLine();
+        String maCanTim = sc.nextLine();
         for (int i=0; i<soLuongTour; i++){
-            if (maCanTim == list[i].getMaTour()) {
+            if (list[i].getMaTour() != null && list[i].getMaTour().equals(maCanTim)) {
                 list[i].hienThiThongTin();
                 return;
             }
@@ -241,15 +246,14 @@ public class DSTourTrongNuoc {
                 if (line.isEmpty()) continue;
                 String[] parts = line.split(",");
                 if (parts.length < 8) continue; // invalid line
-                int maTour = safeParseInt(parts[0].trim(), 0);
+                String maTour = parts[0].trim();
                 String tenTour = parts[1].trim().replace(";", ",");
                 int soNgay = safeParseInt(parts[2].trim(), 0);
                 double donGia = safeParseDouble(parts[3].trim(), 0.0);
-                int maThanhPho = safeParseInt(parts[4].trim(), 0);
+                String maThanhPho = parts[4].trim();
                 String diaDiemDen = parts[5].trim().replace(";", ",");
                 String diaDiemDi = parts[6].trim().replace(";", ",");
                 double phiDichVu = safeParseDouble(parts[7].trim(), 0.0);
-
                 TourTrongNuoc t = new TourTrongNuoc(maTour, tenTour, soNgay, donGia, maThanhPho, diaDiemDen, diaDiemDi, phiDichVu);
                 if (soLuongTour < list.length) {
                     list[soLuongTour++] = t;
@@ -297,9 +301,10 @@ public class DSTourTrongNuoc {
     }
 
     // Kiểm tra mã tour có duy nhất trong danh sách hiện tại hay không
-    private boolean isMaTourUnique(int maTour) {
+    private boolean isMaTourUnique(String maTour) {
+        if (maTour == null) return false;
         for (int i = 0; i < soLuongTour; i++) {
-            if (list[i] != null && list[i].getMaTour() == maTour) {
+            if (list[i] != null && maTour.equals(list[i].getMaTour())) {
                 return false;
             }
         }
@@ -308,7 +313,7 @@ public class DSTourTrongNuoc {
 
     //Hàm manu quan ly tour trong nuoc
     public static void menuTourTrongNuoc(DSTourTrongNuoc dsTour) {
-        Scanner sc = new Scanner(System.in);
+        // Scanner sc = new Scanner(System.in);
         // Menu để kiểm tra chức năng
         while (true) {
             System.out.println("\n=== Quan ly tour trong nuoc ===");
@@ -331,14 +336,12 @@ public class DSTourTrongNuoc {
                     break;
                 case 2:
                     System.out.print("Nhap ma tour can xoa: ");
-                    int maTourXoa = sc.nextInt();
-                    sc.nextLine(); // Tránh lỗi nhập liệu
+                    String maTourXoa = sc.nextLine();
                     dsTour.xoaTour(maTourXoa);
                     break;
                 case 3:
                     System.out.print("Nhap ma tour can chinh sua: ");
-                    int maTourSua = sc.nextInt();
-                    sc.nextLine();
+                    String maTourSua = sc.nextLine();
                     dsTour.chinhSuaTour(maTourSua);
                     break;
                 case 4:

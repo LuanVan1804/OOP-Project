@@ -1,0 +1,15 @@
+NH01;Huong Bien Restaurant;Combo Hai san tuoi song;450000
+NH02;Am Thuc Hoa Sen;Combo Com Viet truyen thong;320000
+NH03;Lau Song Hong;Combo Lau Thai chua cay;380000
+NH04;BBQ Pho Nui;Combo Nuong khong khoi;520000
+NH05;Nha Hang Tre Viet;Combo Ga ta hap muoi;400000
+NH06;Hai San Bien Vang;Combo Tom hum nuong bo toi;650000
+NH07;Quan Mat Troi;Combo Thit nuong Han Quoc;480000
+NH08;Am Thuc Ha Thanh;Combo Pho bo va nem cuon;300000
+NH09;Tokyo Sushi Bar;Combo Sushi & Sashimi;750000
+NH10;Bangkok Taste;Combo Lau Tomyum truyen thong;550000
+NH11;Singapore Kitchen;Combo Chao ech & mi cay;500000
+NH12;Paris Le Dîner;Combo Bo beefsteak và ruou vang;950000
+NH13;Sydney Grill House;Combo Hai san nuong Uc;880000
+NH14;New York Deli;Combo Burger My & khoai chien;620000
+NH15;Seoul Sky BBQ;Combo Thtt nuong kieu Han;700000

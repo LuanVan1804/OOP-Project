@@ -29,17 +29,13 @@ public class DSThanhPho {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
-                String[] parts = line.split(",");
+                String[] parts = line.split(",", 3);
                 if (parts.length < 3) continue;
-                // kiểm tra phần mã quốc gia và mã thành phố có phải số không
-                try {
-                    Integer.parseInt(parts[0].trim());
-                    Integer.parseInt(parts[1].trim());
-                    count++;
-                } catch (NumberFormatException ex) {
-                    // skip invalid
-                    continue;
-                }
+                String country = parts[0].trim();
+                String city = parts[1].trim();
+                String name = parts[2].trim();
+                if (country.isEmpty() || city.isEmpty() || name.isEmpty()) continue;
+                count++;
             }
         }
 
@@ -56,17 +52,13 @@ public class DSThanhPho {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
-                String[] parts = line.split(",");
+                String[] parts = line.split(",", 3);
                 if (parts.length < 3) continue;
-                try {
-                    int countryCode = Integer.parseInt(parts[0].trim());
-                    int cityCode = Integer.parseInt(parts[1].trim());
-                    String cityName = parts[2].trim();
-                    tp[idx++] = new ThanhPho(countryCode, cityCode, cityName);
-                } catch (NumberFormatException ex) {
-                    // skip invalid
-                    continue;
-                }
+                String countryCode = parts[0].trim();
+                String cityCode = parts[1].trim();
+                String cityName = parts[2].trim();
+                if (countryCode.isEmpty() || cityCode.isEmpty() || cityName.isEmpty()) continue;
+                tp[idx++] = new ThanhPho(countryCode, cityCode, cityName);
             }
         }
         // gán mảng vào danh sách
@@ -74,18 +66,18 @@ public class DSThanhPho {
         return ds;
     }
     // hàm lấy danh sách thành phố theo mã quốc gia
-    public ThanhPho[] getCitiesByCountry(int countryCode) {
+    public ThanhPho[] getCitiesByCountry(String countryCode) {
         if (list == null || list.length == 0) return new ThanhPho[0];
         // đếm số thành phố thuộc quốc gia đó
         int c = 0;
         for (int i = 0; i < list.length; i++) {
-            if (list[i] != null && list[i].getMaQuocGia() == countryCode) c++;
+            if (list[i] != null && countryCode.equals(list[i].getMaQuocGia())) c++;
         }
         if (c == 0) return new ThanhPho[0];
         ThanhPho[] res = new ThanhPho[c];
         int j = 0;
         for (int i = 0; i < list.length; i++) {
-            if (list[i] != null && list[i].getMaQuocGia() == countryCode) {
+            if (list[i] != null && countryCode.equals(list[i].getMaQuocGia())) {
                 res[j++] = list[i];
             }
         }

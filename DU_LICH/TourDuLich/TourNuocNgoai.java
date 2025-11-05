@@ -10,7 +10,7 @@ public class TourNuocNgoai extends Tour {
         this.donViTienTe = "";
     }
 
-    public TourNuocNgoai(int maTour, String tenTour, int soNgay, double donGia, int maThanhPho, 
+    public TourNuocNgoai(String maTour, String tenTour, int soNgay, double donGia, String maThanhPho, 
                          String diaDiemDen, String diaDiemDi, double visa, String donViTienTe) {
         super(maTour, tenTour, soNgay, donGia, maThanhPho, diaDiemDen, diaDiemDi);
         this.visa = visa;
@@ -42,7 +42,7 @@ public class TourNuocNgoai extends Tour {
     public void nhapThongTin() {
         // Nhập các trường cơ bản
         System.out.print("Nhap Ma Tour: ");
-        maTour = sc.nextInt(); sc.nextLine();
+        maTour = sc.nextLine();
         System.out.print("Nhap Ten Tour: ");
         tenTour = sc.nextLine();
         System.out.print("Nhap So Ngay: ");
@@ -50,7 +50,7 @@ public class TourNuocNgoai extends Tour {
         System.out.print("Nhap Don Gia: ");
         donGia = sc.nextDouble(); sc.nextLine();
         System.out.print("Nhap Ma Thanh Pho: ");
-        maThanhPho = sc.nextInt(); sc.nextLine();
+        maThanhPho = sc.nextLine();
         System.out.print("Nhap Dia Diem Den: ");
         diaDiemDen = sc.nextLine();
         System.out.print("Nhap Dia Diem Di: ");

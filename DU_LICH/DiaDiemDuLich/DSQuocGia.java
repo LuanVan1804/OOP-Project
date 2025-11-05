@@ -29,13 +29,11 @@ public class DSQuocGia {
             while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
-                String[] parts = line.split(",");   
+                String[] parts = line.split(",", 2);
                 if (parts.length < 2) continue;
-                String first = parts[0].trim();
-                String second = parts[1].trim();
-                if (first.matches("\\d+") || second.matches("\\d+")) {
-                    count++;
-                }
+                String ma = parts[0].trim();
+                String name = parts[1].trim();
+                if (!ma.isEmpty() && !name.isEmpty()) count++;
             }
         }
 
@@ -48,21 +46,10 @@ public class DSQuocGia {
                 while ((line = br.readLine()) != null) {
                     line = line.trim();
                     if (line.isEmpty()) continue;
-                    String[] parts = line.split(",");
+                    String[] parts = line.split(",", 2);
                     if (parts.length < 2) continue;
-                    String first = parts[0].trim();
-                    String second = parts[1].trim();
-                    int ma;
-                    String name;
-                    if (first.matches("\\d+")) {
-                        ma = Integer.parseInt(first);
-                        name = second;
-                    } else if (second.matches("\\d+")) {
-                        ma = Integer.parseInt(second);
-                        name = first;
-                    } else {
-                        continue;
-                    }
+                    String ma = parts[0].trim();
+                    String name = parts[1].trim();
                     QuocGia q = new QuocGia(name, ma);
                     q.setListTPhos(new ThanhPho[0]);
                     countries[idx++] = q;

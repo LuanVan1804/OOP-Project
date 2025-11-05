@@ -1,6 +1,6 @@
 
 
-package DU_LICH;
+package DU_LICH.NH_KS_PT;
 
 public class PhuongTien {
     int maPTien;

@@ -1,5 +1,8 @@
 package DU_LICH;
 import java.sql.Date;
+
+import DU_LICH.NH_KS_PT.KhachSan;
+import DU_LICH.NH_KS_PT.NhaHang;
 public class ChiPhiKHTour {
     KeHoachTour keHoachTour;
     Date ngay;

@@ -1,6 +1,5 @@
 package DU_LICH;
 
-    
 public class ChiTietHD {
     private HoaDon hoaDon;
     private KeHoachTour keHoachTour;

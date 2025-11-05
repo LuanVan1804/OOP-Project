@@ -8,7 +8,7 @@ public class TourTrongNuoc extends Tour {
         this.phiDichVu = 0.0;
     }
 
-    public TourTrongNuoc(int maTour, String tenTour, int soNgay, double donGia, int maThanhPho,
+    public TourTrongNuoc(String maTour, String tenTour, int soNgay, double donGia, String maThanhPho,
                          String diaDiemDen, String diaDiemDi, double phiDichVu) {
         super(maTour, tenTour, soNgay, donGia, maThanhPho, diaDiemDen, diaDiemDi);
         this.phiDichVu = phiDichVu;
@@ -35,7 +35,7 @@ public class TourTrongNuoc extends Tour {
     public void nhapThongTin() {
         // Nhập các trường cơ bản
         System.out.print("Nhap Ma Tour: ");
-        maTour = sc.nextInt(); sc.nextLine();
+        maTour = sc.nextLine();
         System.out.print("Nhap Ten Tour: ");
         tenTour = sc.nextLine();
         System.out.print("Nhap So Ngay: ");
@@ -43,7 +43,7 @@ public class TourTrongNuoc extends Tour {
         System.out.print("Nhap Don Gia: ");
         donGia = sc.nextDouble(); sc.nextLine();
         System.out.print("Nhap Ma Thanh Pho: ");
-        maThanhPho = sc.nextInt(); sc.nextLine();
+        maThanhPho = sc.nextLine();
         System.out.print("Nhap Dia Diem Den: ");
         diaDiemDen = sc.nextLine();
         System.out.print("Nhap Dia Diem Di: ");
