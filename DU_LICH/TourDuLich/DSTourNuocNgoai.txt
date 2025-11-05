@@ -1,0 +1,2 @@
+201,TourBeijing,5,4500000.0,0,10,Beijing,Shanghai,500.0,USD
+202,TourBangkok,4,3200000.0,0,11,Bangkok,Phuket,100.0,THB

@@ -1,0 +1,2 @@
+101,DuLichHaNoi,3,1500000.0,1,Hanoi,HoChiMinh,200000.0
+102,BienDaNang,4,1800000.0,3,DaNang,HoChiMinh,250000.0
