@@ -1,5 +1,7 @@
 package DU_LICH;
 
+import DU_LICH.Nguoi.KhachHang;
+
 public class ChiTietHD {
     private HoaDon hoaDon;
     private KeHoachTour keHoachTour;

@@ -3,16 +3,20 @@ package DU_LICH.TourDuLich;
 public class TourNuocNgoai extends Tour {
     private double visa;
     private String donViTienTe;
+    private String maQuocGia;
 
     public TourNuocNgoai() {
         super();
         this.visa = 0.0;
         this.donViTienTe = "";
+        this.maQuocGia = "";
     }
 
-    public TourNuocNgoai(String maTour, String tenTour, int soNgay, double donGia, String maThanhPho, 
-                         String diaDiemDen, String diaDiemDi, double visa, String donViTienTe) {
+    // New constructor includes maQuocGia for foreign tours
+    public TourNuocNgoai(String maTour, String tenTour, int soNgay, double donGia, String maQuocGia,
+                         String maThanhPho, String diaDiemDen, String diaDiemDi, double visa, String donViTienTe) {
         super(maTour, tenTour, soNgay, donGia, maThanhPho, diaDiemDen, diaDiemDi);
+        this.maQuocGia = maQuocGia;
         this.visa = visa;
         this.donViTienTe = donViTienTe;
     }
@@ -22,6 +26,9 @@ public class TourNuocNgoai extends Tour {
     public String getDonViTienTe() { return donViTienTe; }
     public void setDonViTienTe(String donViTienTe) { this.donViTienTe = donViTienTe; }
 
+    public String getMaQuocGia() { return maQuocGia; }
+    public void setMaQuocGia(String maQuocGia) { this.maQuocGia = maQuocGia; }
+
     @Override
     public void hienThiThongTin() {
         // Hiển thị thông tin cơ bản của Tour (Tour không còn triển khai phương thức này),
@@ -30,6 +37,7 @@ public class TourNuocNgoai extends Tour {
         System.out.println("Ten Tour: " + tenTour);
         System.out.println("So Ngay: " + soNgay);
         System.out.println("Don Gia: " + donGia);
+        System.out.println("Ma Quoc Gia: " + maQuocGia);
         System.out.println("Ma Thanh Pho: " + maThanhPho);
         System.out.println("Dia Diem Den: " + diaDiemDen);
         System.out.println("Dia Diem Di: " + diaDiemDi);

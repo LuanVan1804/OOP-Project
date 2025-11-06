@@ -2,6 +2,7 @@ package DU_LICH.NH_KS_PT;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -142,7 +143,7 @@ public class DSKhachSan {
         if (ks == null) return false;
         System.out.println("De trong va nhan Enter neu muon giu nguyen.");
 
-        System.out.print("TTen khach san hien tai (" + ks.getTenKhachSan() + "): ");
+        System.out.print("Ten khach san hien tai (" + ks.getTenKhachSan() + "): ");
         String ten = sc.nextLine();
         if (!ten.trim().isEmpty()) ks.setTenKhachSan(ten.trim());
 
@@ -167,136 +168,118 @@ public class DSKhachSan {
     }
 
     // ================== ĐỌC / GHI FILE ==================
-    // Định dạng dòng: ma;ten;dd/MM/yyyy;dd/MM/yyyy;gia
+    // Định dạng dòng: ma,ten,dd/MM/yyyy,dd/MM/yyyy,gia
     public int docFile(String filePath) {
         int dem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            soLuong = 0;
             String line;
-            // Reset danh sách trước khi đọc
-            this.soLuong = 0;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-                String[] parts = line.split(";");
-                if (parts.length < 5) {
-                    System.out.println("Bo qua dong khong hop le: " + line);
-                    continue;
-                }
+            while ((line = br.readLine()) != null && soLuong < dsKhachSan.length) {
+                String[] p = line.split(",");
                 try {
-                    KhachSan ks = new KhachSan();
-                    ks.setMaKhachSan(parts[0].trim());
-                    ks.setTenKhachSan(parts[1].trim());
-                    ks.setNgayDen(parseDate(parts[2].trim()));
-                    ks.setNgayDi(parseDate(parts[3].trim()));
-                    ks.setGiaDatPhong(Double.parseDouble(parts[4].trim()));
+                    KhachSan ks = new KhachSan(
+                        p[0].trim(),
+                        p[1].trim(),
+                        parseDate(p[2].trim()),
+                        parseDate(p[3].trim()),
+                        Double.parseDouble(p[4].trim())
+                    );
                     if (them(ks)) dem++;
-                } catch (Exception ex) {
-                    System.out.println("LLoi phan tich dong: " + line + " -> " + ex.getMessage());
+                } catch (Exception e) {
+                    System.out.println("Loi dinh dang du lieu trong file: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
-            System.out.println("Khong the doc file: " + e.getMessage());
+            System.out.println("Không thể đọc file: " + e.getMessage());
         }
         return dem;
     }
 
     public int ghiFile(String filePath) {
         int dem = 0;
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(filePath))) {
+        File f = new File(filePath);
+        if (f.getParentFile() != null) f.getParentFile().mkdirs();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             for (int i = 0; i < soLuong; i++) {
                 KhachSan ks = dsKhachSan[i];
-                if (ks == null) continue;
-                String dong = String.join(";",
-                        ks.getMaKhachSan(),
-                        ks.getTenKhachSan(),
-                        formatDate(ks.getNgayDen()),
-                        formatDate(ks.getNgayDi()),
-                        String.valueOf(ks.getGiaDatPhong())
-                );
-                bw.write(dong);
+                bw.write(String.join(",",
+                    ks.getMaKhachSan(),
+                    ks.getTenKhachSan(),
+                    formatDate(ks.getNgayDen()),
+                    formatDate(ks.getNgayDi()),
+                    String.valueOf(ks.getGiaDatPhong())
+                ));
                 bw.newLine();
                 dem++;
             }
         } catch (IOException e) {
-            System.out.println("Khong the ghi file: " + e.getMessage());
+            System.out.println("Không thể ghi file: " + e.getMessage());
         }
         return dem;
     }
 
-    // ================== MENU TƯƠNG TÁC ==================
-    public void menu() {
-        Scanner sc = new Scanner(System.in);
-        String macDinh = "DU_LICH\\NH_KS_PT\\KhachSan.txt"; // Dành cho khi chạy từ ổ d:, có thể thay đổi khi cần
-        String duongDan = macDinh;
-        if (!new java.io.File(duongDan).exists()) {
-            // Thử đường dẫn tuyệt đối như trong workspace
-            duongDan = "D:\\DU_LICH\\NH_KS_PT\\KhachSan.txt";
+    // hàm thống kê đơn giản
+    public void thongKeDonGian() {
+        System.out.println("--- Thong ke don gian ---");
+        System.out.println("So luong khach san: " + soLuong);
+        if (soLuong > 0) {
+            double tong = 0.0;
+            int dem = 0;
+            for (int i = 0; i < soLuong; i++) {
+                KhachSan k = dsKhachSan[i];
+                if (k != null) { tong += k.getGiaDatPhong(); dem++; }
+            }
+            double avg = dem == 0 ? 0.0 : (tong / dem);
+            System.out.println("Gia trung binh dat phong: " + avg);
         }
-        int chon;
-        do {
-            System.out.println("\n========= MENU QUAN LY KHACH SAN =========");
-            System.out.println("1. Doc danh sach tu file");
-            System.out.println("2. Ghi danh sach ra file");
-            System.out.println("3. Xem danh sach khach san");
-            System.out.println("4. Them khach san");
-            System.out.println("5. Xoa khach san theo ma");
-            System.out.println("6. Sua thong tin khach san theo ma");
-            System.out.println("7. Tim kiem theo ma");
-            System.out.println("8. Tim kiem theo ten (chua tu khoa)");
+    }
+
+    // ================== MENU TƯƠNG TÁC ==================
+    public void menu(String providedPath) {
+        Scanner sc = new Scanner(System.in);
+        while (true) {
+            System.out.println("\n===== MENU QUAN LY KHACH SAN =====");
+            System.out.println("1. Them");
+            System.out.println("2. Sua");
+            System.out.println("3. Xoa");
+            System.out.println("4. Tim kiem theo ten");
+            System.out.println("5. Tim kiem theo ma");
+            System.out.println("6. Thong ke don gian");
+            System.out.println("7. Hien thi danh sach");
             System.out.println("0. Thoat");
             System.out.print("Chon: ");
 
-            while (!sc.hasNextInt()) { System.out.print("Vui long nhap so: "); sc.nextLine(); }
-            chon = sc.nextInt(); sc.nextLine();
+            int chon = sc.nextInt(); 
+            sc.nextLine();
 
             switch (chon) {
-                case 1: {
-                    System.out.print("Nhap duong dan file (Enter de dung mac dinh: " + duongDan + "): ");
-                    String p = sc.nextLine().trim();
-                    if (!p.isEmpty()) duongDan = p;
-                    int n = docFile(duongDan);
-                    System.out.println("Da doc " + n + " dong hop le.");
-                    break;
-                }
-                case 2: {
-                    System.out.print("Nhap duong dan file (Enter de dung mac dinh: " + duongDan + "): ");
-                    String p = sc.nextLine().trim();
-                    if (!p.isEmpty()) duongDan = p;
-                    int n = ghiFile(duongDan);
-                    System.out.println("Da ghi " + n + " dong.");
-                    break;
-                }
-                case 3: {
-                    xuatDanhSach();
-                    break;
-                }
-                case 4: {
+                case 1: { // Them
                     KhachSan ks = new KhachSan();
                     ks.nhap(sc);
                     if (them(ks)) System.out.println("Them thanh cong!");
                     break;
                 }
-                case 5: {
-                    System.out.print("Nhap ma can xoa: ");
+                case 2: { // Sua
+                    System.out.print("Nhap ma khach san can sua: ");
                     String ma = sc.nextLine();
-                    if (xoaTheoMa(ma)) System.out.println("Da xoa!"); else System.out.println("Khong tim thay ma.");
+                    if (suaTheoMaTuBanPhim(ma, sc)) 
+                        System.out.println("Da cap nhat!"); 
+                    else 
+                        System.out.println("Khong tim thay ma.");
                     break;
                 }
-                case 6: {
-                    System.out.print("Nhap ma can sua: ");
+                case 3: { // Xoa
+                    System.out.print("Nhap ma khach san can xoa: ");
                     String ma = sc.nextLine();
-                    if (suaTheoMaTuBanPhim(ma, sc)) System.out.println("Da cap nhat!"); else System.out.println("Khong tim thay ma.");
+                    if (xoaTheoMa(ma)) 
+                        System.out.println("Da xoa!"); 
+                    else 
+                        System.out.println("Khong tim thay ma.");
                     break;
                 }
-                case 7: {
-                    System.out.print("Nhap ma can tim: ");
-                    String ma = sc.nextLine();
-                    KhachSan ks = timTheoMa(ma);
-                    if (ks == null) System.out.println("Khong tim thay."); else ks.xuat();
-                    break;
-                }
-                case 8: {
-                    System.out.print("Nhap tu khoa ten: ");
+                case 4: { // Tim kiem theo ten
+                    System.out.print("Nhap tu khoa tim theo ten: ");
                     String tk = sc.nextLine();
                     KhachSan[] kq = new KhachSan[soLuong];
                     int n = timTheoTen(tk, kq);
@@ -309,12 +292,27 @@ public class DSKhachSan {
                     }
                     break;
                 }
-                case 0: {
+                case 5: { // Tim kiem theo ma
+                    System.out.print("Nhap ma can tim: ");
+                    String ma = sc.nextLine();
+                    KhachSan ks = timTheoMa(ma);
+                    if (ks == null) System.out.println("Khong tim thay."); else ks.xuat();
                     break;
                 }
-                default:
-                    System.out.println("Lua chon khong hop le.");
+                case 6: { // Thong ke don gian
+                    thongKeDonGian();
+                    break;
+                }
+                case 7: { // Hien thi danh sach
+                    xuatDanhSach();
+                    break;
+                }
+                case 0: { // Thoat -> luu file
+                    ghiFile("D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt");
+                    return;
+                }
+                default: System.out.println("Lua chon khong hop le.");
             }
-        } while (chon != 0);
+        }
     }
 }

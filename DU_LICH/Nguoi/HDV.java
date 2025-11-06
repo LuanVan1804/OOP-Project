@@ -1,4 +1,6 @@
-package DU_LICH;
+package DU_LICH.Nguoi;
+
+import java.util.Scanner;
 
 public class HDV {
     int maHDV;
@@ -59,5 +61,26 @@ public class HDV {
     public void setKinhNghiem(double kinhNghiem) {
         this.kinhNghiem = kinhNghiem;
     }
-    
+
+   @Override
+    public String toString() {
+        return String.format("HDV [Ma: %d, Ten: %s, SDT: %s, CCCD: %s, GT: %s, KN: %.1f nam]",
+                maHDV, tenHDV, soDienThoai, CCCD, gioiTinh, kinhNghiem);
+    }
+
+    public void nhapThongTinHDV(){
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Nhap ma HDV: ");
+        this.maHDV = Integer.parseInt(sc.nextLine());
+        System.out.print("Nhap ten HDV: ");
+        this.tenHDV = sc.nextLine();
+        System.out.print("Nhap so dien thoai: ");
+        this.soDienThoai = sc.nextLine();
+        System.out.print("Nhap CCCD: ");
+        this.CCCD = sc.nextLine();
+        System.out.print("Nhap gioi tinh: ");
+        this.gioiTinh = sc.nextLine();
+        System.out.print("Nhap kinh nghiem (nam): ");
+        this.kinhNghiem = Double.parseDouble(sc.nextLine());
+    }
 }

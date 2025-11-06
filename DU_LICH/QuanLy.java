@@ -1,11 +1,19 @@
 package DU_LICH;
 
-public interface QuanLy<T>
-{
-    void them(T item);
-    void xoa (int item);
-    void sua (T item);
-    T[] danhSach();
+import java.io.IOException;
+
+public interface QuanLy<T> {
+    void loadFromFile(String fileName) throws IOException;
+
+    boolean MaDuyNhat(int ma);
+
+    void saveToFile(String fileName) throws IOException;
+
+    void them(T obj);
+
+    void sua(int maHDV);
+
+    void xoa(int maHDV);
 }
 
 

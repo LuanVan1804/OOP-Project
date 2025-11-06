@@ -10,6 +10,10 @@ import DU_LICH.DiaDiemDuLich.DSQuocGia;
 import DU_LICH.DiaDiemDuLich.DSThanhPho;
 import DU_LICH.DiaDiemDuLich.QuocGia;
 import DU_LICH.DiaDiemDuLich.ThanhPho;
+import DU_LICH.NH_KS_PT.DSKhachSan;
+import DU_LICH.NH_KS_PT.DSNhaHang;
+import DU_LICH.Nguoi.DSHDV;
+import DU_LICH.Nguoi.DSKhachHang;
 
 
 public class Main {
@@ -46,15 +50,54 @@ public class Main {
         // Tạo các bộ quản lý tour (sử dụng DSQuocGia đã load)
         DSTourTrongNuoc dsTrong = new DSTourTrongNuoc(dsQuocGia);
         DSTourNuocNgoai dsNgoai = new DSTourNuocNgoai(dsQuocGia);
+        String dsTrongPath = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourTrongNuoc.txt";
+        String dsNgoaiPath = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourNuocNgoai.txt";
 
-        // Load dữ liệu tour từ file
+        // Load dữ liệu tour từ file TourTrongNuoc.txt và TourNuocNgoai.txt
         try {
-            dsTrong.loadFromFile("D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourTrongNuoc.txt");
-        } catch (IOException e) { /* ignore */ }
+            dsTrong.loadFromFile(dsTrongPath);
+        } catch (IOException e) { 
+            System.out.println("Loi doc DSTourTrongNuoc.txt: " + e.getMessage()); 
+        }
+        try {
+            dsNgoai.loadFromFile(dsNgoaiPath);
+        } catch (IOException e) { 
+            System.out.println("Loi doc DSTourNuocNgoai.txt: " + e.getMessage()); 
+        }
+        
+        // Load dữ liệu từ file KhachSan.txt, NhaHang.txt, PhuongTien.txt
+        DSKhachSan dsKhachSan = new DSKhachSan();
+        DSNhaHang dsNhaHang = new DSNhaHang();
+        String khachSanPath = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt";
+        String nhaHangPath = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\NhaHang.txt";
+        try {
+            dsKhachSan.docFile(khachSanPath);
+        } catch (Exception ex) {
+            System.out.println("Loi doc KhachSan.txt: " + ex.getMessage());
+        }
+        try {
+            dsNhaHang.docFile(nhaHangPath);
+        } catch (Exception ex) {
+            System.out.println("Loi doc NhaHang.txt: " + ex.getMessage());
+        }
+        // Load dữ liệu từ file KhachHang.txt
+        DSKhachHang dsKhachHang = new DSKhachHang();
+        String khachHangPath = "D:\\doanOOP\\DU_LICH\\Nguoi\\KhachHang.txt";
+        try {
+            dsKhachHang.loadFromFile(khachHangPath);
+        } catch (Exception ex) {
+            System.out.println("Loi doc KhachHang.txt: " + ex.getMessage());
+        }
+        // Load dữ liệu từ file HDV.txt
+        DSHDV dsHDV = new DSHDV();
+        String hdvPath = "D:\\doanOOP\\DU_LICH\\Nguoi\\HDV.txt";
+        try {
+            dsHDV.loadFromFile(hdvPath);
+        } catch (Exception ex) {
+            System.out.println("Loi doc HDV.txt: " + ex.getMessage());
+        }
 
-        try {
-            dsNgoai.loadFromFile("D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourNuocNgoai.txt");
-        } catch (IOException e) { /* ignore */ }
+
 
         // Menu chinh
         Scanner sc = new Scanner(System.in);
@@ -62,18 +105,15 @@ public class Main {
             System.out.println("\n=== MENU CHINH ===");
             System.out.println("1. Quan ly tour trong nuoc (menu)");
             System.out.println("2. Quan ly tour nuoc ngoai (menu)");
-            System.out.println("3. Thoat");
-            System.out.print("Chon (1-3): ");
+            System.out.println("3. Quan ly khach san (menu)");
+            System.out.println("4. Quan ly nha hang (menu)");
+            System.out.println("5. Quan ly huong dan vien (menu)");
+            System.out.println("6. Quan ly khach hang (menu)");
+            System.out.println("0. Thoat");
+            System.out.print("Chon chuc nang: ");
 
-            int choice;
-            // Doc lua chon va xu ly ngoai le
-            try {
-                choice = Integer.parseInt(sc.nextLine().trim()); // doc dong va chuyen sang so nguyen
-            } catch (Exception ex) {
-                System.out.println("Lua chon khong hop le. Thu lai.");
-                continue;
-            }
-
+            int choice = sc.nextInt();
+            sc.nextLine();          
             switch (choice) {
                 case 1:
                     // Gọi menu quản lý tour trong nước
@@ -84,12 +124,28 @@ public class Main {
                     DSTourNuocNgoai.menuTourNuocNgoai(dsNgoai);
                     break;
                 case 3:
+                    // Gọi menu quản lý khách sạn 
+                    dsKhachSan.menu(khachSanPath);
+                    break;
+                case 4:
+                    // Gọi menu quản lý nhà hàng
+                    dsNhaHang.menu(nhaHangPath);
+                    break;
+                case 5:
+                    // Gọi menu quản lý huong dan vien
+                    dsHDV.menuHDV(hdvPath);
+                    break;
+                case 6:
+                    // Gọi menu quản lý khách hàng
+                    dsKhachHang.menuKhachHang(khachHangPath);
+                    break;
+                case 0:
                     System.out.println("Thoat chuong trinh. Tam biet!");
                     sc.close();
                     return;
                 default:
-                    System.out.println("Chon tu 1 den 3.");
-            }
+                    System.out.println("Lua chon khong hop le.");
+            }   
         }
     }
 }

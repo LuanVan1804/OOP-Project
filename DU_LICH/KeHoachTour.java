@@ -1,6 +1,7 @@
 package DU_LICH;
 
 import DU_LICH.NH_KS_PT.PhuongTien;
+import DU_LICH.Nguoi.HDV;
 import DU_LICH.TourDuLich.Tour;
 
 public class KeHoachTour {

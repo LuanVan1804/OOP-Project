@@ -1,0 +1,5 @@
+101,Nguyen Binh An,0901,123456789,Nam,2.50
+102,Tran Hoa Binh,0902,987654321,Nu,3.00
+103,Nguyen Chi Nguyen,0903,456789123,Nu,1.80
+104,Nguyen Hong Tham,0921,1234512345,Nu,4.00
+108,Nguyen Van Teo,4444,2222,Nam,6.00

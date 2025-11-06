@@ -235,69 +235,47 @@ public class DSTourTrongNuoc {
 
     // Đọc danh sách tour từ file (mỗi dòng: maTour,tenTour,soNgay,donGia,maThanhPho,diaDiemDen,diaDiemDi,phiDichVu)
     public void loadFromFile(String path) throws IOException {
-        File f = new File(path);
-        if (!f.exists()) return;
-        BufferedReader br = new BufferedReader(new FileReader(f));
-        try {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            soLuongTour = 0;
             String line;
-            soLuongTour = 0; // reset
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-                String[] parts = line.split(",");
-                if (parts.length < 8) continue; // invalid line
-                String maTour = parts[0].trim();
-                String tenTour = parts[1].trim().replace(";", ",");
-                int soNgay = safeParseInt(parts[2].trim(), 0);
-                double donGia = safeParseDouble(parts[3].trim(), 0.0);
-                String maThanhPho = parts[4].trim();
-                String diaDiemDen = parts[5].trim().replace(";", ",");
-                String diaDiemDi = parts[6].trim().replace(";", ",");
-                double phiDichVu = safeParseDouble(parts[7].trim(), 0.0);
-                TourTrongNuoc t = new TourTrongNuoc(maTour, tenTour, soNgay, donGia, maThanhPho, diaDiemDen, diaDiemDi, phiDichVu);
-                if (soLuongTour < list.length) {
-                    list[soLuongTour++] = t;
-                } else {
-                    // array full, stop reading
-                    break;
-                }
+            while ((line = br.readLine()) != null && soLuongTour < list.length) {
+                String[] p = line.split(",");
+                TourTrongNuoc t = new TourTrongNuoc(
+                    p[0].trim(),
+                    p[1].trim(),
+                    Integer.parseInt(p[2].trim()),
+                    Double.parseDouble(p[3].trim()),
+                    p[4].trim(),
+                    p[5].trim(),
+                    p[6].trim(),
+                    Double.parseDouble(p[7].trim())
+                );
+                list[soLuongTour++] = t;
             }
-        } finally {
-            br.close();
         }
     }
 
     // Ghi danh sách tour hiện tại vào file theo định dạng tương tự
     public void saveToFile(String path) throws IOException {
         File f = new File(path);
-        // chắc chắn thư mục cha tồn tại
-        if (f.getParentFile() != null && !f.getParentFile().exists()) {
-            f.getParentFile().mkdirs();
-        }
-        BufferedWriter bw = new BufferedWriter(new FileWriter(f));
-        try {
+        if (f.getParentFile() != null) f.getParentFile().mkdirs();
+
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             for (int i = 0; i < soLuongTour; i++) {
                 TourTrongNuoc t = list[i];
-                if (t == null) continue;
-                String ten = t.getTenTour() == null ? "" : t.getTenTour().replace(",", ";");
-                String den = t.getDiaDiemDen() == null ? "" : t.getDiaDiemDen().replace(",", ";");
-                String di = t.getDiaDiemDi() == null ? "" : t.getDiaDiemDi().replace(",", ";");
-                String line = t.getMaTour() + "," + ten + "," + t.getSoNgay() + "," + t.getDonGia() + "," + t.getMaThanhPho() + "," + den + "," + di + "," + t.getPhiDichVu();
-                bw.write(line);
+                bw.write(String.join(",",
+                    t.getMaTour(),
+                    t.getTenTour(),
+                    String.valueOf(t.getSoNgay()),
+                    String.valueOf(t.getDonGia()),
+                    t.getMaThanhPho(),
+                    t.getDiaDiemDen(),
+                    t.getDiaDiemDi(),
+                    String.valueOf(t.getPhiDichVu())
+                ));
                 bw.newLine();
             }
-            bw.flush();
-        } finally {
-            bw.close();
         }
-    }
-
-    private static int safeParseInt(String s, int fallback) {
-        try { return Integer.parseInt(s); } catch (NumberFormatException e) { return fallback; }
-    }
-
-    private static double safeParseDouble(String s, double fallback) {
-        try { return Double.parseDouble(s); } catch (NumberFormatException e) { return fallback; }
     }
 
     // Kiểm tra mã tour có duy nhất trong danh sách hiện tại hay không
@@ -313,7 +291,6 @@ public class DSTourTrongNuoc {
 
     //Hàm manu quan ly tour trong nuoc
     public static void menuTourTrongNuoc(DSTourTrongNuoc dsTour) {
-        // Scanner sc = new Scanner(System.in);
         // Menu để kiểm tra chức năng
         while (true) {
             System.out.println("\n=== Quan ly tour trong nuoc ===");
@@ -324,8 +301,8 @@ public class DSTourTrongNuoc {
             System.out.println("5. Xem thong ke");
             System.out.println("6. Tim kiem theo ten");
             System.out.println("7. Tim kiem theo ma");
-            System.out.println("8. Thoat");
-            System.out.print("Chon chuc nang (1-8): ");
+            System.out.println("0. Thoat");
+            System.out.print("Chon chuc nang: ");
 
             int choice = sc.nextInt();
             sc.nextLine(); // Xóa bộ đệm dòng
@@ -356,8 +333,7 @@ public class DSTourTrongNuoc {
                 case 7:
                     dsTour.timKiemTheoMa();
                     break;
-                case 8:
-                    // Before exiting, save current list to file
+                case 0:
                     try {
                         dsTour.saveToFile("D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourTrongNuoc.txt");
                     } catch (IOException ex) {

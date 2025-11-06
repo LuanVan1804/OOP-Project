@@ -1,5 +1,8 @@
 package DU_LICH;
 
+import DU_LICH.Nguoi.HDV;
+import DU_LICH.Nguoi.KhachHang;
+
 public class HoaDon {
     int maHD;
     KeHoachTour maKHTour;
