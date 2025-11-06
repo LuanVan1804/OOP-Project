@@ -65,7 +65,18 @@ public class DSTourTrongNuoc {
         return false;
     }
 
-    // Thêm tour trong nước
+     // Kiểm tra mã tour có duy nhất trong danh sách hiện tại hay không
+    private boolean isMaTourUnique(String maTour) {
+        if (maTour == null) return false;
+        for (int i = 0; i < soLuongTour; i++) {
+            if (list[i] != null && maTour.equals(list[i].getMaTour())) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //--------------------- Thêm tour trong nước---------------------------
     public void themTour() {
         if (soLuongTour >= list.length) {
             System.out.println("Danh sach tour da day!");
@@ -83,7 +94,7 @@ public class DSTourTrongNuoc {
         // Kiểm tra mã tour phải là duy nhất
         while (!isMaTourUnique(tour.getMaTour())) {
             System.out.println("Ma tour da ton tai. Vui long nhap ma tour khac:");
-            System.out.print("Nhap Ma Tour: ");
+            System.out.print("Nhap Ma Tour moi: ");
             String newMa = sc.nextLine();
             tour.setMaTour(newMa);
         }
@@ -91,7 +102,7 @@ public class DSTourTrongNuoc {
         // Kiểm tra mã thành phố hợp lệ
         while (!isValidCityCode(tour.getMaThanhPho())) {
             System.out.println("Ma thanh pho khong hop le! Vui long chon lai tu danh sach tren:");
-            System.out.print("Nhap Ma Thanh Pho: ");
+            System.out.print("Nhap Ma Thanh Pho moi: ");
             tour.setMaThanhPho(sc.nextLine());
         }
 
@@ -278,19 +289,13 @@ public class DSTourTrongNuoc {
         }
     }
 
-    // Kiểm tra mã tour có duy nhất trong danh sách hiện tại hay không
-    private boolean isMaTourUnique(String maTour) {
-        if (maTour == null) return false;
-        for (int i = 0; i < soLuongTour; i++) {
-            if (list[i] != null && maTour.equals(list[i].getMaTour())) {
-                return false;
-            }
-        }
-        return true;
-    }
+   
 
-    //Hàm manu quan ly tour trong nuoc
-    public static void menuTourTrongNuoc(DSTourTrongNuoc dsTour) {
+    // Menu quản lý tour trong nước - instance method
+    public void menu() { menu((String) null); }
+
+    public void menu(String providedPath) {
+        String savePath = (providedPath != null && !providedPath.trim().isEmpty()) ? providedPath : "D:\\doanOOP\\\\DU_LICH\\\\TourDuLich\\\\DSTourTrongNuoc.txt";
         // Menu để kiểm tra chức năng
         while (true) {
             System.out.println("\n=== Quan ly tour trong nuoc ===");
@@ -309,33 +314,33 @@ public class DSTourTrongNuoc {
 
             switch (choice) {
                 case 1:
-                    dsTour.themTour();
+                    this.themTour();
                     break;
                 case 2:
                     System.out.print("Nhap ma tour can xoa: ");
                     String maTourXoa = sc.nextLine();
-                    dsTour.xoaTour(maTourXoa);
+                    this.xoaTour(maTourXoa);
                     break;
                 case 3:
                     System.out.print("Nhap ma tour can chinh sua: ");
                     String maTourSua = sc.nextLine();
-                    dsTour.chinhSuaTour(maTourSua);
+                    this.chinhSuaTour(maTourSua);
                     break;
                 case 4:
-                    dsTour.hienThiDanhSachTour();
+                    this.hienThiDanhSachTour();
                     break;
                 case 5:
-                    dsTour.thongKeTourTrongNuoc();
+                    this.thongKeTourTrongNuoc();
                     break;
                 case 6:
-                    dsTour.timKiemTheoTen();
+                    this.timKiemTheoTen();
                     break;
                 case 7:
-                    dsTour.timKiemTheoMa();
+                    this.timKiemTheoMa();
                     break;
                 case 0:
                     try {
-                        dsTour.saveToFile("D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourTrongNuoc.txt");
+                        this.saveToFile(savePath);
                     } catch (IOException ex) {
                         System.out.println("Loi khi luu DSTourTrongNuoc.txt: " + ex.getMessage());
                     }

@@ -240,8 +240,11 @@ public void sua(int maKH) {
             System.out.println("Khong tim thay khach hang de xoa!");
         }
     }
+
+    //instance menu không tham số
+    public void menu() { menu((String) null); }
     // ---------------------- menu khách hàng --------------------
-    public void menuKhachHang(String providedPath) {
+    public void menu(String providedPath) {
         Scanner sc = new Scanner(System.in);
         String savePath = (providedPath != null && !providedPath.trim().isEmpty()) ? providedPath : FILE_PATH;
         int choice;

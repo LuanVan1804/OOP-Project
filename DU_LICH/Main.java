@@ -117,11 +117,11 @@ public class Main {
             switch (choice) {
                 case 1:
                     // Gọi menu quản lý tour trong nước
-                    DSTourTrongNuoc.menuTourTrongNuoc(dsTrong);
+                    dsTrong.menu(dsTrongPath);
                     break;
                 case 2:
                     // Gọi menu quản lý tour nước ngoài
-                    DSTourNuocNgoai.menuTourNuocNgoai(dsNgoai);
+                    dsNgoai.menu(dsNgoaiPath);
                     break;
                 case 3:
                     // Gọi menu quản lý khách sạn 
@@ -133,11 +133,11 @@ public class Main {
                     break;
                 case 5:
                     // Gọi menu quản lý huong dan vien
-                    dsHDV.menuHDV(hdvPath);
+                    dsHDV.menu(hdvPath);
                     break;
                 case 6:
                     // Gọi menu quản lý khách hàng
-                    dsKhachHang.menuKhachHang(khachHangPath);
+                    dsKhachHang.menu(khachHangPath);
                     break;
                 case 0:
                     System.out.println("Thoat chuong trinh. Tam biet!");

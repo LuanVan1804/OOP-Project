@@ -258,8 +258,11 @@ public class DSHDV implements DU_LICH.QuanLy<HDV> {
             System.out.printf("Kinh nghiem: %.1f - So luong HDV: %d%n", kinhNghiemValues[i], dem[i]);
         }
     }
+
+    // instance menu không tham số
+    public void menu() { menu((String) null); }
     // hàm menu tương tác cho HDV
-    public void menuHDV(String providedPath) {
+    public void menu(String providedPath) {
         Scanner sc = new Scanner(System.in);
 
         int chon;

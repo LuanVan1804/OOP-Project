@@ -345,7 +345,13 @@ public class DSTourNuocNgoai {
     }
 
     // Menu quản lý tour nước ngoài
-    public static void menuTourNuocNgoai(DSTourNuocNgoai dsTour) {
+    // Instance-style menu giống DSTourTrongNuoc: cho phép truyền đường dẫn lưu
+    public void menu() { menu((String) null); }
+
+    public void menu(String providedPath) {
+        String defaultPath = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourNuocNgoai.txt";
+        String savePath = (providedPath != null && !providedPath.trim().isEmpty()) ? providedPath : defaultPath;
+
         // Menu để kiểm tra chức năng
         while (true) {
             System.out.println("\n=== Quan ly tour nuoc ngoai ===");
@@ -356,7 +362,7 @@ public class DSTourNuocNgoai {
             System.out.println("5. Thong ke");
             System.out.println("6. Tim kiem theo ten");
             System.out.println("7. Tim kiem theo ma");
-            System.out.println("0. Thoat");
+            System.out.println("0. Thoat (luu thay doi)");
             System.out.print("Chon chuc nang: ");
 
             int choice = sc.nextInt();
@@ -364,30 +370,30 @@ public class DSTourNuocNgoai {
 
             switch (choice) {
                 case 1:
-                    dsTour.themTour();
+                    this.themTour();
                     break;
                 case 2:
-                    dsTour.xoaTour();
+                    this.xoaTour();
                     break;
                 case 3:
-                    dsTour.chinhSuaTour();
+                    this.chinhSuaTour();
                     break;
                 case 4:
-                    dsTour.hienThiDanhSachTour();
+                    this.hienThiDanhSachTour();
                     break;
                 case 5:
-                    dsTour.thongKeTourNuocNgoai();
+                    this.thongKeTourNuocNgoai();
                     break;
                 case 6:
-                    dsTour.timKiemTheoTen();
+                    this.timKiemTheoTen();
                     break;
                 case 7:
-                    dsTour.timKiemTheoMa();
+                    this.timKiemTheoMa();
                     break;
                 case 0:
                     // Before exiting, save current list to file
                     try {
-                        dsTour.saveToFile("D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourNuocNgoai.txt");
+                        this.saveToFile(savePath);
                     } catch (IOException ex) {
                         System.out.println("Loi khi luu DSTourNuocNgoai.txt: " + ex.getMessage());
                     }

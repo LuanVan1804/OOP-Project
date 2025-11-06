@@ -164,6 +164,8 @@ public class DSNhaHang {
         return dem;
     }
 
+    // instance menu không tham số
+    public void menu() { menu((String) null); }
     // hàm menu quản lý nhà hàng
     public void menu(String providedPath) {
         Scanner sc = new Scanner(System.in);

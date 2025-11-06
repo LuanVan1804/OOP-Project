@@ -234,7 +234,8 @@ public class DSKhachSan {
             System.out.println("Gia trung binh dat phong: " + avg);
         }
     }
-
+    // instance menu không tham số
+    public void menu() { menu((String) null); }
     // ================== MENU TƯƠNG TÁC ==================
     public void menu(String providedPath) {
         Scanner sc = new Scanner(System.in);
