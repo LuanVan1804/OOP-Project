@@ -92,28 +92,27 @@ public class DSNhaHang {
     public boolean suaTheoMaTuBanPhim(String ma, Scanner sc) {
         NhaHang nh = timTheoMa(ma);
         if (nh == null) return false;
-        System.out.println("Để trống và nhấn Enter nếu muốn giữ nguyên.");
+        System.out.println("De trong va nhan Enter neu muon giu nguyen.");
 
-        System.out.print("Tên nhà hàng hiện tại (" + nh.getTenNhaHang() + "): ");
+        System.out.print("Ten nha hang hien tai (" + nh.getTenNhaHang() + "): ");
         String ten = sc.nextLine();
         if (!ten.trim().isEmpty()) nh.setTenNhaHang(ten.trim());
 
-        System.out.print("Combo hiện tại (" + nh.getCombo() + "): ");
+        System.out.print("Combo hien tai (" + nh.getCombo() + "): ");
         String combo = sc.nextLine();
         if (!combo.trim().isEmpty()) nh.setCombo(combo.trim());
 
-        System.out.print("Giá combo hiện tại (" + nh.getGiaCombo() + "): ");
+        System.out.print("Gia combo hien tai (" + nh.getGiaCombo() + "): ");
         String giaStr = sc.nextLine();
         if (!giaStr.trim().isEmpty()) {
-            try { nh.setGiaCombo(Double.parseDouble(giaStr.trim())); } catch (NumberFormatException e) { System.out.println("Giá không hợp lệ, giữ nguyên."); }
+            try { nh.setGiaCombo(Double.parseDouble(giaStr.trim())); } catch (NumberFormatException e) { System.out.println("Gia khong hop le, giu nguyen."); }
         }
         return true;
     }
 
     // File format: ma,ten,combo,gia 
     // Đọc danh sách nhà hàng từ file (mỗi dòng: ma,ten,combo,gia)
-    // Accept both ',' and ';' as separators and skip invalid lines
-    public int docFile(String filePath) {
+    public int loadFromFile(String filePath) {
         int dem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             soLuong = 0;
@@ -121,7 +120,7 @@ public class DSNhaHang {
             while ((line = br.readLine()) != null && soLuong < dsNhaHang.length) {
                 line = line.trim(); if (line.isEmpty()) continue;
                 String[] p = line.split("[,;]");
-                if (p.length < 4) { System.out.println("Bỏ qua dòng không hợp lệ: " + line); continue; }
+                if (p.length < 4) { System.out.println("Bo qua dong khong hop le: " + line); continue; }
                 try {
                     NhaHang nh = new NhaHang(
                         p[0].trim(),        // maNhaHang
@@ -141,7 +140,7 @@ public class DSNhaHang {
     }
 
     // Ghi danh sách nhà hàng ra file (định dạng tương tự)
-    public int ghiFile(String filePath) {
+    public int saveToFile(String filePath) {
         int dem = 0;
         File f = new File(filePath);
         if (f.getParentFile() != null) f.getParentFile().mkdirs();
@@ -242,7 +241,8 @@ public class DSNhaHang {
                     xuatDanhSach(); break;
                 }
                 case 0: {
-                    ghiFile("D:\\doanOOP\\DU_LICH\\NH_KS_PT\\NhaHang.txt"); break;
+                    String savePath = providedPath != null ? providedPath : "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\NhaHang.txt";
+                    saveToFile(savePath); break;
                 }
                 default: System.out.println("Lua chon khong hop le.");
             }

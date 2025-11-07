@@ -2,14 +2,11 @@ package DU_LICH;
 import java.io.IOException;
 import java.util.Scanner;
 
-import DU_LICH.TourDuLich.DSTourNuocNgoai;
-import DU_LICH.TourDuLich.DSTourTrongNuoc;
-import DU_LICH.TourDuLich.TourNuocNgoai;
-import DU_LICH.TourDuLich.TourTrongNuoc;
+import DU_LICH.TourDuLich.DSTour;
 import DU_LICH.DiaDiemDuLich.DSQuocGia;
 import DU_LICH.DiaDiemDuLich.DSThanhPho;
 import DU_LICH.DiaDiemDuLich.QuocGia;
-import DU_LICH.DiaDiemDuLich.ThanhPho;
+
 import DU_LICH.NH_KS_PT.DSKhachSan;
 import DU_LICH.NH_KS_PT.DSNhaHang;
 import DU_LICH.Nguoi.DSHDV;
@@ -47,22 +44,14 @@ public class Main {
             }
         }
 
-        // Tạo các bộ quản lý tour (sử dụng DSQuocGia đã load)
-        DSTourTrongNuoc dsTrong = new DSTourTrongNuoc(dsQuocGia);
-        DSTourNuocNgoai dsNgoai = new DSTourNuocNgoai(dsQuocGia);
-        String dsTrongPath = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourTrongNuoc.txt";
-        String dsNgoaiPath = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTourNuocNgoai.txt";
 
-        // Load dữ liệu tour từ file TourTrongNuoc.txt và TourNuocNgoai.txt
+        DSTour dsTour = new DSTour();
+
+        String dsTourPath = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTour.txt";
         try {
-            dsTrong.loadFromFile(dsTrongPath);
-        } catch (IOException e) { 
-            System.out.println("Loi doc DSTourTrongNuoc.txt: " + e.getMessage()); 
-        }
-        try {
-            dsNgoai.loadFromFile(dsNgoaiPath);
-        } catch (IOException e) { 
-            System.out.println("Loi doc DSTourNuocNgoai.txt: " + e.getMessage()); 
+            dsTour.loadFromFile(dsTourPath);
+        } catch (IOException e) {
+            System.out.println("Loi doc DSTour.txt: " + e.getMessage());
         }
         
         // Load dữ liệu từ file KhachSan.txt, NhaHang.txt, PhuongTien.txt
@@ -71,12 +60,12 @@ public class Main {
         String khachSanPath = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt";
         String nhaHangPath = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\NhaHang.txt";
         try {
-            dsKhachSan.docFile(khachSanPath);
+            dsKhachSan.loadFromFile(khachSanPath);
         } catch (Exception ex) {
             System.out.println("Loi doc KhachSan.txt: " + ex.getMessage());
         }
         try {
-            dsNhaHang.docFile(nhaHangPath);
+            dsNhaHang.loadFromFile(nhaHangPath);
         } catch (Exception ex) {
             System.out.println("Loi doc NhaHang.txt: " + ex.getMessage());
         }
@@ -103,12 +92,11 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println("\n=== MENU CHINH ===");
-            System.out.println("1. Quan ly tour trong nuoc (menu)");
-            System.out.println("2. Quan ly tour nuoc ngoai (menu)");
-            System.out.println("3. Quan ly khach san (menu)");
-            System.out.println("4. Quan ly nha hang (menu)");
-            System.out.println("5. Quan ly huong dan vien (menu)");
-            System.out.println("6. Quan ly khach hang (menu)");
+            System.out.println("1. Quan ly tour");
+            System.out.println("3. Quan ly khach san");
+            System.out.println("4. Quan ly nha hang");
+            System.out.println("5. Quan ly huong dan vien");
+            System.out.println("6. Quan ly khach hang");
             System.out.println("0. Thoat");
             System.out.print("Chon chuc nang: ");
 
@@ -116,12 +104,8 @@ public class Main {
             sc.nextLine();          
             switch (choice) {
                 case 1:
-                    // Gọi menu quản lý tour trong nước
-                    dsTrong.menu(dsTrongPath);
-                    break;
-                case 2:
-                    // Gọi menu quản lý tour nước ngoài
-                    dsNgoai.menu(dsNgoaiPath);
+                    // Gọi menu quản lý tour tổng hợp
+                    dsTour.menu(dsTourPath);
                     break;
                 case 3:
                     // Gọi menu quản lý khách sạn 

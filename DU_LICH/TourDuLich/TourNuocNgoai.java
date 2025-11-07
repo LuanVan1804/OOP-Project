@@ -12,6 +12,14 @@ public class TourNuocNgoai extends Tour {
         this.maQuocGia = "";
     }
 
+    //constructor sao chép
+    public TourNuocNgoai(TourNuocNgoai other) {
+        super(other); 
+        this.maQuocGia = other.maQuocGia;
+        this.visa = other.visa;
+        this.donViTienTe = other.donViTienTe;
+    }
+
     // New constructor includes maQuocGia for foreign tours
     public TourNuocNgoai(String maTour, String tenTour, int soNgay, double donGia, String maQuocGia,
                          String maThanhPho, String diaDiemDen, String diaDiemDi, double visa, String donViTienTe) {
@@ -31,47 +39,33 @@ public class TourNuocNgoai extends Tour {
 
     @Override
     public void hienThiThongTin() {
-        // Hiển thị thông tin cơ bản của Tour (Tour không còn triển khai phương thức này),
-        // do đó in trực tiếp các trường được kế thừa.
-        System.out.println("Ma Tour: " + maTour);
-        System.out.println("Ten Tour: " + tenTour);
-        System.out.println("So Ngay: " + soNgay);
-        System.out.println("Don Gia: " + donGia);
+        super.hienThiThongTin();
         System.out.println("Ma Quoc Gia: " + maQuocGia);
-        System.out.println("Ma Thanh Pho: " + maThanhPho);
-        System.out.println("Dia Diem Den: " + diaDiemDen);
-        System.out.println("Dia Diem Di: " + diaDiemDi);
         System.out.println("Visa: " + visa);
         System.out.println("Don Vi Tien Te: " + donViTienTe);
-        System.out.println("TTong Gia Tour: " + tinhGiaTour());
+        System.out.println("Tong Gia Tour: " + tinhGiaTour());
     }
 
     @Override
     public void nhapThongTin() {
-        // Nhập các trường cơ bản
-        System.out.print("Nhap Ma Tour: ");
-        maTour = sc.nextLine();
-        System.out.print("Nhap Ten Tour: ");
-        tenTour = sc.nextLine();
-        System.out.print("Nhap So Ngay: ");
-        soNgay = sc.nextInt(); sc.nextLine();
-        System.out.print("Nhap Don Gia: ");
-        donGia = sc.nextDouble(); sc.nextLine();
-        System.out.print("Nhap Ma Thanh Pho: ");
-        maThanhPho = sc.nextLine();
-        System.out.print("Nhap Dia Diem Den: ");
-        diaDiemDen = sc.nextLine();
-        System.out.print("Nhap Dia Diem Di: ");
-        diaDiemDi = sc.nextLine();
-
+        // kế thừa nhập thông tin cơ bản
+        super.nhapThongTin();
         // Nhập phần mở rộng
+        System.out.print("Nhap Ma Quoc Gia: ");
+        maQuocGia = sc.nextLine();
         System.out.print("Nhap Phi Visa: ");
         visa = sc.nextDouble();
-        sc.nextLine(); // bỏ dòng trống
+        sc.nextLine();
         System.out.print("Nhap Don Vi Tien Te: ");
         donViTienTe = sc.nextLine();
     }
 
+    //Loại tour
+    @Override
+    public String loai() {
+        return "NuocNgoai";
+    }
+    @Override
     public double tinhGiaTour() {
         return (donGia * soNgay) + visa;
     }

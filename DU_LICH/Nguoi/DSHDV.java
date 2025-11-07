@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class DSHDV implements DU_LICH.QuanLy<HDV> {
+public class DSHDV implements DU_LICH.Interfaces<HDV> {
     private HDV[] dsHDV;
     private int soLuongHDV;
     private static final String File_PATH = "HDV.txt";

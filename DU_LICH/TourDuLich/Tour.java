@@ -36,6 +36,15 @@ public abstract class Tour {
         this.diaDiemDi = diaDiemDi;
     }
 
+    // Constructor sao chép
+    public Tour(Tour other) {
+        this.maTour = other.maTour;
+        this.tenTour = other.tenTour;
+        this.soNgay = other.soNgay;
+        this.donGia = other.donGia;
+        this.maThanhPho = other.maThanhPho;
+    }
+
     // getter/setter
     public String getMaTour() { return maTour; }
     public void setMaTour(String maTour) { this.maTour = maTour; }
@@ -53,9 +62,36 @@ public abstract class Tour {
     public void setDiaDiemDi(String diaDiemDi) { this.diaDiemDi = diaDiemDi; }
 
 
-   
+//abstract Loai()
+    public abstract String loai();
+// Tinh gia tour (tuong doi) - de cac lop con override
+    public abstract double tinhGiaTour();
 // hien thi tour 
-    public abstract void hienThiThongTin();
+    public void hienThiThongTin(){
+        System.out.println("Ma Tour: " + maTour);
+        System.out.println("Ten Tour: " + tenTour);
+        System.out.println("So Ngay: " + soNgay);
+        System.out.println("Don Gia: " + donGia);
+        System.out.println("Ma Thanh Pho: " + maThanhPho);
+        System.out.println("Dia Diem Den: " + diaDiemDen);
+        System.out.println("Dia Diem Di: " + diaDiemDi);
+    };
 // ham nhap thong tin tour
-    public abstract void nhapThongTin();
+    public void nhapThongTin(){
+        System.out.print("Nhap Ma Tour: ");
+        maTour = sc.nextLine();
+        System.out.print("Nhap Ten Tour: ");
+        tenTour = sc.nextLine();
+        System.out.print("Nhap So Ngay: ");
+        soNgay = sc.nextInt(); sc.nextLine();
+        System.out.print("Nhap Don Gia: ");
+        donGia = sc.nextDouble(); sc.nextLine();
+        System.out.print("Nhap Ma Thanh Pho: ");
+        maThanhPho = sc.nextLine();
+        System.out.print("Nhap Dia Diem Den: ");
+        diaDiemDen = sc.nextLine();
+        System.out.print("Nhap Dia Diem Di: ");
+        diaDiemDi = sc.nextLine();
+    };
+    
 }

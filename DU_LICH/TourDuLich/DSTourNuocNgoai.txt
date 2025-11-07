@@ -1,2 +1,0 @@
-201,TourChinaClassic,5,4500000.0,2,1,Beijing,Shanghai,500.0,USD
-202,TourJapanHighlights,4,3200000.0,3,1,Tokyo,Osaka,0.0,JPY

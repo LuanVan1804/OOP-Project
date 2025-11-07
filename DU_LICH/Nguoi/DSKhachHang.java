@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
-public class DSKhachHang implements DU_LICH.QuanLy<KhachHang> {
+public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
     private KhachHang[] list;
     private static final String FILE_PATH = "KhachHang.txt";
 

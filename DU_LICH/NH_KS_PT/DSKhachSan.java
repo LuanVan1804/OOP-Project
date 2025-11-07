@@ -169,13 +169,16 @@ public class DSKhachSan {
 
     // ================== ĐỌC / GHI FILE ==================
     // Định dạng dòng: ma,ten,dd/MM/yyyy,dd/MM/yyyy,gia
-    public int docFile(String filePath) {
+    public int loadFromFile(String filePath) {
         int dem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
             soLuong = 0;
             String line;
             while ((line = br.readLine()) != null && soLuong < dsKhachSan.length) {
-                String[] p = line.split(",");
+                if (line.trim().isEmpty()) continue;
+                // accept comma or semicolon as separator
+                String[] p = line.split("[,;]");
+                if (p.length < 5) { System.out.println("Bỏ qua dòng không hợp lệ: " + line); continue; }
                 try {
                     KhachSan ks = new KhachSan(
                         p[0].trim(),
@@ -195,7 +198,7 @@ public class DSKhachSan {
         return dem;
     }
 
-    public int ghiFile(String filePath) {
+    public int saveToFile(String filePath) {
         int dem = 0;
         File f = new File(filePath);
         if (f.getParentFile() != null) f.getParentFile().mkdirs();
@@ -309,7 +312,8 @@ public class DSKhachSan {
                     break;
                 }
                 case 0: { // Thoat -> luu file
-                    ghiFile("D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt");
+                    String savePath = providedPath != null ? providedPath : "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt";
+                    saveToFile(savePath);
                     return;
                 }
                 default: System.out.println("Lua chon khong hop le.");

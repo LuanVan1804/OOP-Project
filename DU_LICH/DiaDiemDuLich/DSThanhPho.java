@@ -84,4 +84,42 @@ public class DSThanhPho {
         // trả về danh sách thành phố thuộc quốc gia đó
         return res;
     }
+    // HIỂN THỊ DANH SÁCH THÀNH PHỐ THEO QUỐC GIA
+    public void hienThiDanhSachTheoQuocGia(String maQG) {
+        ThanhPho[] cities = getCitiesByCountry(maQG);
+        if (cities.length == 0) {
+            System.out.println("Khong co thanh pho nao cho ma quoc gia: " + maQG);
+            return;
+        }
+        System.out.println("Danh sach thanh pho (Quoc gia: " + maQG + "):");
+        for (ThanhPho tp : cities) {
+            System.out.println(" - " + tp.getTenTPho() + " (Ma: " + tp.getMaTPho() + ")");
+        }
+    }
+
+    // KIỂM TRA MÃ THÀNH PHỐ HỢP LỆ TRONG QUỐC GIA
+    public boolean isValidCityCode(String maQG, String maTP) {
+        ThanhPho[] cities = getCitiesByCountry(maQG);
+        for (ThanhPho tp : cities) {
+            if (tp.getMaTPho().equals(maTP)) return true;
+        }
+        return false;
+    }
+
+    // HIỂN THỊ DANH SÁCH THÀNH PHỐ NỘI ĐỊA
+    public void hienThiDanhSachNoiDia(DSQuocGia dsqg) {
+        QuocGia domestic = dsqg.getDomesticCountry();
+        if (domestic == null) {
+            System.out.println("Khong co quoc gia noi dia!");
+            return;
+        }
+        hienThiDanhSachTheoQuocGia(domestic.getMaQuocGia());
+    }
+
+    // KIỂM TRA MÃ THÀNH PHỐ NỘI ĐỊA
+    public boolean isValidDomesticCityCode(DSQuocGia dsqg, String maTP) {
+        QuocGia domestic = dsqg.getDomesticCountry();
+        if (domestic == null) return false;
+        return isValidCityCode(domestic.getMaQuocGia(), maTP);
+    }
 }

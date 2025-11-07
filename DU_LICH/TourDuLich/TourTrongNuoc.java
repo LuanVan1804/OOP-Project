@@ -14,46 +14,36 @@ public class TourTrongNuoc extends Tour {
         this.phiDichVu = phiDichVu;
     }
 
+    //constructor sao chép
+    public TourTrongNuoc(TourTrongNuoc other) {
+        super(other); 
+        this.phiDichVu = other.phiDichVu;
+    }
+
     public double getPhiDichVu() { return phiDichVu; }
     public void setPhiDichVu(double phiDichVu) { this.phiDichVu = phiDichVu; }
 
     @Override
     public void hienThiThongTin() {
-        // Hiển thị thông tin cơ bản
-        System.out.println("Ma Tour: " + maTour);
-        System.out.println("Ten Tour: " + tenTour);
-        System.out.println("So Ngay: " + soNgay);
-        System.out.println("Don Gia: " + donGia);
-        System.out.println("Ma Thanh Pho: " + maThanhPho);
-        System.out.println("Dia Diem Den: " + diaDiemDen);
-        System.out.println("Dia Diem Di: " + diaDiemDi);
+        super.hienThiThongTin();
         System.out.println("Phi Dich Vu: " + phiDichVu);
         System.out.println("Tong Gia Tour: " + tinhGiaTour());
     }
 
     @Override
     public void nhapThongTin() {
-        // Nhập các trường cơ bản
-        System.out.print("Nhap Ma Tour: ");
-        maTour = sc.nextLine();
-        System.out.print("Nhap Ten Tour: ");
-        tenTour = sc.nextLine();
-        System.out.print("Nhap So Ngay: ");
-        soNgay = sc.nextInt(); sc.nextLine();
-        System.out.print("Nhap Don Gia: ");
-        donGia = sc.nextDouble(); sc.nextLine();
-        System.out.print("Nhap Ma Thanh Pho: ");
-        maThanhPho = sc.nextLine();
-        System.out.print("Nhap Dia Diem Den: ");
-        diaDiemDen = sc.nextLine();
-        System.out.print("Nhap Dia Diem Di: ");
-        diaDiemDi = sc.nextLine();
-
+       super.nhapThongTin();
         System.out.print("Nhap Phi Dich Vu: ");
         phiDichVu = sc.nextDouble();
         sc.nextLine(); // bỏ dòng trống
     }
 
+    //Loại tour
+    @Override
+    public String loai() {
+        return "TrongNuoc";
+    }
+    @Override
     public double tinhGiaTour() {
         return (donGia * soNgay) + phiDichVu;
     }

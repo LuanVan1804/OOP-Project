@@ -61,4 +61,42 @@ public class DSQuocGia {
         dsqg.setCurrentCountryIndex(0);
         return dsqg;
     }
+
+    // LẤY QUỐC GIA NỘI ĐỊA
+    public QuocGia getDomesticCountry() {
+        if (list.length == 0) return null;
+        return list[currentCountryIndex];
+    }
+
+    // LẤY DANH SÁCH QUỐC GIA NƯỚC NGOÀI (loại trừ nội địa)
+    public QuocGia[] getForeignCountries() {
+        if (list.length <= 1) return new QuocGia[0];
+        QuocGia[] res = new QuocGia[list.length - 1];
+        int idx = 0;
+        for (int i = 0; i < list.length; i++) {
+            if (i != currentCountryIndex) {
+                res[idx++] = list[i];
+            }
+        }
+        return res;
+    }
+
+    // KIỂM TRA MÃ QUỐC GIA CÓ HỢP LỆ VÀ KHÔNG PHẢI NỘI ĐỊA
+    public boolean isValidForeignCountryCode(String maQG) {
+        if (maQG == null) return false;
+        for (QuocGia qg : list) {
+            if (qg.getMaQuocGia().equals(maQG)) {
+                return !qg.getMaQuocGia().equals(getDomesticCountry().getMaQuocGia());
+            }
+        }
+        return false;
+    }
+
+    // LẤY QUỐC GIA THEO MÃ
+    public QuocGia getCountryByCode(String maQG) {
+        for (QuocGia qg : list) {
+            if (qg.getMaQuocGia().equals(maQG)) return qg;
+        }
+        return null;
+    }
 }
