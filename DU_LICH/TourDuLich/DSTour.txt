@@ -5,4 +5,3 @@
 202,TourJapanHighlights,4,3200000.0,3,1,Tokyo,Osaka,0.0,JPY
 2,dihcm,3,1000000.0,2,hcm,quangbinh,50000.0
 jashdk,aaaa,3,5000.0,3,2,nnn,khong biet,10000.0,yen
-asd,dichina,3,2345678.0,2,3,guangchau,hcm,5000.0,NDT

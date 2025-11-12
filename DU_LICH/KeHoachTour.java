@@ -5,30 +5,30 @@ import DU_LICH.Nguoi.HDV;
 import DU_LICH.TourDuLich.Tour;
 
 public class KeHoachTour {
-    int maKHTour;
+    String maKHTour;
     Tour maTour;
     HDV maHDV;
     PhuongTien maPTien;
     
 
     public KeHoachTour() {
-        this.maKHTour = 0;
+        this.maKHTour = "";
         this.maTour = null; // tour là abstract nên không thể khởi tạo trực tiếp
         this.maHDV = new HDV();
         this.maPTien = new PhuongTien();
        
     }
-    public KeHoachTour(int maKHTour, Tour maTour, HDV maHDV, PhuongTien maPTien) {
+    public KeHoachTour(String maKHTour, Tour maTour, HDV maHDV, PhuongTien maPTien) {
         this.maKHTour = maKHTour;
         this.maTour = maTour;
         this.maHDV = maHDV;
         this.maPTien = maPTien;
         
     }
-    public int getMaKHTour() {
+    public String getMaKHTour() {
         return maKHTour;
     }
-    public void setMaKHTour(int maKHTour) {
+    public void setMaKHTour(String maKHTour) {
         this.maKHTour = maKHTour;
     }
     public Tour getMaTour() {

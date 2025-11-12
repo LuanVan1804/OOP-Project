@@ -83,7 +83,6 @@ public class DSKhachSan {
     }
 
     public int timTheoTen(String tuKhoa, KhachSan[] ketQua) {
-        // Trả về số lượng kết quả ghi vào mảng ketQua (có thể null -> chỉ đếm)
         if (tuKhoa == null) tuKhoa = "";
         String tk = tuKhoa.trim().toLowerCase();
         int dem = 0;
@@ -237,87 +236,5 @@ public class DSKhachSan {
             System.out.println("Gia trung binh dat phong: " + avg);
         }
     }
-    // instance menu không tham số
-    public void menu() { menu((String) null); }
-    // ================== MENU TƯƠNG TÁC ==================
-    public void menu(String providedPath) {
-        Scanner sc = new Scanner(System.in);
-        while (true) {
-            System.out.println("\n===== MENU QUAN LY KHACH SAN =====");
-            System.out.println("1. Them");
-            System.out.println("2. Sua");
-            System.out.println("3. Xoa");
-            System.out.println("4. Tim kiem theo ten");
-            System.out.println("5. Tim kiem theo ma");
-            System.out.println("6. Thong ke don gian");
-            System.out.println("7. Hien thi danh sach");
-            System.out.println("0. Thoat");
-            System.out.print("Chon: ");
-
-            int chon = sc.nextInt(); 
-            sc.nextLine();
-
-            switch (chon) {
-                case 1: { // Them
-                    KhachSan ks = new KhachSan();
-                    ks.nhap(sc);
-                    if (them(ks)) System.out.println("Them thanh cong!");
-                    break;
-                }
-                case 2: { // Sua
-                    System.out.print("Nhap ma khach san can sua: ");
-                    String ma = sc.nextLine();
-                    if (suaTheoMaTuBanPhim(ma, sc)) 
-                        System.out.println("Da cap nhat!"); 
-                    else 
-                        System.out.println("Khong tim thay ma.");
-                    break;
-                }
-                case 3: { // Xoa
-                    System.out.print("Nhap ma khach san can xoa: ");
-                    String ma = sc.nextLine();
-                    if (xoaTheoMa(ma)) 
-                        System.out.println("Da xoa!"); 
-                    else 
-                        System.out.println("Khong tim thay ma.");
-                    break;
-                }
-                case 4: { // Tim kiem theo ten
-                    System.out.print("Nhap tu khoa tim theo ten: ");
-                    String tk = sc.nextLine();
-                    KhachSan[] kq = new KhachSan[soLuong];
-                    int n = timTheoTen(tk, kq);
-                    if (n == 0) System.out.println("Khong co ket qua.");
-                    else {
-                        System.out.println("Tim thay " + n + " ket qua:");
-                        for (int i = 0; i < n && i < kq.length; i++) {
-                            if (kq[i] != null) { kq[i].xuat(); System.out.println(); }
-                        }
-                    }
-                    break;
-                }
-                case 5: { // Tim kiem theo ma
-                    System.out.print("Nhap ma can tim: ");
-                    String ma = sc.nextLine();
-                    KhachSan ks = timTheoMa(ma);
-                    if (ks == null) System.out.println("Khong tim thay."); else ks.xuat();
-                    break;
-                }
-                case 6: { // Thong ke don gian
-                    thongKeDonGian();
-                    break;
-                }
-                case 7: { // Hien thi danh sach
-                    xuatDanhSach();
-                    break;
-                }
-                case 0: { // Thoat -> luu file
-                    String savePath = providedPath != null ? providedPath : "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt";
-                    saveToFile(savePath);
-                    return;
-                }
-                default: System.out.println("Lua chon khong hop le.");
-            }
-        }
-    }
+    // Menus have been moved to QuanLy
 }
