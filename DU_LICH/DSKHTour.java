@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.sql.Date;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Scanner;
@@ -22,25 +21,19 @@ public class DSKHTour {
     private static final String DATE_PATTERN = "dd/MM/yyyy";
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));
 
-    // Tham chiếu tới các DS khác để kiểm tra tính hợp lệ khi thêm/sửa
+    // Tham chiếu tới các danh sách khác để validate
     private DSTour dsTour;
     private DSHDV dsHDV;
-    private DU_LICH.NH_KS_PT.DSNhaHang dsNhaHang;
-    private DU_LICH.NH_KS_PT.DSKhachSan dsKhachSan;
 
-    public DSKHTour() { // Hoặc DSKHTour(DSTour dsTour, ...) để pass
+    public DSKHTour() {
         this.list = new KeHoachTour[50];
         this.soLuongKHTour = 0;
-        // Khởi tạo các ds khác nếu cần
     }
 
-    // Constructor có tham chiếu để validate
-    public DSKHTour(DSTour dsTour, DSHDV dsHDV, DU_LICH.NH_KS_PT.DSNhaHang dsNhaHang, DU_LICH.NH_KS_PT.DSKhachSan dsKhachSan) {
+    public DSKHTour(DSTour dsTour, DSHDV dsHDV) {
         this();
         this.dsTour = dsTour;
         this.dsHDV = dsHDV;
-        this.dsNhaHang = dsNhaHang;
-        this.dsKhachSan = dsKhachSan;
     }
 
     public KeHoachTour[] getList() {
@@ -51,245 +44,152 @@ public class DSKHTour {
         return soLuongKHTour;
     }
 
-    // Kiểm tra mã KHTour có duy nhất không
+    // Kiểm tra mã kế hoạch tour có bị trùng không
     private boolean isMaKHTourUnique(String maKHTour) {
-        if (maKHTour == null) return false;
+        if (maKHTour == null || maKHTour.trim().isEmpty()) return false;
         for (int i = 0; i < soLuongKHTour; i++) {
-            if (list[i] != null && maKHTour.equals(list[i].getMaKHTour()))
+            if (list[i] != null && maKHTour.equalsIgnoreCase(list[i].getMaKHTour())) {
                 return false;
+            }
         }
         return true;
     }
 
-    // Thêm kế hoạch tour
+    // Thêm kế hoạch tour mới
     public void themKHTour() {
         if (soLuongKHTour >= list.length) {
-            System.out.println("Danh sach day!");
+            System.out.println("Danh sách kế hoạch tour đã đầy!");
             return;
         }
 
         KeHoachTour kht = new KeHoachTour();
         kht.nhapThongTin();
 
+        // Kiểm tra mã trùng
         while (!isMaKHTourUnique(kht.getMaKHTour())) {
-            System.out.print("Ma KHTour da ton tai! Nhap lai: ");
-            kht.setMaKHTour(sc.nextLine());
+            System.out.print("Mã KHTour đã tồn tại! Nhập lại: ");
+            kht.setMaKHTour(sc.nextLine().trim());
         }
 
-        // Kiểm tra tồn tại (nếu các DS được gán)
-        if (this.dsTour != null) {
+        // Validate mã tour tồn tại
+        if (dsTour != null) {
             boolean found = false;
-            if (dsTour.getList() != null) {
-                for (DU_LICH.TourDuLich.Tour t : dsTour.getList()) {
-                    if (t != null && t.getMaTour() != null && t.getMaTour().equals(kht.getMaTour())) { found = true; break; }
-                }
-            }
-            if (!found) { System.out.println("Ma Tour khong ton tai!"); return; }
-        }
-
-        if (this.dsHDV != null) {
-            String maHDVStr = kht.getMaHDV();
-            try {
-                int maHDV = Integer.parseInt(maHDVStr.trim());
-                if (dsHDV.timTheoMa(maHDV) == null) { System.out.println("Ma HDV khong ton tai!"); return; }
-            } catch (Exception ex) {
-                System.out.println("Ma HDV khong hop le!"); return;
-            }
-        }
-
-        if (this.dsNhaHang != null) {
-            String maNH = kht.getChiPhi() != null ? kht.getChiPhi().getMaNhaHang() : null;
-            if (maNH != null && dsNhaHang.timTheoMa(maNH) == null) { System.out.println("Ma Nha Hang khong ton tai!"); return; }
-        }
-
-        if (this.dsKhachSan != null) {
-            String maKS = kht.getChiPhi() != null ? kht.getChiPhi().getMaKhachSan() : null;
-            if (maKS != null && dsKhachSan.timTheoMa(maKS) == null) { System.out.println("Ma Khach San khong ton tai!"); return; }
-        }
-
-        // Lấy giá vé từ DSTour (nếu có)
-        if (this.dsTour != null) {
-            boolean found = false;
-            if (dsTour.getList() != null) {
-                for (DU_LICH.TourDuLich.Tour t : dsTour.getList()) {
-                    if (t != null && t.getMaTour() != null && t.getMaTour().equals(kht.getMaTour())) {
-                        kht.setGiaVe(t.getDonGia());
-                        found = true;
-                        break;
-                    }
+            for (DU_LICH.TourDuLich.Tour t : dsTour.getList()) {
+                if (t != null && t.getMaTour() != null && t.getMaTour().equalsIgnoreCase(kht.getMaTour())) {
+                    kht.setGiaVe(t.getDonGia());
+                    found = true;
+                    break;
                 }
             }
             if (!found) {
-                System.out.println("Canh bao: Khong tim thay Tour de lay don gia. Gia ve se mac dinh = 0.");
+                System.out.println("Mã Tour không tồn tại trong danh sách tour!");
+                return;
+            }
+        }
+
+        // Validate mã hướng dẫn viên
+        if (dsHDV != null && !kht.getMaHDV().trim().isEmpty()) {
+            try {
+                int maHDV = Integer.parseInt(kht.getMaHDV().trim());
+                if (dsHDV.timTheoMa(maHDV) == null) {
+                    System.out.println("Mã HDV không tồn tại!");
+                    return;
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Mã HDV phải là số nguyên!");
+                return;
             }
         }
 
         list[soLuongKHTour++] = kht;
-        System.out.println("Them ke hoach tour thanh cong!");
+        System.out.println("Thêm kế hoạch tour thành công!");
     }
 
-    // Hiển thị danh sách kế hoạch tour
-    public void hienThiDanhSachKHTour() {
+    // Hiển thị danh sách (cần truyền DSChiPhiKHTour để lấy chi phí)
+    public void hienThiDanhSachKHTour(DSChiPhiKHTour dsChiPhi) {
         if (soLuongKHTour == 0) {
-            System.out.println("Danh sach ke hoach tour rong!");
+            System.out.println("Danh sách kế hoạch tour trống!");
             return;
         }
-        System.out.println("Danh sach ke hoach tour:");
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
+        System.out.println("                             DANH SÁCH KẾ HOẠCH TOUR");
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
         for (int i = 0; i < soLuongKHTour; i++) {
-            System.out.println("---------------------------");
-            list[i].hienThiThongTin();
+            if (list[i] != null) {
+                System.out.printf("STT: %2d | ", i + 1);
+                list[i].hienThiNgan(dsChiPhi);
+            }
         }
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
     }
 
-    // Xóa kế hoạch theo mã
+    // Xóa kế hoạch tour theo mã
     public boolean xoaKHTour(String maKHTour) {
         int index = -1;
         for (int i = 0; i < soLuongKHTour; i++) {
-            if (list[i] != null && maKHTour.equals(list[i].getMaKHTour())) {
+            if (list[i] != null && maKHTour.equalsIgnoreCase(list[i].getMaKHTour())) {
                 index = i;
                 break;
             }
         }
         if (index == -1) {
-            System.out.println("Khong tim thay ke hoach tour voi ma " + maKHTour);
+            System.out.println("Không tìm thấy kế hoạch tour với mã: " + maKHTour);
             return false;
         }
-        for (int i = index; i < soLuongKHTour - 1; i++)
+
+        // Dồn mảng
+        for (int i = index; i < soLuongKHTour - 1; i++) {
             list[i] = list[i + 1];
+        }
         list[soLuongKHTour - 1] = null;
         soLuongKHTour--;
-        System.out.println("Xoa ke hoach tour thanh cong!");
+        System.out.println("Xóa kế hoạch tour thành công!");
         return true;
     }
 
-    // Chỉnh sửa kế hoạch theo mã
+    // Chỉnh sửa kế hoạch tour (chỉ sửa thông tin cơ bản, không sửa chi phí)
     public void chinhSuaKHTour(String maKHTour) {
-        int index = -1;
-        for (int i = 0; i < soLuongKHTour; i++) {
-            if (list[i] != null && maKHTour.equals(list[i].getMaKHTour())) {
-                index = i;
-                break;
-            }
-        }
-        if (index == -1) {
-            System.out.println("Khong tim thay ke hoach tour voi ma " + maKHTour);
+        KeHoachTour kht = timTheoMaObject(maKHTour);
+        if (kht == null) {
+            System.out.println("Không tìm thấy kế hoạch tour với mã: " + maKHTour);
             return;
         }
 
-        KeHoachTour kht = list[index];
-        System.out.println("De trong va nhan Enter neu muon giu nguyen.");
+        System.out.println("Để trống và nhấn Enter nếu muốn giữ nguyên giá trị.");
 
-        System.out.print("Ma Tour hien tai (" + kht.getMaTour() + "): ");
-        String maTourNew = sc.nextLine();
-        if (!maTourNew.trim().isEmpty()) kht.setMaTour(maTourNew.trim());
+        System.out.print("Mã Tour hiện tại (" + kht.getMaTour() + "): ");
+        String input = sc.nextLine().trim();
+        if (!input.isEmpty()) kht.setMaTour(input);
 
-        System.out.print("Ma HDV hien tai (" + kht.getMaHDV() + "): ");
-        String maHDVNew = sc.nextLine();
-        if (!maHDVNew.trim().isEmpty()) kht.setMaHDV(maHDVNew.trim());
+        System.out.print("Mã HDV hiện tại (" + kht.getMaHDV() + "): ");
+        input = sc.nextLine().trim();
+        if (!input.isEmpty()) kht.setMaHDV(input);
 
-        System.out.print("Tong So Ve hien tai (" + kht.getTongSoVe() + "): ");
-        String tongSoVeStr = sc.nextLine();
-        if (!tongSoVeStr.trim().isEmpty()) {
-            try { kht.setTongSoVe(Integer.parseInt(tongSoVeStr.trim())); } catch (NumberFormatException e) { System.out.println("So khong hop le, giu nguyen."); }
-        }
-
-        System.out.print("Gia Ve hien tai (" + kht.getGiaVe() + "): ");
-        String giaVeStr = sc.nextLine();
-        if (!giaVeStr.trim().isEmpty()) {
-            try { kht.setGiaVe(Double.parseDouble(giaVeStr.trim())); } catch (NumberFormatException e) { System.out.println("Gia khong hop le, giu nguyen."); }
-        }
-
-        System.out.print("Tong Ve Da Dat hien tai (" + kht.getTongVeDaDat() + "): ");
-        String tongVeDaDatStr = sc.nextLine();
-        if (!tongVeDaDatStr.trim().isEmpty()) {
-            try { kht.setTongVeDaDat(Integer.parseInt(tongVeDaDatStr.trim())); } catch (NumberFormatException e) { System.out.println("So khong hop le, giu nguyen."); }
-        }
-
-        System.out.print("Ma Nha Hang hien tai (" + kht.getChiPhi().getMaNhaHang() + "): ");
-        String maNhaHangNew = sc.nextLine();
-        if (!maNhaHangNew.trim().isEmpty()) kht.getChiPhi().setMaNhaHang(maNhaHangNew.trim());
-
-        System.out.print("Ma Khach San hien tai (" + kht.getChiPhi().getMaKhachSan() + "): ");
-        String maKhachSanNew = sc.nextLine();
-        if (!maKhachSanNew.trim().isEmpty()) kht.getChiPhi().setMaKhachSan(maKhachSanNew.trim());
-
-        System.out.print("Tong Tien An hien tai (" + kht.getChiPhi().getTongTienAn() + "): ");
-        String tongTienAnStr = sc.nextLine();
-        if (!tongTienAnStr.trim().isEmpty()) {
-            try { kht.getChiPhi().setTongTienAn(Double.parseDouble(tongTienAnStr.trim())); } catch (NumberFormatException e) { System.out.println("Gia khong hop le, giu nguyen."); }
-        }
-
-        System.out.print("Tong Tien Phong hien tai (" + kht.getChiPhi().getTongTienPhong() + "): ");
-        String tongTienPhongStr = sc.nextLine();
-        if (!tongTienPhongStr.trim().isEmpty()) {
-            try { kht.getChiPhi().setTongTienPhong(Double.parseDouble(tongTienPhongStr.trim())); } catch (NumberFormatException e) { System.out.println("Gia khong hop le, giu nguyen."); }
-        }
-
-        System.out.print("Ngay Di hien tai (" + SDF.format(new java.util.Date(kht.getNgayDi().getTime())) + ") [dd/MM/yyyy]: ");
-        String ngayDiStr = sc.nextLine();
-        if (!ngayDiStr.trim().isEmpty()) {
-            try { kht.setNgayDi(new Date(SDF.parse(ngayDiStr.trim()).getTime())); } catch (ParseException e) { System.out.println("Ngay khong hop le, giu nguyen."); }
-        }
-
-        System.out.print("Ngay Ve hien tai (" + SDF.format(new java.util.Date(kht.getNgayVe().getTime())) + ") [dd/MM/yyyy]: ");
-        String ngayVeStr = sc.nextLine();
-        if (!ngayVeStr.trim().isEmpty()) {
+        System.out.print("Tổng số vé hiện tại (" + kht.getTongSoVe() + "): ");
+        input = sc.nextLine().trim();
+        if (!input.isEmpty()) {
             try {
-                Date newNgayVe = new Date(SDF.parse(ngayVeStr.trim()).getTime());
-                if (newNgayVe.after(kht.getNgayDi())) {
-                    kht.setNgayVe(newNgayVe);
-                } else {
-                    System.out.println("Ngay ve phai sau ngay di, giu nguyen.");
-                }
-            } catch (ParseException e) { System.out.println("Ngay khong hop le, giu nguyen."); }
-        }
-
-        // Kiểm tra tồn tại sau chỉnh sửa nếu cần
-
-        System.out.println("Chinh sua ke hoach tour thanh cong!");
-    }
-
-    // Tìm kiếm theo tên (giả sử theo maTour như "tên")
-    public KeHoachTour[] timKiemTheoTen(String key) {
-        if (key == null || key.trim().isEmpty()) {
-            return new KeHoachTour[0];
-        }
-
-        String tuKhoa = key.trim().toLowerCase();
-        int count = 0;
-
-        for (int i = 0; i < soLuongKHTour; i++) {
-            String tenTour = list[i].getMaTour();
-            if (tenTour != null && tenTour.toLowerCase().contains(tuKhoa)) {
-                count++;
+                kht.setTongSoVe(Integer.parseInt(input));
+            } catch (NumberFormatException e) {
+                System.out.println("Số vé không hợp lệ → giữ nguyên.");
             }
         }
 
-        KeHoachTour[] ketQua = new KeHoachTour[count];
-        int index = 0;
-
-        for (int i = 0; i < soLuongKHTour; i++) {
-            String tenTour = list[i].getMaTour();
-            if (tenTour != null && tenTour.toLowerCase().contains(tuKhoa)) {
-                ketQua[index++] = list[i];
+        System.out.print("Vé đã đặt hiện tại (" + kht.getTongVeDaDat() + "): ");
+        input = sc.nextLine().trim();
+        if (!input.isEmpty()) {
+            try {
+                kht.setTongVeDaDat(Integer.parseInt(input));
+            } catch (NumberFormatException e) {
+                System.out.println("Số vé không hợp lệ → giữ nguyên.");
             }
         }
 
-        return ketQua;
+        System.out.println("Chỉnh sửa kế hoạch tour thành công!");
+        System.out.println("Lưu ý: Chi phí ăn ở được quản lý riêng trong menu 'Chi phí kế hoạch tour'.");
     }
 
-    // Tìm kiếm theo mã
-    public void timKiemTheoMa(String ma) {
-        for (int i = 0; i < soLuongKHTour; i++) {
-            if (list[i].getMaKHTour() != null && list[i].getMaKHTour().equals(ma)) {
-                list[i].hienThiThongTin();
-                return;
-            }
-        }
-        System.out.println("Khong tim thay ke hoach tour voi ma " + ma);
-    }
-
-    // Trả về đối tượng KeHoachTour theo mã (hữu ích cho các thao tác khác như DSChiPhiKHTour)
+    // Tìm kiếm theo mã (trả về object)
     public KeHoachTour timTheoMaObject(String ma) {
         if (ma == null) return null;
         for (int i = 0; i < soLuongKHTour; i++) {
@@ -300,132 +200,107 @@ public class DSKHTour {
         return null;
     }
 
-    // Thống kê đơn giản
-    public void thongKe() {
+    // Tìm kiếm theo từ khóa (mã tour)
+    public KeHoachTour[] timKiemTheoTen(String key) {
+        if (key == null || key.trim().isEmpty()) return new KeHoachTour[0];
+
+        String tuKhoa = key.trim().toLowerCase();
+        int count = 0;
+        for (int i = 0; i < soLuongKHTour; i++) {
+            if (list[i] != null && list[i].getMaTour() != null &&
+                list[i].getMaTour().toLowerCase().contains(tuKhoa)) {
+                count++;
+            }
+        }
+
+        KeHoachTour[] ketQua = new KeHoachTour[count];
+        int idx = 0;
+        for (int i = 0; i < soLuongKHTour; i++) {
+            if (list[i] != null && list[i].getMaTour() != null &&
+                list[i].getMaTour().toLowerCase().contains(tuKhoa)) {
+                ketQua[idx++] = list[i];
+            }
+        }
+        return ketQua;
+    }
+
+    // Tìm kiếm theo mã (in kết quả ra màn hình) — dùng bởi menu
+    public void timKiemTheoMa(String ma, DSChiPhiKHTour dsChiPhi) {
+        if (ma == null || ma.trim().isEmpty()) {
+            System.out.println("Vui lòng nhập mã hợp lệ.");
+            return;
+        }
+        KeHoachTour k = timTheoMaObject(ma.trim());
+        if (k == null) System.out.println("Khong tim thay ke hoach tour voi ma: " + ma);
+        else k.hienThiThongTin(dsChiPhi);
+    }
+
+    // Thống kê tổng quan (cần truyền DSChiPhiKHTour)
+    public void thongKe(DSChiPhiKHTour dsChiPhi) {
         if (soLuongKHTour == 0) {
-            System.out.println("Danh sach ke hoach tour rong!");
+            System.out.println("Chưa có kế hoạch tour nào để thống kê!");
             return;
         }
 
-        double tongThuVe = 0.0, tongChiPhi = 0.0;
-        int tongVe = 0, tongVeDaDat = 0;
+        double tongThuVe = 0;
+        double tongChiPhi = 0;
+        int tongVe = 0;
+        int tongVeDaDat = 0;
 
         for (int i = 0; i < soLuongKHTour; i++) {
             KeHoachTour k = list[i];
             tongThuVe += k.getTongTienThuVe();
-            tongChiPhi += k.getTongChiPhiAll();
+            tongChiPhi += k.getTongChiPhiAll(dsChiPhi);
             tongVe += k.getTongSoVe();
             tongVeDaDat += k.getTongVeDaDat();
         }
 
-        System.out.println("=== THONG KE KE HOACH TOUR ===");
-        System.out.printf("Tong so ke hoach: %,d\n", soLuongKHTour);
-        System.out.printf("Tong ve: %,d | Ve da dat: %,d\n", tongVe, tongVeDaDat);
-        System.out.printf("Tong thu ve: %, .0f\n", tongThuVe);
-        System.out.printf("Tong chi phi: %, .0f\n", tongChiPhi);
-        System.out.printf("Loi nhuan: %, .0f\n", (tongThuVe - tongChiPhi));
+        System.out.println("================================ THỐNG KÊ KẾ HOẠCH TOUR ================================");
+        System.out.printf("Tổng số kế hoạch tour       : %,d%n", soLuongKHTour);
+        System.out.printf("Tổng số vé khả dụng         : %,d%n", tongVe);
+        System.out.printf("Tổng vé đã đặt              : %,d%n", tongVeDaDat);
+        System.out.printf("Tổng doanh thu từ vé        : %, .0f VND%n", tongThuVe);
+        System.out.printf("Tổng chi phí ăn ở           : %, .0f VND%n", tongChiPhi);
+        System.out.printf("LỢI NHUẬN DỰ KIẾN           : %, .0f VND%n", (tongThuVe - tongChiPhi));
+        System.out.println("========================================================================================");
     }
 
-    // Đọc từ file
+    // Đọc từ file (chỉ lưu thông tin cơ bản của kế hoạch tour)
     public void loadFromFile(String path) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        File f = new File(path);
+        if (!f.exists()) return;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             soLuongKHTour = 0;
             String line;
             while ((line = br.readLine()) != null && soLuongKHTour < list.length) {
-                if (line.trim().isEmpty()) continue;
+                line = line.trim();
+                if (line.isEmpty()) continue;
+
                 String[] p = line.split(",");
-                try {
-                    if (p.length == 12) {
+                if (p.length >= 8) {
+                    try {
                         KeHoachTour kht = new KeHoachTour(
-                                p[0].trim(),
-                                p[1].trim(),
-                                p[2].trim(),
-                                Integer.parseInt(p[3].trim()),
-                                Double.parseDouble(p[4].trim()),
-                                Integer.parseInt(p[5].trim()),
-                                new Date(SDF.parse(p[6].trim()).getTime()),
-                                new Date(SDF.parse(p[7].trim()).getTime()),
-                                p[8].trim(),
-                                p[9].trim(),
-                                Double.parseDouble(p[10].trim()),
-                                Double.parseDouble(p[11].trim())
+                            p[0].trim(),
+                            p[1].trim(),
+                            p[2].trim(),
+                            Integer.parseInt(p[3].trim()),
+                            Double.parseDouble(p[4].trim()),
+                            Integer.parseInt(p[5].trim()),
+                            new Date(SDF.parse(p[6].trim()).getTime()),
+                            new Date(SDF.parse(p[7].trim()).getTime())
                         );
                         list[soLuongKHTour++] = kht;
-                    } else {
-                        System.out.println("Bo qua dong khong hop le: " + line);
+                    } catch (Exception e) {
+                        System.out.println("Bỏ qua dòng lỗi: " + line);
                     }
-                } catch (Exception ex) {
-                    System.out.println("Loi phan tich dong: " + line + " -> " + ex.getMessage());
                 }
             }
         }
+        System.out.println("Tải dữ liệu kế hoạch tour thành công từ: " + path);
     }
 
-    /**
-     * Load từ file và ngay lập tức kiểm tra/validate liên kết với DSTour và DSHDV.
-     * Nếu tham số dst hoặc dshdv là null, chỉ đọc mà không kiểm tra.
-     */
-    public void loadFromFile(String path, DSTour dst, DSHDV dshdv) throws IOException {
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
-            soLuongKHTour = 0;
-            String line;
-            while ((line = br.readLine()) != null && soLuongKHTour < list.length) {
-                if (line.trim().isEmpty()) continue;
-                String[] p = line.split(",");
-                try {
-                    if (p.length == 12) {
-                        KeHoachTour kht = new KeHoachTour(
-                                p[0].trim(),
-                                p[1].trim(),
-                                p[2].trim(),
-                                Integer.parseInt(p[3].trim()),
-                                Double.parseDouble(p[4].trim()),
-                                Integer.parseInt(p[5].trim()),
-                                new Date(SDF.parse(p[6].trim()).getTime()),
-                                new Date(SDF.parse(p[7].trim()).getTime()),
-                                p[8].trim(),
-                                p[9].trim(),
-                                Double.parseDouble(p[10].trim()),
-                                Double.parseDouble(p[11].trim())
-                        );
-
-                        // Validate liên kết với DSTour
-                        if (dst != null) {
-                            boolean found = false;
-                            if (dst.getList() != null) {
-                                for (DU_LICH.TourDuLich.Tour t : dst.getList()) {
-                                    if (t != null && t.getMaTour() != null && t.getMaTour().equals(kht.getMaTour())) { found = true; break; }
-                                }
-                            }
-                            if (!found) System.out.println("Canh bao: Ma tour '" + kht.getMaTour() + "' khong ton tai trong DSTour.");
-                        }
-
-                        // Validate lien ket voi DSHDV (maHDV duoc luu la String — parse sang int de tim)
-                        if (dshdv != null) {
-                            String maHDVStr = kht.getMaHDV();
-                            try {
-                                int maHDV = Integer.parseInt(maHDVStr.trim());
-                                if (dshdv.timTheoMa(maHDV) == null) {
-                                    System.out.println("Canh bao: Ma HDV '" + maHDVStr + "' khong ton tai trong DSHDV.");
-                                }
-                            } catch (Exception ex) {
-                                if (maHDVStr != null && !maHDVStr.trim().isEmpty())
-                                    System.out.println("Canh bao: Ma HDV '" + maHDVStr + "' khong phai so nguyen.");
-                            }
-                        }
-
-                        list[soLuongKHTour++] = kht;
-                    } else {
-                        System.out.println("Bo qua dong khong hop le: " + line);
-                    }
-                } catch (Exception ex) {
-                    System.out.println("Loi phan tich dong: " + line + " -> " + ex.getMessage());
-                }
-            }
-        }
-    }
-
-    // Ghi vào file
+    // Ghi ra file (chỉ ghi thông tin cơ bản)
     public void saveToFile(String path) throws IOException {
         File f = new File(path);
         if (f.getParentFile() != null) f.getParentFile().mkdirs();
@@ -433,22 +308,20 @@ public class DSKHTour {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             for (int i = 0; i < soLuongKHTour; i++) {
                 KeHoachTour k = list[i];
+                if (k == null) continue;
                 bw.write(String.join(",",
-                        k.getMaKHTour(),
-                        k.getMaTour(),
-                        k.getMaHDV(),
-                        String.valueOf(k.getTongSoVe()),
-                        String.valueOf(k.getGiaVe()),
-                        String.valueOf(k.getTongVeDaDat()),
-                        SDF.format(new java.util.Date(k.getNgayDi().getTime())),
-                        SDF.format(new java.util.Date(k.getNgayVe().getTime())),
-                        k.getChiPhi().getMaNhaHang(),
-                        k.getChiPhi().getMaKhachSan(),
-                        String.valueOf(k.getChiPhi().getTongTienAn()),
-                        String.valueOf(k.getChiPhi().getTongTienPhong())
+                    k.getMaKHTour(),
+                    k.getMaTour(),
+                    k.getMaHDV(),
+                    String.valueOf(k.getTongSoVe()),
+                    String.valueOf(k.getGiaVe()),
+                    String.valueOf(k.getTongVeDaDat()),
+                    SDF.format(k.getNgayDi()),
+                    SDF.format(k.getNgayVe())
                 ));
                 bw.newLine();
             }
         }
+        System.out.println("Lưu dữ liệu kế hoạch tour thành công vào: " + path);
     }
 }

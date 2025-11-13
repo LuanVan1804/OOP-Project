@@ -23,7 +23,7 @@ public class ChiPhiKHTour {
         this.tongTienAn = tongTienAn;
     }
 
-    // Getter/Setter
+    // Getter & Setter
     public String getMaKHTour() { return maKHTour; }
     public void setMaKHTour(String maKHTour) { this.maKHTour = maKHTour; }
     public String getMaNhaHang() { return maNhaHang; }
@@ -35,13 +35,16 @@ public class ChiPhiKHTour {
     public double getTongTienAn() { return tongTienAn; }
     public void setTongTienAn(double tongTienAn) { this.tongTienAn = tongTienAn; }
 
+    public double getTongChiPhi() { return tongTienPhong + tongTienAn; }
+
     public void xuatThongTin() {
-        System.out.println("===== THONG TIN CHI PHI KE HOACH TOUR =====");
-        System.out.println("Ma ke hoach tour: " + maKHTour);
-        System.out.println("Ma nha hang: " + maNhaHang);
-        System.out.println("Ma khach san: " + maKhachSan);
-        System.out.println("Tong tien phong: " + String.format("%,.0f VND", tongTienPhong));
-        System.out.println("Tong tien an: " + String.format("%,.0f VND", tongTienAn));
-        System.out.println("TONG CHI: " + String.format("%,.0f VND", (tongTienPhong + tongTienAn)));
+        System.out.println("===== CHI PHI KE HOACH TOUR =====");
+        System.out.printf("Ma KHTour       : %s%n", maKHTour);
+        System.out.printf("Ma Nha Hang     : %s%n", maNhaHang);
+        System.out.printf("Ma Khach San    : %s%n", maKhachSan);
+        System.out.printf("Tong tien an    : %, .0f VND%n", tongTienAn);
+        System.out.printf("Tong tien phong : %, .0f VND%n", tongTienPhong);
+        System.out.printf("TONG CHI PHI    : %, .0f VND%n", getTongChiPhi());
+        System.out.println("==================================");
     }
 }
