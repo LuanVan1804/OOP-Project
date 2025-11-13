@@ -112,7 +112,22 @@ public class DSTour {
 
     // 4. CHỈNH SỬA TOUR THEO MÃ
     public void chinhSuaTour(String maTour) {
-        boolean found=false;
+        if (soLuongTour == 0) {
+            System.out.println("Danh sach tour rong!");
+            return;
+        }
+        if (maTour == null || maTour.trim().isEmpty()) {
+            System.out.println("Ma tour khong hop le!");
+            return;
+        }
+        for (int i = 0; i < soLuongTour; i++) {
+            if (list[i] != null && maTour.equals(list[i].getMaTour())) {
+                System.out.println("Nhap thong tin moi cho tour (ma tour khong doi):");
+                list[i].nhapThongTin();
+                System.out.println("Chinh sua tour thanh cong!");
+                return;
+            }
+        }
     }
     //---------------------tim kiem theo ten-------------------
     public Tour[] timKiemTheoTen(String key) {

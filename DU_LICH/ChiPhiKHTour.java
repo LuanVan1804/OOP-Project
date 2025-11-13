@@ -1,63 +1,47 @@
 package DU_LICH;
-import java.sql.Date;
 
-import DU_LICH.NH_KS_PT.KhachSan;
-import DU_LICH.NH_KS_PT.NhaHang;
 public class ChiPhiKHTour {
-    KeHoachTour keHoachTour;
-    Date ngay;
-    KhachSan makhachSan;
-    NhaHang maNhaHang;
+    private String maKHTour;
+    private String maNhaHang;
+    private String maKhachSan;
+    private double tongTienPhong;
+    private double tongTienAn;
 
     public ChiPhiKHTour() {
-        this.keHoachTour = new KeHoachTour();
-        this.ngay = null;
-        this.makhachSan = new KhachSan();
-        this.maNhaHang = new NhaHang();
+        this.maKHTour = "";
+        this.maNhaHang = "";
+        this.maKhachSan = "";
+        this.tongTienPhong = 0.0;
+        this.tongTienAn = 0.0;
     }
 
-    public ChiPhiKHTour(KeHoachTour keHoachTour, Date ngay, KhachSan makhachSan, NhaHang maNhaHang) {
-        this.keHoachTour = keHoachTour;
-        this.ngay = ngay;
-        this.makhachSan = makhachSan;
+    public ChiPhiKHTour(String maKHTour, String maNhaHang, String maKhachSan, double tongTienPhong, double tongTienAn) {
+        this.maKHTour = maKHTour;
         this.maNhaHang = maNhaHang;
-    }
-    public KeHoachTour getKeHoachTour() {
-        return keHoachTour;
-    }
-    public void setKeHoachTour(KeHoachTour keHoachTour) {
-        this.keHoachTour = keHoachTour;
-    }
-    public Date getNgay() {
-        return ngay;
-    }
-    public void setNgay(Date ngay) {
-        this.ngay = ngay;
-    }
-    public KhachSan getMakhachSan() {
-        return makhachSan;
-    }
-    public void setMakhachSan(KhachSan makhachSan) {
-        this.makhachSan = makhachSan;
-    }
-    public NhaHang getMaNhaHang() {
-        return maNhaHang;
-    }
-    public void setMaNhaHang(NhaHang maNhaHang) {
-        this.maNhaHang = maNhaHang;
+        this.maKhachSan = maKhachSan;
+        this.tongTienPhong = tongTienPhong;
+        this.tongTienAn = tongTienAn;
     }
 
-    public double tongChiChoNgay() {
-        double tongTien = 0.0;
-        return tongTien;
-    }
-    public double tongTienPhong() {
-        double tongTien = 0.0;
-        return tongTien;
-    }
+    // Getter/Setter
+    public String getMaKHTour() { return maKHTour; }
+    public void setMaKHTour(String maKHTour) { this.maKHTour = maKHTour; }
+    public String getMaNhaHang() { return maNhaHang; }
+    public void setMaNhaHang(String maNhaHang) { this.maNhaHang = maNhaHang; }
+    public String getMaKhachSan() { return maKhachSan; }
+    public void setMaKhachSan(String maKhachSan) { this.maKhachSan = maKhachSan; }
+    public double getTongTienPhong() { return tongTienPhong; }
+    public void setTongTienPhong(double tongTienPhong) { this.tongTienPhong = tongTienPhong; }
+    public double getTongTienAn() { return tongTienAn; }
+    public void setTongTienAn(double tongTienAn) { this.tongTienAn = tongTienAn; }
 
-    public double tongDiLai() {
-        double tongTien = 0.0;
-        return tongTien;
+    public void xuatThongTin() {
+        System.out.println("===== THONG TIN CHI PHI KE HOACH TOUR =====");
+        System.out.println("Ma ke hoach tour: " + maKHTour);
+        System.out.println("Ma nha hang: " + maNhaHang);
+        System.out.println("Ma khach san: " + maKhachSan);
+        System.out.println("Tong tien phong: " + String.format("%,.0f VND", tongTienPhong));
+        System.out.println("Tong tien an: " + String.format("%,.0f VND", tongTienAn));
+        System.out.println("TONG CHI: " + String.format("%,.0f VND", (tongTienPhong + tongTienAn)));
     }
 }

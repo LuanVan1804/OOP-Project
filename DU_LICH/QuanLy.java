@@ -26,6 +26,8 @@ public class QuanLy {
 	private DSNhaHang dsNhaHang;
 	private DSHDV dsHDV;
 	private DSKhachHang dsKhachHang;
+	private DSKHTour dsKeHoach;
+    private DSChiPhiKHTour dsChiPhi;
 
 	// Các đường dẫn file mặc định (có thể thay đổi khi khởi tạo nếu cần)
 	private String pathQuocGia = "D:\\doanOOP\\DU_LICH\\DiaDiemDuLich\\quocGia.txt";
@@ -35,6 +37,8 @@ public class QuanLy {
 	private String pathNhaHang = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\NhaHang.txt";
 	private String pathKhachHang = "D:\\doanOOP\\DU_LICH\\Nguoi\\KhachHang.txt";
 	private String pathHDV = "D:\\doanOOP\\DU_LICH\\Nguoi\\HDV.txt";
+	private String pathKeHoach = "D:\\doanOOP\\DU_LICH\\kehoachtour.txt";
+    private String pathChiPhi = "D:\\doanOOP\\DU_LICH\\ChiPhiKHTour.txt";
 
 	public QuanLy() {
 		loadAll();
@@ -104,6 +108,22 @@ public class QuanLy {
 		} catch (Exception e) {
 			System.out.println("Loi doc HDV.txt: " + e.getMessage());
 		}
+
+		// Ke hoach tour (pass các DS để xác thực khi thêm/sửa)
+		dsKeHoach = new DSKHTour(dsTour, dsHDV, dsNhaHang, dsKhachSan);
+		try {
+			dsKeHoach.loadFromFile(pathKeHoach, dsTour, dsHDV);
+		} catch (Exception e) {
+			System.out.println("Loi doc kehoachtour.txt: " + e.getMessage());
+		}
+
+		// Chi phi ke hoach tour (phu thuoc vao dsKeHoach, dsKhachSan, dsNhaHang)
+		dsChiPhi = new DSChiPhiKHTour(dsKeHoach, dsKhachSan, dsNhaHang);
+		try {
+			dsChiPhi.loadFromFile(pathChiPhi);
+		} catch (Exception e) {
+			System.out.println("Loi doc ChiPhiKHTour.txt: " + e.getMessage());
+		}
 	}
 
 	// Menu chính của lớp QuanLy (sử dụng scanner do caller truyền vào)
@@ -118,6 +138,8 @@ public class QuanLy {
 			System.out.println("3. Quan ly nha hang");
 			System.out.println("4. Quan ly huong dan vien");
 			System.out.println("5. Quan ly khach hang");
+			System.out.println("6. Quan ly ke hoach tour");
+			System.out.println("7. Quan ly chi phi ke hoach tour");
 			System.out.println("0. Thoat");
 			System.out.print("Chon chuc nang: ");
 
@@ -142,12 +164,28 @@ public class QuanLy {
 				case 5:
 					this.khachHangMenu(sc);
 					break;
+				case 6:
+					this.keHoachMenu(sc);
+					break;
+				case 7:
+					this.chiPhiMenu(sc);
+					break;
 				case 0:
 					// Khi thoát, lưu các danh sách nếu cần (DSTour đã lưu trong menu của nó)
 					try {
 						dsTour.saveToFile(pathDSTour);
 					} catch (IOException e) {
 						System.out.println("Loi khi luu DSTour: " + e.getMessage());
+					}
+					try {
+						dsKeHoach.saveToFile(pathKeHoach);
+					} catch (IOException e) {
+						System.out.println("Loi khi luu ke hoach: " + e.getMessage());
+					}
+					try {
+						dsChiPhi.saveToFile(pathChiPhi);
+					} catch (Exception e) {
+						System.out.println("Loi khi luu chi phi: " + e.getMessage());
 					}
 					System.out.println("Thoat QuanLy.");
 					return;
@@ -370,6 +408,104 @@ public class QuanLy {
 		}
 	}
 
+	public void keHoachMenu(Scanner sc) {
+		while (true) {
+			System.out.println("\n===== MENU QUAN LY KE HOACH TOUR =====");
+			System.out.println("1. Them ke hoach");
+			System.out.println("2. Xoa ke hoach theo ma");
+			System.out.println("3. Sua ke hoach theo ma");
+			System.out.println("4. Hien thi danh sach");
+			System.out.println("5. Tim kiem theo ma");
+			System.out.println("6. Tim kiem theo ten tour");
+			System.out.println("7. Thong ke don gian");
+			System.out.println("0. Thoat (luu)");
+			System.out.print("Chon: ");
+			String line = sc.nextLine(); int ch = -1; try { ch = Integer.parseInt(line.trim()); } catch (Exception e) { ch = -1; }
+			switch (ch) {
+				case 1: {
+					// Thêm kế hoạch: DSKHTour có phương thức họp nhập từ bàn phím
+					dsKeHoach.themKHTour();
+					break;
+				}
+				case 2: {
+					System.out.print("Nhap ma ke hoach can xoa: "); String ma = sc.nextLine().trim();
+					boolean ok = dsKeHoach.xoaKHTour(ma);
+					if (ok) {
+						// Cascade delete chi phi lien quan
+						if (dsChiPhi != null) {
+							if (dsChiPhi.xoaTheoMa(ma)) System.out.println("Chi phi lien quan da bi xoa.");
+						}
+					}
+					break;
+				}
+				case 3: {
+					System.out.print("Nhap ma ke hoach can sua: "); String ma = sc.nextLine().trim(); dsKeHoach.chinhSuaKHTour(ma); break;
+				}
+				case 4: dsKeHoach.hienThiDanhSachKHTour(); break;
+				case 5: {
+					System.out.print("Nhap ma can tim: "); String ma = sc.nextLine().trim(); dsKeHoach.timKiemTheoMa(ma); break;
+				}
+				case 6: {
+					System.out.print("Nhap tu khoa ten tour: "); String tk = sc.nextLine().trim(); KeHoachTour[] kq = dsKeHoach.timKiemTheoTen(tk); if (kq == null || kq.length == 0) System.out.println("Khong co ket qua."); else { System.out.println("Tim thay " + kq.length + " ket qua:"); for (KeHoachTour kk : kq) { if (kk != null) { kk.hienThiThongTin(); System.out.println(); } } } break;
+				}
+				case 7: dsKeHoach.thongKe(); break;
+				case 0: try { dsKeHoach.saveToFile(pathKeHoach); } catch (IOException e) { System.out.println("Loi khi luu: " + e.getMessage()); } return;
+				default: System.out.println("Lua chon khong hop le.");
+			}
+		}
+	}
+
+	public void chiPhiMenu(Scanner sc) {
+		while (true) {
+			System.out.println("\n===== MENU QUAN LY CHI PHI KE HOACH TOUR =====");
+			System.out.println("1. Them chi phi");
+			System.out.println("2. Xoa chi phi theo ma KHTour");
+			System.out.println("3. Chinh sua chi phi theo ma KHTour");
+			System.out.println("4. Hien thi danh sach chi phi");
+			System.out.println("5. Tim kiem theo ma KHTour");
+			System.out.println("6. Tim kiem theo tu khoa (ma KHTour)");
+			System.out.println("7. Thong ke don gian");
+			System.out.println("0. Thoat (luu)");
+			System.out.print("Chon: ");
+			String line = sc.nextLine(); int ch = -1; try { ch = Integer.parseInt(line.trim()); } catch (Exception e) { ch = -1; }
+			switch (ch) {
+				case 1: dsChiPhi.themChiPhi(); break;
+				case 2: {
+					System.out.print("Nhap ma KHTour can xoa chi phi: ");
+					String ma = sc.nextLine().trim();
+					if (dsChiPhi.xoaTheoMa(ma)) System.out.println("Da xoa!"); else System.out.println("Khong tim thay ma.");
+					break;
+				}
+				case 3: {
+					System.out.print("Nhap ma KHTour can chinh sua chi phi: ");
+					String ma = sc.nextLine().trim();
+					if (dsChiPhi.chinhSuaTheoMa(ma)) System.out.println("Da cap nhat!"); else System.out.println("Khong tim thay ma.");
+					break;
+				}
+				case 4: dsChiPhi.xuatDanhSach(); break;
+				case 5: {
+					System.out.print("Nhap ma KHTour can tim: ");
+					String ma = sc.nextLine().trim();
+					ChiPhiKHTour cp = dsChiPhi.timTheoMa(ma);
+					if (cp == null) System.out.println("Khong tim thay."); else cp.xuatThongTin();
+					break;
+				}
+				case 6: {
+					System.out.print("Nhap tu khoa tim: ");
+					String tk = sc.nextLine().trim();
+					ChiPhiKHTour[] arr = new ChiPhiKHTour[dsChiPhi.getSoLuong()];
+					int n = dsChiPhi.timTheoTen(tk, arr);
+					if (n == 0) System.out.println("Khong co ket qua."); else { System.out.println("Tim thay " + n + " ket qua:"); for (int i = 0; i < n && i < arr.length; i++) if (arr[i] != null) { arr[i].xuatThongTin(); System.out.println(); } }
+					break;
+				}
+				case 7: dsChiPhi.thongKeDonGian(); break;
+				case 0: dsChiPhi.saveToFile(pathChiPhi); return;
+				default: System.out.println("Lua chon khong hop le.");
+			}
+		}
+	}
+
+
 	// Getters để Main hoặc các class khác có thể truy xuất các DS đã nạp
 	public DSQuocGia getDsQuocGia() { return dsQuocGia; }
 	public DSThanhPho getDsThanhPho() { return dsThanhPho; }
@@ -378,4 +514,5 @@ public class QuanLy {
 	public DSNhaHang getDsNhaHang() { return dsNhaHang; }
 	public DSHDV getDsHDV() { return dsHDV; }
 	public DSKhachHang getDsKhachHang() { return dsKhachHang; }
+	public DSKHTour getDsKeHoach() { return dsKeHoach; }
 }

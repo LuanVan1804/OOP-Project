@@ -222,6 +222,15 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         }
     }
 
+    // Trả về đối tượng HDV theo mã (nếu có) — hỗ trợ resolve khi load các liên kết
+    public HDV timTheoMa(int maHDV) {
+        if (dsHDV == null) return null;
+        for (HDV hdv : dsHDV) {
+            if (hdv != null && hdv.getMaHDV() == maHDV) return hdv;
+        }
+        return null;
+    }
+
     public void thongKeTheoKinhNghiem() {
         if (dsHDV.length == 0) {
             System.out.println(" Danh sach HDV rong. Khong the thong ke.");
