@@ -25,9 +25,8 @@ public class TourTrongNuoc extends Tour {
 
     @Override
     public void hienThiThongTin() {
-        super.hienThiThongTin();
-        System.out.println("Phi Dich Vu: " + phiDichVu);
-        System.out.println("Tong Gia Tour: " + tinhGiaTour());
+        // Hiển thị tất cả thông tin trên một hàng, dựa trên toString() của lớp cha
+        System.out.printf("%s | Phi Dich Vu: %,.0f | Tong Gia Tour: %,.0f%n", super.toString(), phiDichVu, tinhGiaTour());
     }
 
     @Override

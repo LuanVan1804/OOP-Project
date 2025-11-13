@@ -67,15 +67,18 @@ public abstract class Tour {
 // Tinh gia tour (tuong doi) - de cac lop con override
     public abstract double tinhGiaTour();
 // hien thi tour 
-    public void hienThiThongTin(){
-        System.out.println("Ma Tour: " + maTour);
-        System.out.println("Ten Tour: " + tenTour);
-        System.out.println("So Ngay: " + soNgay);
-        System.out.println("Don Gia: " + donGia);
-        System.out.println("Ma Thanh Pho: " + maThanhPho);
-        System.out.println("Dia Diem Den: " + diaDiemDen);
-        System.out.println("Dia Diem Di: " + diaDiemDi);
-    };
+   public String toString() {
+    // Sắp xếp lại thông tin cho trực quan: Mã | Tên | Số ngày | Đơn giá | Điểm đi -> Điểm đến (Thành phố)
+    return String.format("%-8s | %-28s | %2d ngày | %,12.0f đ | %s -> %s (TP: %s)",
+        maTour,
+        tenTour,
+        soNgay,
+        donGia,
+        diaDiemDi,
+        diaDiemDen,
+        maThanhPho
+    );
+}
 // ham nhap thong tin tour
     public void nhapThongTin(){
         System.out.print("Nhap Ma Tour: ");
@@ -94,4 +97,9 @@ public abstract class Tour {
         diaDiemDi = sc.nextLine();
     };
     
+    // Hiển thị thông tin cơ bản của tour (các lớp con có thể override và gọi super)
+    public void hienThiThongTin() {
+        System.out.println(this.toString());
+    }
+
 }

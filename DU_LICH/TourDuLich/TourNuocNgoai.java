@@ -39,11 +39,9 @@ public class TourNuocNgoai extends Tour {
 
     @Override
     public void hienThiThongTin() {
-        super.hienThiThongTin();
-        System.out.println("Ma Quoc Gia: " + maQuocGia);
-        System.out.println("Visa: " + visa);
-        System.out.println("Don Vi Tien Te: " + donViTienTe);
-        System.out.println("Tong Gia Tour: " + tinhGiaTour());
+        // Hiển thị tất cả thông tin trên một hàng, dựa trên toString() của lớp cha
+        System.out.printf("%s | Ma Quoc Gia: %s | Visa: %,.0f | Don Vi Tien Te: %s | Tong Gia Tour: %,.0f%n",
+                super.toString(), maQuocGia, visa, donViTienTe, tinhGiaTour());
     }
 
     @Override

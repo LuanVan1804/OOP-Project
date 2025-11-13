@@ -24,14 +24,15 @@ public class DSKHTour {
     // Tham chiếu tới các danh sách khác để validate
     private DSTour dsTour;
     private DSHDV dsHDV;
-
+    
     public DSKHTour() {
         this.list = new KeHoachTour[50];
         this.soLuongKHTour = 0;
     }
-
+    // Constructor với tham chiếu tới các danh sách khác
     public DSKHTour(DSTour dsTour, DSHDV dsHDV) {
-        this();
+        this.list = new KeHoachTour[50];
+        this.soLuongKHTour = 0;
         this.dsTour = dsTour;
         this.dsHDV = dsHDV;
     }
@@ -297,7 +298,6 @@ public class DSKHTour {
                 }
             }
         }
-        System.out.println("Tải dữ liệu kế hoạch tour thành công từ: " + path);
     }
 
     // Ghi ra file (chỉ ghi thông tin cơ bản)
@@ -322,6 +322,5 @@ public class DSKHTour {
                 bw.newLine();
             }
         }
-        System.out.println("Lưu dữ liệu kế hoạch tour thành công vào: " + path);
     }
 }

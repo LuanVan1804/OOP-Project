@@ -30,12 +30,18 @@ public class QuocGia {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-    sb.append("QuocGia{").append("ten=").append(tenNuoc).append(", ma=").append(maQuocGia).append(", cities=[");
-        for (int i = 0; i < listTPhos.length; i++) {
-            if (i > 0) sb.append(", ");
-            sb.append(listTPhos[i].getTenTPho());
+        sb.append(maQuocGia).append(" | ").append(tenNuoc).append(" | Thành phố: ");
+
+        if (listTPhos == null || listTPhos.length == 0) {
+            sb.append("Chưa có");
+        } else {
+            for (int i = 0; i < listTPhos.length; i++) {
+                if (i > 0) sb.append(", ");
+                sb.append(listTPhos[i].getMaTPho())   // mã thành phố
+                .append("-")
+                .append(listTPhos[i].getTenTPho()); // tên thành phố
+            }
         }
-        sb.append("]}");
         return sb.toString();
     }
 }
