@@ -170,33 +170,37 @@ public void sua(int maKH) {
 }
 
     // ---------------------- tìm kiếm khách hàng theo mã --------------------
-    public void timKiemKHTheoMa(int maKH) {
+    public KhachHang timKiemKHTheoMa(int maKH) {
         for (KhachHang kh : list) {
             if (kh.getMaKH() == maKH) {
                 System.out.println("Khach hang tim thay:");
                 System.out.println(kh.toString());
-                return;
+                return kh;
             }
         }
-        System.out.println("Khong tim thay khach hang co ma: " + maKH);
+         System.out.println("Khong tim thay khach hang co ma: " + maKH);
+        return null; // không tìm thấy
     }
 
     // ---------------------- tìm kiếm khách hàng theo tên --------------------
-    public void timKiemTheoTen(String tenKH) {
-        boolean found = false;
+    public KhachHang[] timKiemTheoTen(String tenKH) {
         String keyword = tenKH.toLowerCase();
+        KhachHang[]  ketQua = new KhachHang[0];
         for (KhachHang kh : list) {
             if (kh.getTenKH().toLowerCase().contains(keyword)) {
-                if (!found) {
-                    System.out.println("Khach hang tim thay:");
-                    found = true;
-                }
+                ketQua = Arrays.copyOf(ketQua, ketQua.length + 1);
+                ketQua[ketQua.length - 1] = kh;
+            }
+        }
+        if (ketQua.length == 0) {
+            System.out.println("Khong tim thay khach hang voi ten: " + tenKH);
+        } else {
+            System.out.println("Danh sach khach hang tim thay:");
+            for (KhachHang kh : ketQua) {
                 System.out.println(kh.toString());
             }
         }
-        if (!found) {
-            System.out.println("Khong tim thay khach hang co ten: " + tenKH);
-        }
+        return ketQua;
     }
 
     // ---------------------- Thống kê theo giới tính --------------------

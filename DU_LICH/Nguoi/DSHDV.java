@@ -13,6 +13,12 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         this.dsHDV = new HDV[0];
         this.soLuongHDV = 0;
     }
+    public DSHDV(HDV[] dsHDV, int soLuongHDV) {
+        this.dsHDV = dsHDV;
+        this.soLuongHDV = soLuongHDV;
+    }
+
+     // -------------------- load file --------------------
 
     @Override
     public void loadFromFile(String fileName) throws IOException {
@@ -191,50 +197,56 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         }
     }
 
-    public void timKiemTheoKinhNghiem(double kinhNghiem) {
+    public HDV[] timKiemTheoKinhNghiem(double kinhNghiem) {
         System.out.println("Danh sach HDV co kinh nghiem " + kinhNghiem + " nam:");
-        boolean found = false;
+        HDV[] ketQua = new HDV[0];
         for (HDV hdv : dsHDV) {
             if (hdv.getKinhNghiem() == kinhNghiem) {
-                System.out.println(hdv);
-                found = true;
+                ketQua = Arrays.copyOf(ketQua, ketQua.length + 1);
+                ketQua[ketQua.length - 1] = hdv;
             }
         }
-        if (!found) {
+        if (ketQua.length == 0) {
             System.out.println("Khong tim thay HDV voi kinh nghiem: " + kinhNghiem);
         }
-    }
-
-    public void timKiemTheoTen(String tenHDV) {
-        boolean found = false;
-        String keyword = tenHDV.toLowerCase();
-        for (HDV hdv : dsHDV) {
-            if (hdv.getTenHDV().toLowerCase().contains(keyword)) {
-                if (!found) {
-                    System.out.println("Danh sach HDV tim thay:");
-                    found = true;
-                }
+        else
+        {
+            for (HDV hdv : ketQua) {
                 System.out.println(hdv);
             }
         }
-        if (!found) {
+        return ketQua;
+    }
+
+   
+
+    public HDV[] timKiemTheoTen(String tenHDV) {
+        String keyWord= tenHDV.toLowerCase();
+        HDV [] ketQua  = new HDV[0];
+        for ( HDV hdv : dsHDV ) {
+            if (hdv.getTenHDV().toLowerCase().contains(keyWord)) {
+                ketQua = Arrays.copyOf(ketQua, ketQua.length + 1);
+                ketQua[ketQua.length - 1] = hdv;
+            }
+        }
+       
+        if (ketQua.length == 0) {
             System.out.println("Khong tim thay HDV voi ten: " + tenHDV);
         }
-    }
-
-    // Trả về đối tượng HDV theo mã (nếu có) — hỗ trợ resolve khi load các liên kết
-    public HDV timTheoMa(int maHDV) {
-        if (dsHDV == null) return null;
-        for (HDV hdv : dsHDV) {
-            if (hdv != null && hdv.getMaHDV() == maHDV) return hdv;
+        else {
+            System.out.println("Danh sach HDV tim thay voi ten '" + tenHDV + "':");
+            for (HDV hdv : ketQua) {
+                System.out.println(hdv);
+            }
         }
-        return null;
+        return ketQua;
+
     }
 
-    public void thongKeTheoKinhNghiem() {
+    public int[] thongKeTheoKinhNghiem() {
         if (dsHDV.length == 0) {
             System.out.println(" Danh sach HDV rong. Khong the thong ke.");
-            return;
+            return new int[0];
         }
 
         // tạo mảng chứa giá trị kinh nghiệm và mảng đếm
@@ -266,5 +278,7 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         for (int i = 0; i < soLoai; i++) {
             System.out.printf("Kinh nghiem: %.1f - So luong HDV: %d%n", kinhNghiemValues[i], dem[i]);
         }
+          // Cắt mảng dem chỉ lấy phần có dữ liệu thật sự
+        return Arrays.copyOf(dem, soLoai);
     }
 }
