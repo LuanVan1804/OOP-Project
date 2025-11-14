@@ -59,7 +59,7 @@ public class DSKHTour {
     // Thêm kế hoạch tour mới
     public void themKHTour() {
         if (soLuongKHTour >= list.length) {
-            System.out.println("Danh sách kế hoạch tour đã đầy!");
+            System.out.println("Danh sach ke hoach tour da day!");
             return;
         }
 
@@ -68,7 +68,7 @@ public class DSKHTour {
 
         // Kiểm tra mã trùng
         while (!isMaKHTourUnique(kht.getMaKHTour())) {
-            System.out.print("Mã KHTour đã tồn tại! Nhập lại: ");
+            System.out.print("Ma KHTour da ton tai! Nhap lai: ");
             kht.setMaKHTour(sc.nextLine().trim());
         }
 
@@ -83,7 +83,7 @@ public class DSKHTour {
                 }
             }
             if (!found) {
-                System.out.println("Mã Tour không tồn tại trong danh sách tour!");
+                System.out.println("Ma Tour khong ton tai trong danh sach tour!");
                 return;
             }
         }
@@ -93,23 +93,23 @@ public class DSKHTour {
             try {
                 int maHDV = Integer.parseInt(kht.getMaHDV().trim());
                 if (dsHDV.timTheoMa(maHDV) == null) {
-                    System.out.println("Mã HDV không tồn tại!");
+                    System.out.println("Ma HDV khong ton tai!");
                     return;
                 }
             } catch (NumberFormatException e) {
-                System.out.println("Mã HDV phải là số nguyên!");
+                System.out.println("Ma HDV phai la so nguyen!");
                 return;
             }
         }
 
         list[soLuongKHTour++] = kht;
-        System.out.println("Thêm kế hoạch tour thành công!");
+        System.out.println("Them ke hoach tour thanh cong!");
     }
 
     // Hiển thị danh sách (cần truyền DSChiPhiKHTour để lấy chi phí)
     public void hienThiDanhSachKHTour(DSChiPhiKHTour dsChiPhi) {
         if (soLuongKHTour == 0) {
-            System.out.println("Danh sách kế hoạch tour trống!");
+            System.out.println("Danh sach ke hoach tour trong!");
             return;
         }
         System.out.println("════════════════════════════════════════════════════════════════════════════════");
@@ -134,7 +134,7 @@ public class DSKHTour {
             }
         }
         if (index == -1) {
-            System.out.println("Không tìm thấy kế hoạch tour với mã: " + maKHTour);
+            System.out.println("Khong tim thay ke hoach tour voi ma: " + maKHTour);
             return false;
         }
 
@@ -144,7 +144,7 @@ public class DSKHTour {
         }
         list[soLuongKHTour - 1] = null;
         soLuongKHTour--;
-        System.out.println("Xóa kế hoạch tour thành công!");
+        System.out.println("XXoa ke hoach tour thanh cong!");
         return true;
     }
 
@@ -152,42 +152,41 @@ public class DSKHTour {
     public void chinhSuaKHTour(String maKHTour) {
         KeHoachTour kht = timTheoMaObject(maKHTour);
         if (kht == null) {
-            System.out.println("Không tìm thấy kế hoạch tour với mã: " + maKHTour);
+            System.out.println("Khong tim thay ke hoach tour voi ma: " + maKHTour);
             return;
         }
 
-        System.out.println("Để trống và nhấn Enter nếu muốn giữ nguyên giá trị.");
+        System.out.println("De trong va nhan Enter neu muon giu nguyen gia tri.");
 
-        System.out.print("Mã Tour hiện tại (" + kht.getMaTour() + "): ");
+        System.out.print("Ma Tour hien tai (" + kht.getMaTour() + "): ");
         String input = sc.nextLine().trim();
         if (!input.isEmpty()) kht.setMaTour(input);
 
-        System.out.print("Mã HDV hiện tại (" + kht.getMaHDV() + "): ");
+        System.out.print("Ma HDV hien tai (" + kht.getMaHDV() + "): ");
         input = sc.nextLine().trim();
         if (!input.isEmpty()) kht.setMaHDV(input);
 
-        System.out.print("Tổng số vé hiện tại (" + kht.getTongSoVe() + "): ");
+        System.out.print("Tong so ve hien tai (" + kht.getTongSoVe() + "): ");
         input = sc.nextLine().trim();
         if (!input.isEmpty()) {
             try {
                 kht.setTongSoVe(Integer.parseInt(input));
             } catch (NumberFormatException e) {
-                System.out.println("Số vé không hợp lệ → giữ nguyên.");
+                System.out.println("So ve khong hop le → giu nguyen.");
             }
         }
 
-        System.out.print("Vé đã đặt hiện tại (" + kht.getTongVeDaDat() + "): ");
+        System.out.print("Ve da dat hien tai (" + kht.getTongVeDaDat() + "): ");
         input = sc.nextLine().trim();
         if (!input.isEmpty()) {
             try {
                 kht.setTongVeDaDat(Integer.parseInt(input));
             } catch (NumberFormatException e) {
-                System.out.println("Số vé không hợp lệ → giữ nguyên.");
+                System.out.println("So ve khong hop le → giu nguyen.");
             }
         }
 
-        System.out.println("Chỉnh sửa kế hoạch tour thành công!");
-        System.out.println("Lưu ý: Chi phí ăn ở được quản lý riêng trong menu 'Chi phí kế hoạch tour'.");
+        System.out.println("Chinh sua ke hoach tour thanh cong!");
     }
 
     // Tìm kiếm theo mã (trả về object)
@@ -228,7 +227,7 @@ public class DSKHTour {
     // Tìm kiếm theo mã (in kết quả ra màn hình) — dùng bởi menu
     public void timKiemTheoMa(String ma, DSChiPhiKHTour dsChiPhi) {
         if (ma == null || ma.trim().isEmpty()) {
-            System.out.println("Vui lòng nhập mã hợp lệ.");
+            System.out.println("Vui long nhap ma hop le.");
             return;
         }
         KeHoachTour k = timTheoMaObject(ma.trim());
@@ -239,7 +238,7 @@ public class DSKHTour {
     // Thống kê tổng quan (cần truyền DSChiPhiKHTour)
     public void thongKe(DSChiPhiKHTour dsChiPhi) {
         if (soLuongKHTour == 0) {
-            System.out.println("Chưa có kế hoạch tour nào để thống kê!");
+            System.out.println("Chua co ke hoach tour nao de thong ke!");
             return;
         }
 
@@ -257,12 +256,12 @@ public class DSKHTour {
         }
 
         System.out.println("================================ THỐNG KÊ KẾ HOẠCH TOUR ================================");
-        System.out.printf("Tổng số kế hoạch tour       : %,d%n", soLuongKHTour);
-        System.out.printf("Tổng số vé khả dụng         : %,d%n", tongVe);
-        System.out.printf("Tổng vé đã đặt              : %,d%n", tongVeDaDat);
-        System.out.printf("Tổng doanh thu từ vé        : %, .0f VND%n", tongThuVe);
-        System.out.printf("Tổng chi phí ăn ở           : %, .0f VND%n", tongChiPhi);
-        System.out.printf("LỢI NHUẬN DỰ KIẾN           : %, .0f VND%n", (tongThuVe - tongChiPhi));
+        System.out.printf("Tong so ke hoach tour       : %,d%n", soLuongKHTour);
+        System.out.printf("TTong so ve kha dung         : %,d%n", tongVe);
+        System.out.printf("TTong ve da dat              : %,d%n", tongVeDaDat);
+        System.out.printf("TTong doanh thu tu ve        : %, .0f VND%n", tongThuVe);
+        System.out.printf("TTong chi phi an o           : %, .0f VND%n", tongChiPhi);
+        System.out.printf("LOI NHUAN DU KIEN           : %, .0f VND%n", (tongThuVe - tongChiPhi));
         System.out.println("========================================================================================");
     }
 
@@ -293,7 +292,7 @@ public class DSKHTour {
                         );
                         list[soLuongKHTour++] = kht;
                     } catch (Exception e) {
-                        System.out.println("Bỏ qua dòng lỗi: " + line);
+                        System.out.println("Bo qua dong loi: " + line);
                     }
                 }
             }

@@ -170,8 +170,8 @@ public class KeHoachTour {
 
     // Hiển thị thông tin (cần truyền dsChiPhi để lấy chi phí)
     public void hienThiThongTin(DSChiPhiKHTour dsChiPhi) {
-        String di = (ngayDi != null) ? SDF.format(ngayDi) : "Chưa có";
-        String ve = (ngayVe != null) ? SDF.format(ngayVe) : "Chưa có";
+        String di = (ngayDi != null) ? SDF.format(ngayDi) : "Chua co";
+        String ve = (ngayVe != null) ? SDF.format(ngayVe) : "Chua co";
 
         System.out.println("==================================");
         System.out.println("Ma KHTour       : " + maKHTour);

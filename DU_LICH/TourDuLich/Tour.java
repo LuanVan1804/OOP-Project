@@ -67,6 +67,7 @@ public abstract class Tour {
 // Tinh gia tour (tuong doi) - de cac lop con override
     public abstract double tinhGiaTour();
 // hien thi tour 
+    
    public String toString() {
     // Sắp xếp lại thông tin cho trực quan: Mã | Tên | Số ngày | Đơn giá | Điểm đi -> Điểm đến (Thành phố)
     return String.format("%-8s | %-28s | %2d ngày | %,12.0f đ | %s -> %s (TP: %s)",
