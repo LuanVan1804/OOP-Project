@@ -43,6 +43,17 @@ public class KeHoachTour {
         this.ngayDi = ngayDi;
         this.ngayVe = ngayVe;
     }
+    // constructor sao chép
+    public KeHoachTour(KeHoachTour other) {
+        this.maKHTour = other.maKHTour;
+        this.maTour = other.maTour;
+        this.maHDV = other.maHDV;
+        this.tongSoVe = other.tongSoVe;
+        this.giaVe = other.giaVe;
+        this.tongVeDaDat = other.tongVeDaDat;
+        this.ngayDi = other.ngayDi;
+        this.ngayVe = other.ngayVe;
+    }
 
     // Getter & Setter
     public String getMaKHTour() { return maKHTour; }

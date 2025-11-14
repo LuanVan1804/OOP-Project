@@ -22,6 +22,14 @@ public class ChiPhiKHTour {
         this.tongTienPhong = tongTienPhong;
         this.tongTienAn = tongTienAn;
     }
+    //constructor sao chép
+    public ChiPhiKHTour(ChiPhiKHTour other) {
+        this.maKHTour = other.maKHTour;
+        this.maNhaHang = other.maNhaHang;
+        this.maKhachSan = other.maKhachSan;
+        this.tongTienPhong = other.tongTienPhong;
+        this.tongTienAn = other.tongTienAn;
+    }
 
     // Getter & Setter
     public String getMaKHTour() { return maKHTour; }

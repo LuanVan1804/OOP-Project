@@ -170,6 +170,16 @@ public class DSTour {
         }
         System.out.println("Khong tim thay tour voi ma " + ma);
     }
+
+    // Trả về đối tượng Tour theo mã (không in ra). Dùng cho logic nghiệp vụ.
+    public Tour timTheoMa(String ma) {
+        if (ma == null) return null;
+        for (int i = 0; i < soLuongTour; i++) {
+            if (list[i] != null && ma.equals(list[i].getMaTour()))
+                return list[i];
+        }
+        return null;
+    }
     //-----------------------thong ke----------------------
     public void thongKe() {
         if (soLuongTour == 0) {
