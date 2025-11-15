@@ -5,6 +5,10 @@ import java.util.Arrays;
 
 public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
     private KhachHang[] list;
+    
+    // Getter for compatibility
+    public KhachHang[] getList() { return list; }
+    
     public DSKhachHang() {
         this.list = new KhachHang[0];
     }

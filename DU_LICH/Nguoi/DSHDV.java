@@ -16,6 +16,9 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         this.soLuongHDV = soLuongHDV;
     }
 
+    // Getter for compatibility
+    public HDV[] getList() { return dsHDV; }
+
      // -------------------- load file --------------------
 
     @Override
