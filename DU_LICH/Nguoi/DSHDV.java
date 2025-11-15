@@ -127,13 +127,6 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
             }
             dsHDV[dsHDV.length - 1] = null;
             dsHDV = Arrays.copyOf(dsHDV, dsHDV.length - 1);
-            try {
-                saveToFile(File_PATH);
-            } catch (IOException e) {
-                System.out.println("Loi khi luu file: " + e.getMessage());
-            }
-        } else {
-            System.out.println("Khong tim thay HDV voi ma: " + maHDV);
         }
     }
 
