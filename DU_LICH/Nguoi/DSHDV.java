@@ -11,6 +11,15 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         this.dsHDV = new HDV[0];
         this.soLuongHDV = 0;
     }
+    public DSHDV(HDV[] dsHDV, int soLuongHDV) {
+        this.dsHDV = dsHDV;
+        this.soLuongHDV = soLuongHDV;
+    }
+
+    // Getter for compatibility
+    public HDV[] getList() { return dsHDV; }
+
+     // -------------------- load file --------------------
 
     @Override
     public void loadFromFile(String fileName) throws IOException {
