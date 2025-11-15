@@ -43,6 +43,17 @@ public class KeHoachTour {
         this.ngayDi = ngayDi;
         this.ngayVe = ngayVe;
     }
+    // constructor sao chép
+    public KeHoachTour(KeHoachTour other) {
+        this.maKHTour = other.maKHTour;
+        this.maTour = other.maTour;
+        this.maHDV = other.maHDV;
+        this.tongSoVe = other.tongSoVe;
+        this.giaVe = other.giaVe;
+        this.tongVeDaDat = other.tongVeDaDat;
+        this.ngayDi = other.ngayDi;
+        this.ngayVe = other.ngayVe;
+    }
 
     // Getter & Setter
     public String getMaKHTour() { return maKHTour; }
@@ -170,8 +181,8 @@ public class KeHoachTour {
 
     // Hiển thị thông tin (cần truyền dsChiPhi để lấy chi phí)
     public void hienThiThongTin(DSChiPhiKHTour dsChiPhi) {
-        String di = (ngayDi != null) ? SDF.format(ngayDi) : "Chưa có";
-        String ve = (ngayVe != null) ? SDF.format(ngayVe) : "Chưa có";
+        String di = (ngayDi != null) ? SDF.format(ngayDi) : "Chua co";
+        String ve = (ngayVe != null) ? SDF.format(ngayVe) : "Chua co";
 
         System.out.println("==================================");
         System.out.println("Ma KHTour       : " + maKHTour);

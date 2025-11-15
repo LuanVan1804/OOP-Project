@@ -1,40 +1,20 @@
 package DU_LICH;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Scanner;
 
-import DU_LICH.TourDuLich.DSTour;
-import DU_LICH.Nguoi.DSHDV;
-
 public class DSKHTour {
     private KeHoachTour[] list;
     private int soLuongKHTour;
-    private static final Scanner sc = new Scanner(System.in);
     private static final String DATE_PATTERN = "dd/MM/yyyy";
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));
 
-    // Tham chiếu tới các danh sách khác để validate
-    private DSTour dsTour;
-    private DSHDV dsHDV;
-    
     public DSKHTour() {
         this.list = new KeHoachTour[50];
         this.soLuongKHTour = 0;
-    }
-    // Constructor với tham chiếu tới các danh sách khác
-    public DSKHTour(DSTour dsTour, DSHDV dsHDV) {
-        this.list = new KeHoachTour[50];
-        this.soLuongKHTour = 0;
-        this.dsTour = dsTour;
-        this.dsHDV = dsHDV;
     }
 
     public KeHoachTour[] getList() {
@@ -45,7 +25,7 @@ public class DSKHTour {
         return soLuongKHTour;
     }
 
-    // Kiểm tra mã kế hoạch tour có bị trùng không
+    // Kiểm tra mã kế hoạch tour có bị trùng không (chỉ nội bộ)
     private boolean isMaKHTourUnique(String maKHTour) {
         if (maKHTour == null || maKHTour.trim().isEmpty()) return false;
         for (int i = 0; i < soLuongKHTour; i++) {
@@ -56,57 +36,22 @@ public class DSKHTour {
         return true;
     }
 
-    // Thêm kế hoạch tour mới
-    public void themKHTour() {
+    // Thêm kế hoạch tour (chỉ thêm, không validate ngoại lệ)
+    public boolean themKHTour(KeHoachTour kht) {
         if (soLuongKHTour >= list.length) {
             System.out.println("Danh sách kế hoạch tour đã đầy!");
-            return;
+            return false;
         }
-
-        KeHoachTour kht = new KeHoachTour();
-        kht.nhapThongTin();
-
-        // Kiểm tra mã trùng
-        while (!isMaKHTourUnique(kht.getMaKHTour())) {
-            System.out.print("Mã KHTour đã tồn tại! Nhập lại: ");
-            kht.setMaKHTour(sc.nextLine().trim());
+        if (kht == null || kht.getMaKHTour() == null || !isMaKHTourUnique(kht.getMaKHTour())) {
+            System.out.println("Mã kế hoạch tour không hợp lệ hoặc đã tồn tại!");
+            return false;
         }
-
-        // Validate mã tour tồn tại
-        if (dsTour != null) {
-            boolean found = false;
-            for (DU_LICH.TourDuLich.Tour t : dsTour.getList()) {
-                if (t != null && t.getMaTour() != null && t.getMaTour().equalsIgnoreCase(kht.getMaTour())) {
-                    kht.setGiaVe(t.getDonGia());
-                    found = true;
-                    break;
-                }
-            }
-            if (!found) {
-                System.out.println("Mã Tour không tồn tại trong danh sách tour!");
-                return;
-            }
-        }
-
-        // Validate mã hướng dẫn viên
-        if (dsHDV != null && !kht.getMaHDV().trim().isEmpty()) {
-            try {
-                int maHDV = Integer.parseInt(kht.getMaHDV().trim());
-                if (dsHDV.timTheoMa(maHDV) == null) {
-                    System.out.println("Mã HDV không tồn tại!");
-                    return;
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Mã HDV phải là số nguyên!");
-                return;
-            }
-        }
-
         list[soLuongKHTour++] = kht;
         System.out.println("Thêm kế hoạch tour thành công!");
+        return true;
     }
 
-    // Hiển thị danh sách (cần truyền DSChiPhiKHTour để lấy chi phí)
+    // Hiển thị danh sách
     public void hienThiDanhSachKHTour(DSChiPhiKHTour dsChiPhi) {
         if (soLuongKHTour == 0) {
             System.out.println("Danh sách kế hoạch tour trống!");
@@ -148,8 +93,9 @@ public class DSKHTour {
         return true;
     }
 
-    // Chỉnh sửa kế hoạch tour (chỉ sửa thông tin cơ bản, không sửa chi phí)
+    // Chỉnh sửa kế hoạch tour
     public void chinhSuaKHTour(String maKHTour) {
+        Scanner sc = new Scanner(System.in);
         KeHoachTour kht = timTheoMaObject(maKHTour);
         if (kht == null) {
             System.out.println("Không tìm thấy kế hoạch tour với mã: " + maKHTour);
@@ -187,7 +133,6 @@ public class DSKHTour {
         }
 
         System.out.println("Chỉnh sửa kế hoạch tour thành công!");
-        System.out.println("Lưu ý: Chi phí ăn ở được quản lý riêng trong menu 'Chi phí kế hoạch tour'.");
     }
 
     // Tìm kiếm theo mã (trả về object)
@@ -225,28 +170,24 @@ public class DSKHTour {
         return ketQua;
     }
 
-    // Tìm kiếm theo mã (in kết quả ra màn hình) — dùng bởi menu
     public void timKiemTheoMa(String ma, DSChiPhiKHTour dsChiPhi) {
         if (ma == null || ma.trim().isEmpty()) {
             System.out.println("Vui lòng nhập mã hợp lệ.");
             return;
         }
         KeHoachTour k = timTheoMaObject(ma.trim());
-        if (k == null) System.out.println("Khong tim thay ke hoach tour voi ma: " + ma);
+        if (k == null) System.out.println("Không tìm thấy kế hoạch tour với mã: " + ma);
         else k.hienThiThongTin(dsChiPhi);
     }
 
-    // Thống kê tổng quan (cần truyền DSChiPhiKHTour)
     public void thongKe(DSChiPhiKHTour dsChiPhi) {
         if (soLuongKHTour == 0) {
             System.out.println("Chưa có kế hoạch tour nào để thống kê!");
             return;
         }
 
-        double tongThuVe = 0;
-        double tongChiPhi = 0;
-        int tongVe = 0;
-        int tongVeDaDat = 0;
+        double tongThuVe = 0, tongChiPhi = 0;
+        int tongVe = 0, tongVeDaDat = 0;
 
         for (int i = 0; i < soLuongKHTour; i++) {
             KeHoachTour k = list[i];
@@ -293,7 +234,7 @@ public class DSKHTour {
                         );
                         list[soLuongKHTour++] = kht;
                     } catch (Exception e) {
-                        System.out.println("Bỏ qua dòng lỗi: " + line);
+                        System.out.println("Bo qua dong loi: " + line);
                     }
                 }
             }

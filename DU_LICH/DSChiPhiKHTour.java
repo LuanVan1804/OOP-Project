@@ -49,7 +49,7 @@ public class DSChiPhiKHTour {
         return idx == -1 ? null : dsChiPhi[idx];
     }
 
-    // Tìm theo từ khóa (tìm trong mã KHTour) — trả về mảng kết quả
+    // Tìm theo từ khóa — trả về mảng kết quả
     public ChiPhiKHTour[] timTheoTen(String key) {
         if (key == null || key.trim().isEmpty()) return new ChiPhiKHTour[0];
         String tk = key.trim().toLowerCase();
@@ -75,47 +75,47 @@ public class DSChiPhiKHTour {
     // ==================== THÊM CHI PHÍ MỚI ====================
     public void themChiPhi() {
         if (soLuong >= MAX) {
-            System.out.println("Danh sách chi phí đã đầy (" + MAX + ")!");
+            System.out.println("Danh sach chi phi da day (" + MAX + ")!");
             return;
         }
 
-        System.out.print("Nhập mã kế hoạch tour (KHTour): ");
+        System.out.print("Nhap ma ke hoach tour (KHTour): ");
         String maKHTour = sc.nextLine().trim();
         if (maKHTour.isEmpty()) {
-            System.out.println("Mã KHTour không được để trống!");
+            System.out.println("Ma KHTour khong duoc de trong!");
             return;
         }
 
         // Kiểm tra KHTour tồn tại
         if (dsKHTour != null && dsKHTour.timTheoMaObject(maKHTour) == null) {
-            System.out.println("Mã KHTour '" + maKHTour + "' không tồn tại trong danh sách kế hoạch tour!");
+            System.out.println("Ma KHTour '" + maKHTour + "' khong ton tai trong danh sach ke hoach tour!");
             return;
         }
 
         // Kiểm tra đã có chi phí chưa
         if (findIndexByMa(maKHTour) != -1) {
-            System.out.println("Đã tồn tại chi phí cho kế hoạch tour này! Vui lòng dùng chức năng chỉnh sửa.");
+            System.out.println("Da ton tai chi phi cho ke hoach tour nay! Vui long dung chuc nang chinh sua.");
             return;
         }
 
         // Chọn khách sạn
-        System.out.println("\n--- Danh sách khách sạn ---");
+        System.out.println("\n--- Danh sach khach san ---");
         dsKhachSan.xuatDanhSach();
-        System.out.print("Nhập mã khách sạn: ");
+        System.out.print("Nhap ma khach san: ");
         String maKS = sc.nextLine().trim();
         KhachSan ks = dsKhachSan.timTheoMa(maKS);
         if (ks == null) {
-            System.out.println("Khách sạn không tồn tại!");
+            System.out.println("Khach san khong ton tai!");
             return;
         }
 
         // Nhập ngày đến - đi
-        Date ngayDen = nhapNgay("Nhập ngày đến (dd/MM/yyyy): ");
-        Date ngayDi = nhapNgay("Nhập ngày đi (dd/MM/yyyy): ");
+        Date ngayDen = nhapNgay("Nhap ngay den (dd/MM/yyyy): ");
+        Date ngayDi = nhapNgay("Nhap ngay di (dd/MM/yyyy): ");
         if (ngayDen == null || ngayDi == null) return;
 
         if (!ngayDi.after(ngayDen)) {
-            System.out.println("Ngày đi phải sau ngày đến!");
+            System.out.println("Ngay di phai sau ngay den!");
             return;
         }
 
@@ -123,31 +123,31 @@ public class DSChiPhiKHTour {
         double tienPhong = soNgay * ks.getGiaDatPhong();
 
         // Chọn nhà hàng
-        System.out.println("\n--- Danh sách nhà hàng ---");
+        System.out.println("\n--- Danh sach nha hang ---");
         dsNhaHang.xuatDanhSach();
-        System.out.print("Nhập mã nhà hàng: ");
+        System.out.print("Nhap ma nha hang: ");
         String maNH = sc.nextLine().trim();
         NhaHang nh = dsNhaHang.timTheoMa(maNH);
         if (nh == null) {
-            System.out.println("Nhà hàng không tồn tại!");
+            System.out.println("Nha hang khong ton tai!");
             return;
         }
 
-        System.out.print("Nhập số lượng combo ăn: ");
+        System.out.print("Nhap so luong combo an: ");
         int soCombo = 0;
         try {
             soCombo = Integer.parseInt(sc.nextLine().trim());
             if (soCombo < 0) soCombo = 0;
         } catch (Exception e) {
-            System.out.println("Số lượng không hợp lệ → mặc định 0");
+            System.out.println("So luong khong hop le → mac dinh 0");
         }
         double tienAn = soCombo * nh.getGiaCombo();
 
-        // Tạo và thêm
+        // Tao va them
         ChiPhiKHTour cp = new ChiPhiKHTour(maKHTour, maNH, maKS, tienPhong, tienAn);
         dsChiPhi[soLuong++] = cp;
 
-        System.out.println("=== THÊM CHI PHÍ THÀNH CÔNG! ===");
+        System.out.println("=== THEM CHI PHI THANH CONG! ===");
         cp.xuatThongTin();
     }
 
@@ -155,7 +155,7 @@ public class DSChiPhiKHTour {
     public boolean chinhSuaTheoMa(String ma) {
         int idx = findIndexByMa(ma);
         if (idx == -1) {
-            System.out.println("Không tìm thấy chi phí cho mã KHTour: " + ma);
+            System.out.println("Khong tim thay chi phi cho ma KHTour: " + ma);
             return false;
         }
 
@@ -163,11 +163,11 @@ public class DSChiPhiKHTour {
         KhachSan ks = dsKhachSan.timTheoMa(cp.getMaKhachSan());
         NhaHang nh = dsNhaHang.timTheoMa(cp.getMaNhaHang());
 
-        System.out.println("\n--- CHỈNH SỬA CHI PHÍ KẾ HOẠCH TOUR ---");
-        System.out.println("Để trống và nhấn Enter nếu muốn giữ nguyên.");
+        System.out.println("\n--- CHINH SUA CHI PHI KE HOACH TOUR ---");
+        System.out.println("De trong va nhan Enter neu muon giu nguyen.");
 
         // Sửa khách sạn
-        System.out.printf("Mã khách sạn hiện tại (%s): ", cp.getMaKhachSan());
+        System.out.printf("Ma khach san hien tai (%s): ", cp.getMaKhachSan());
         String newKS = sc.nextLine().trim();
         if (!newKS.isEmpty()) {
             KhachSan ksMoi = dsKhachSan.timTheoMa(newKS);
@@ -175,26 +175,26 @@ public class DSChiPhiKHTour {
                 ks = ksMoi;
                 cp.setMaKhachSan(newKS);
             } else {
-                System.out.println("Khách sạn không tồn tại → giữ nguyên.");
+                System.out.println("Khach san khong ton tai → giu nguyen.");
             }
         }
 
-        // Cập nhật ngày → tính lại tiền phòng
-        System.out.print("Cập nhật ngày đến/di để tính lại tiền phòng? (y/n): ");
+        // CCap nhat ngay → tinh lai tien phong
+        System.out.print("CCap nhat ngay den/di de tinh lai tien phong? (y/n): ");
         if (sc.nextLine().trim().equalsIgnoreCase("y")) {
-            Date d1 = nhapNgay("Nhập ngày đến mới (dd/MM/yyyy): ");
-            Date d2 = nhapNgay("Nhập ngày đi mới (dd/MM/yyyy): ");
+            Date d1 = nhapNgay("Nhap ngay den moi (dd/MM/yyyy): ");
+            Date d2 = nhapNgay("Nhap ngay di moi (dd/MM/yyyy): ");
             if (d1 != null && d2 != null && d2.after(d1)) {
                 long soNgay = (d2.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24) + 1;
                 if (ks != null) {
                     cp.setTongTienPhong(soNgay * ks.getGiaDatPhong());
-                    System.out.printf("→ Cập nhật tiền phòng: %, .0f VND (%d đêm)%n", cp.getTongTienPhong(), soNgay);
+                    System.out.printf("→ Cap nhat tien phong: %, .0f VND (%d dem)%n", cp.getTongTienPhong(), soNgay);
                 }
             }
         }
 
-        // Sửa nhà hàng
-        System.out.printf("Mã nhà hàng hiện tại (%s): ", cp.getMaNhaHang());
+        // Sua nha hang
+        System.out.printf("Ma nha hang hien tai (%s): ", cp.getMaNhaHang());
         String newNH = sc.nextLine().trim();
         if (!newNH.isEmpty()) {
             NhaHang nhMoi = dsNhaHang.timTheoMa(newNH);
@@ -202,13 +202,13 @@ public class DSChiPhiKHTour {
                 nh = nhMoi;
                 cp.setMaNhaHang(newNH);
             } else {
-                System.out.println("Nhà hàng không tồn tại → giữ nguyên.");
+                System.out.println("Nha hang khong ton tai → giu nguyen.");
             }
         }
 
-        // Sửa số combo
+        // Sua so combo
         double comboHienTai = nh != null && nh.getGiaCombo() > 0 ? cp.getTongTienAn() / nh.getGiaCombo() : 0;
-        System.out.printf("Số combo hiện tại (%.0f combo → %, .0f VND): ", comboHienTai, cp.getTongTienAn());
+        System.out.printf("So combo hien tai (%.0f combo → %, .0f VND): ", comboHienTai, cp.getTongTienAn());
         String input = sc.nextLine().trim();
         if (!input.isEmpty()) {
             try {
@@ -217,11 +217,11 @@ public class DSChiPhiKHTour {
                     cp.setTongTienAn(soCombo * nh.getGiaCombo());
                 }
             } catch (Exception e) {
-                System.out.println("Số không hợp lệ → giữ nguyên.");
+                System.out.println("So khong hop le → giu nguyen.");
             }
         }
 
-        System.out.println("Chỉnh sửa chi phí thành công!");
+        System.out.println("Chinh sua chi phi thanh cong!");
         return true;
     }
 
@@ -229,21 +229,21 @@ public class DSChiPhiKHTour {
     public boolean xoaTheoMa(String ma) {
         int idx = findIndexByMa(ma);
         if (idx == -1) {
-            System.out.println("Không tìm thấy chi phí cho mã: " + ma);
+            System.out.println("Khong tim thay chi phi cho ma: " + ma);
             return false;
         }
         for (int i = idx; i < soLuong - 1; i++) {
             dsChiPhi[i] = dsChiPhi[i + 1];
         }
         dsChiPhi[--soLuong] = null;
-        System.out.println("Xóa chi phí thành công!");
+        System.out.println("Xoa chi phi thanh cong!");
         return true;
     }
 
     // ==================== HIỂN THỊ DANH SÁCH ====================
     public void xuatDanhSach() {
         if (soLuong == 0) {
-            System.out.println("Chưa có chi phí kế hoạch tour nào.");
+            System.out.println("Chua co chi phi ke hoach tour nao.");
             return;
         }
         System.out.println("════════════════════════════════════════════════════════════════════════════════");
@@ -286,11 +286,11 @@ public class DSChiPhiKHTour {
                     dsChiPhi[soLuong++] = new ChiPhiKHTour(ma, maNH, maKS, tienPhong, tienAn);
                     dem++;
                 } catch (Exception e) {
-                    System.out.println("Bỏ qua dòng lỗi: " + line);
+                    System.out.println("Bo qua dong loi: " + line);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Lỗi đọc file chi phí: " + e.getMessage());
+            System.out.println("Loi doc file chi phi: " + e.getMessage());
         }
         return dem;
     }
@@ -312,7 +312,7 @@ public class DSChiPhiKHTour {
                 bw.newLine();
             }
         } catch (IOException e) {
-            System.out.println("Lỗi ghi file chi phí: " + e.getMessage());
+            System.out.println("Loi ghi file chi phi: " + e.getMessage());
             return 0;
         }
         return soLuong;
@@ -324,14 +324,14 @@ public class DSChiPhiKHTour {
             System.out.print(msg);
             String s = sc.nextLine().trim();
             if (s.isEmpty()) {
-                System.out.println("Không được để trống!");
+                System.out.println("Khong duoc de trong!");
                 continue;
             }
             try {
                 java.util.Date d = SDF.parse(s);
                 return new Date(d.getTime());
             } catch (ParseException e) {
-                System.out.println("Định dạng ngày không đúng! Vui lòng nhập theo dd/MM/yyyy");
+                System.out.println("Dinh dang ngay khong dung! Vui long nhap theo dd/MM/yyyy");
             }
         }
     }
@@ -340,7 +340,7 @@ public class DSChiPhiKHTour {
     // In ra tổng số bản ghi, tổng tiền ăn, tổng tiền phòng
     public void thongKeDonGian() {
         if (soLuong == 0) {
-            System.out.println("Chưa có chi phí kế hoạch tour để thống kê.");
+            System.out.println("Chua co chi phi ke hoach tour de thong ke.");
             return;
         }
         double tongAn = 0;
@@ -351,11 +351,11 @@ public class DSChiPhiKHTour {
             tongAn += cp.getTongTienAn();
             tongPhong += cp.getTongTienPhong();
         }
-        System.out.println("===== THỐNG KÊ CHI PHÍ KẾ HOẠCH TOUR (ĐƠN GIẢN) =====");
-        System.out.println("Số bản ghi: " + soLuong);
-        System.out.printf("Tổng tiền ăn : %, .0f VND%n", tongAn);
-        System.out.printf("Tổng tiền phòng: %, .0f VND%n", tongPhong);
-        System.out.printf("Tổng chi phí  : %, .0f VND%n", (tongAn + tongPhong));
+        System.out.println("===== THONG KE CHI PHI KE HOACH TOUR (DON GIAN) =====");
+        System.out.println("So ban ghi: " + soLuong);
+        System.out.printf("Tong tien an : %, .0f VND%n", tongAn);
+        System.out.printf("Tong tien phong: %, .0f VND%n", tongPhong);
+        System.out.printf("Tong chi phi  : %, .0f VND%n", (tongAn + tongPhong));
         System.out.println("=====================================================");
     }
 }

@@ -114,17 +114,14 @@ public class KhachSan {
     public void xuat(){
         String den = (this.NgayDen == null) ? "(trống)" : SDF.format(new java.util.Date(this.NgayDen.getTime()));
         String di  = (this.NgayDi  == null) ? "(trống)" : SDF.format(new java.util.Date(this.NgayDi.getTime()));
-        System.out.printf("Ma khach san: %s\n", this.maKhachSan);
-        System.out.printf("TTen khach san: %s\n", this.tenKhachSan);
-        System.out.printf("Ngay den: %s\n", den);
-        System.out.printf("Ngay di: %s\n", di);
-        System.out.printf("Gia dat phong: %.2f\n", this.giaDatPhong);
+        System.out.printf("%s | %s | Den: %s | Di: %s | Gia dat phong: %, .0f VND\n",
+            this.maKhachSan, this.tenKhachSan, den, di, this.giaDatPhong);
     }
 
     public String toString() {
         String den = (this.NgayDen == null) ? "(trống)" : SDF.format(new java.util.Date(this.NgayDen.getTime()));
         String di  = (this.NgayDi  == null) ? "(trống)" : SDF.format(new java.util.Date(this.NgayDi.getTime()));
-        return "Khach san: " + maKhachSan + "\nTTen khach san: " + tenKhachSan + "\nNgay den: " + den
-                + "\nNgay di: " + di + "\nGia dat phong: " + giaDatPhong + "\n";
+        return String.format("%s | %s | Den: %s | Di: %s | Gia dat phong: %, .0f VND",
+            maKhachSan, tenKhachSan, den, di, giaDatPhong);
     }
 }

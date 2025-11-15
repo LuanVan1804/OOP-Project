@@ -65,14 +65,13 @@ public class NhaHang {
     }
 
     public void xuat(){
-        System.out.printf("Ma nha hang: %s\n", this.maNhaHang);
-        System.out.printf("Ten nha hang: %s\n", this.tenNhaHang);
-        System.out.printf("Combo: %s\n", this.Combo);
-        System.out.printf("Gia combo: %.2f\n", this.giaCombo);
+        System.out.printf("%s | %s | Combo: %s | Gia combo: %,.0f VND%n",
+                this.maNhaHang, this.tenNhaHang, this.Combo, this.giaCombo);
     }
     
     public String toString() {
-        return "Nha hang: " + maNhaHang + "\n" + "Ten nha hang: " + tenNhaHang + "\n" + "Combo: " + Combo + "\n" + "Gia combo: " + giaCombo;
+        return String.format("%s | %s | Combo: %s | Gia combo: %,.0f VND",
+                maNhaHang, tenNhaHang, Combo, giaCombo);
     }
     
 }

@@ -22,6 +22,14 @@ public class ChiPhiKHTour {
         this.tongTienPhong = tongTienPhong;
         this.tongTienAn = tongTienAn;
     }
+    //constructor sao chép
+    public ChiPhiKHTour(ChiPhiKHTour other) {
+        this.maKHTour = other.maKHTour;
+        this.maNhaHang = other.maNhaHang;
+        this.maKhachSan = other.maKhachSan;
+        this.tongTienPhong = other.tongTienPhong;
+        this.tongTienAn = other.tongTienAn;
+    }
 
     // Getter & Setter
     public String getMaKHTour() { return maKHTour; }
@@ -38,13 +46,13 @@ public class ChiPhiKHTour {
     public double getTongChiPhi() { return tongTienPhong + tongTienAn; }
 
     public void xuatThongTin() {
-        System.out.println("===== CHI PHI KE HOACH TOUR =====");
-        System.out.printf("Ma KHTour       : %s%n", maKHTour);
-        System.out.printf("Ma Nha Hang     : %s%n", maNhaHang);
-        System.out.printf("Ma Khach San    : %s%n", maKhachSan);
-        System.out.printf("Tong tien an    : %, .0f VND%n", tongTienAn);
-        System.out.printf("Tong tien phong : %, .0f VND%n", tongTienPhong);
-        System.out.printf("TONG CHI PHI    : %, .0f VND%n", getTongChiPhi());
-        System.out.println("==================================");
+        System.out.printf("%s | %s | %s | Tong an: %,.0f VND | Tong phong: %,.0f VND | Tong: %,.0f VND%n",
+                maKHTour, maNhaHang, maKhachSan, tongTienAn, tongTienPhong, getTongChiPhi());
+    }
+
+    @Override
+    public String toString() {
+        return String.format("%s | %s | %s | Tong an: %,.0f VND | Tong phong: %,.0f VND | Tong: %,.0f VND",
+                maKHTour, maNhaHang, maKhachSan, tongTienAn, tongTienPhong, getTongChiPhi());
     }
 }
