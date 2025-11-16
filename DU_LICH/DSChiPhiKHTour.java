@@ -19,6 +19,7 @@ public class DSChiPhiKHTour {
     private DSKHTour dsKHTour;
     private DSKhachSan dsKhachSan;
     private DSNhaHang dsNhaHang;
+    private DU_LICH.NH_KS_PT.DSPhuongTien dsPhuongTien;
 
     private static final String DATE_PATTERN = "dd/MM/yyyy";
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));
@@ -30,6 +31,11 @@ public class DSChiPhiKHTour {
         this.dsKHTour = dsKHTour;
         this.dsKhachSan = dsKhachSan;
         this.dsNhaHang = dsNhaHang;
+        this.dsPhuongTien = null;
+    }
+
+    public void setDsPhuongTien(DU_LICH.NH_KS_PT.DSPhuongTien dsPhuongTien) {
+        this.dsPhuongTien = dsPhuongTien;
     }
 
     public int getSoLuong() { return soLuong; }
@@ -143,8 +149,29 @@ public class DSChiPhiKHTour {
         }
         double tienAn = soCombo * nh.getGiaCombo();
 
+        // Chọn phương tiện (tuỳ chọn)
+        String maPT = "";
+        double tienPT = 0.0;
+        if (dsPhuongTien != null) {
+            System.out.println("\n--- Danh sach phuong tien ---");
+            dsPhuongTien.xuat();
+            System.out.print("Nhap bien kiem soat phuong tien (de trong neu khong su dung): ");
+            String bien = sc.nextLine().trim();
+            if (!bien.isEmpty()) {
+                DU_LICH.NH_KS_PT.PhuongTien pt = dsPhuongTien.timTheoBien(bien);
+                if (pt == null) {
+                    System.out.println("Phuong tien khong ton tai -> bo qua.");
+                } else {
+                    maPT = pt.getBienKiemSoat();
+                    // reuse soNgay computed above
+                    tienPT = pt.getPhiTheoNgay() * soNgay;
+                    System.out.printf("Chi phi phuong tien duoc tinh: %,.0f VND (%d ngay)\n", tienPT, soNgay);
+                }
+            }
+        }
+
         // Tao va them
-        ChiPhiKHTour cp = new ChiPhiKHTour(maKHTour, maNH, maKS, tienPhong, tienAn);
+        ChiPhiKHTour cp = new ChiPhiKHTour(maKHTour, maNH, maKS, maPT, tienPhong, tienAn, tienPT);
         dsChiPhi[soLuong++] = cp;
 
         System.out.println("=== THEM CHI PHI THANH CONG! ===");
@@ -283,7 +310,13 @@ public class DSChiPhiKHTour {
                     if (dsNhaHang != null && dsNhaHang.timTheoMa(maNH) == null) continue;
                     if (dsKhachSan != null && dsKhachSan.timTheoMa(maKS) == null) continue;
 
-                    dsChiPhi[soLuong++] = new ChiPhiKHTour(ma, maNH, maKS, tienPhong, tienAn);
+                    String maPT = "";
+                    double tienPT = 0.0;
+                    if (p.length >= 7) {
+                        maPT = p[5].trim();
+                        try { tienPT = Double.parseDouble(p[6].trim()); } catch (Exception ex) { tienPT = 0.0; }
+                    }
+                    dsChiPhi[soLuong++] = new ChiPhiKHTour(ma, maNH, maKS, maPT, tienPhong, tienAn, tienPT);
                     dem++;
                 } catch (Exception e) {
                     System.out.println("Bo qua dong loi: " + line);
@@ -307,7 +340,9 @@ public class DSChiPhiKHTour {
                     cp.getMaNhaHang(),
                     cp.getMaKhachSan(),
                     String.valueOf(cp.getTongTienAn()),
-                    String.valueOf(cp.getTongTienPhong())
+                    String.valueOf(cp.getTongTienPhong()),
+                    (cp.getMaPhuongTien() == null ? "" : cp.getMaPhuongTien()),
+                    String.valueOf(cp.getTongTienPhuongTien())
                 ));
                 bw.newLine();
             }

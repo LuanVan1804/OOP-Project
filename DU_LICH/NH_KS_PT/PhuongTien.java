@@ -6,12 +6,14 @@ public class PhuongTien {
     private String bienKiemSoat;
     private int soChoNgoi;
     private String loaiPhuongTien;
+    private double phiTheoNgay;
     
     // Constructor mặc định
     public PhuongTien() {
         this.bienKiemSoat = "";
         this.soChoNgoi = 0;
         this.loaiPhuongTien = "";
+        this.phiTheoNgay = 0.0;
     }
  
     // Constructor có tham số
@@ -19,6 +21,14 @@ public class PhuongTien {
         this.bienKiemSoat = bienKiemSoat;
         this.soChoNgoi = soChoNgoi;
         this.loaiPhuongTien = loaiPhuongTien;
+        this.phiTheoNgay = 0.0;
+    }
+
+    public PhuongTien(String bienKiemSoat, int soChoNgoi, String loaiPhuongTien, double phiTheoNgay) {
+        this.bienKiemSoat = bienKiemSoat;
+        this.soChoNgoi = soChoNgoi;
+        this.loaiPhuongTien = loaiPhuongTien;
+        this.phiTheoNgay = phiTheoNgay;
     }
 
     // Getter
@@ -34,6 +44,10 @@ public class PhuongTien {
         return loaiPhuongTien;
     }
 
+    public double getPhiTheoNgay() {
+        return phiTheoNgay;
+    }
+
     // Setter
     public void setBienKiemSoat(String bienKiemSoat) {
         this.bienKiemSoat = bienKiemSoat;
@@ -46,10 +60,12 @@ public class PhuongTien {
     public void setLoaiPhuongTien(String loaiPhuongTien) {
         this.loaiPhuongTien = loaiPhuongTien;
     }
+    public void setPhiTheoNgay(double phiTheoNgay) {
+        this.phiTheoNgay = phiTheoNgay;
+    }
     
     // Nhập thông tin (có kiểm tra nhập số nguyên cho số chỗ)
-    public void nhap(){
-        Scanner sc = new Scanner(System.in);
+    public void nhap(Scanner sc){
         System.out.print("Nhập biển kiểm soát: ");
         this.bienKiemSoat = sc.nextLine().trim();
 
@@ -63,19 +79,20 @@ public class PhuongTien {
 
         System.out.print("Nhập loại phương tiện: ");
         this.loaiPhuongTien = sc.nextLine().trim();
+
+        System.out.print("Nhập phí thuê (VND) theo ngày: ");
+        while (!sc.hasNextDouble()) {
+            System.out.print("  Số, nhập lại: ");
+            sc.next();
+        }
+        this.phiTheoNgay = sc.nextDouble();
+        sc.nextLine();
     }
     
     // Xuất thông tin
     public void xuat(){
-        System.out.println("Biển kiểm soát  : " + bienKiemSoat );
-        System.out.println("Số chỗ ngồi     : " + soChoNgoi );
-        System.out.println("Loại phương tiện : " + loaiPhuongTien );
-    }
-    
-    @Override
-    public String toString() {
-        return "\nBiển kiểm soát  : " + bienKiemSoat
-             + "\nSố chỗ ngồi     : " + soChoNgoi
-             + "\nLoại phương tiện : " + loaiPhuongTien;
+        // Single-line summary: Bien | SoCho | Loai | Phi/ngay
+        String fee = String.format("%,.0f VND", phiTheoNgay);
+        System.out.printf("%s | %d chỗ | %s | %s\n", bienKiemSoat, soChoNgoi, loaiPhuongTien, fee);
     }
 }

@@ -79,9 +79,9 @@ public class HoaDon {
 
     // Xuat thong tin hoa don (in dep)
     public void xuatThongTin() {
-        System.out.println("┌" + "─".repeat(60) + "┐");
-        System.out.println("│" + " ".repeat(20) + "HOA DON TOUR" + " ".repeat(28) + "│");
-        System.out.println("├" + "─".repeat(60) + "┤");
+        System.out.println("┌──────────────────────────────────────────────────────────────┐");
+        System.out.println("│                    HOA DON TOUR                              │");
+        System.out.println("├──────────────────────────────────────────────────────────────┤");
         System.out.printf("│ Ma hoa don             : %-33s │%n", getMaHD());
         System.out.printf("│ Ma ke hoach tour       : %-33s │%n", getMaKHTour().getMaKHTour());
         System.out.printf("│ Ma HDV phu trach       : %-33d │%n", getMaHDV().getMaHDV());
@@ -89,7 +89,7 @@ public class HoaDon {
         System.out.printf("│ So khach di tour       : %-33d │%n", getSoKhach());
         System.out.printf("│ So ve                  : %-33d │%n", getSoVe());
         System.out.printf("│ Tong tien              : %-33s │%n", String.format("%,.0f VND", tongTienVe()));
-        System.out.println("└" + "─".repeat(60) + "┘");
+        System.out.println("└──────────────────────────────────────────────────────────────┘");
     }
 
     // Hien thi thong tin hoa don (giu de backward compatible)

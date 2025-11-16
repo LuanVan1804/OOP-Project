@@ -57,9 +57,9 @@ public class ChiTietHD {
 
     // XUAT THONG TIN (in dep)
     public void xuatThongTin() {
-        System.out.println("┌" + "─".repeat(60) + "┐");
-        System.out.println("│" + " ".repeat(18) + "CHI TIET HOA DON" + " ".repeat(26) + "│");
-        System.out.println("├" + "─".repeat(60) + "┤");
+        System.out.println("┌──────────────────────────────────────────────────────────────┐");
+        System.out.println("│                  CHI TIET HOA DON                           │");
+        System.out.println("├──────────────────────────────────────────────────────────────┤");
         
         // Validation: Hien thi canh bao neu maHD null/rong
         String displayMaHD = (maHD == null || maHD.trim().isEmpty()) 
@@ -77,7 +77,7 @@ public class ChiTietHD {
         System.out.printf("│ Gia ve             : %-35s │%n", String.format("%,.0f VND", giaVe));
         System.out.printf("│ So khach           : %-35d │%n", dsMaKhachHang.length);
         System.out.printf("│ Tong tien          : %-35s │%n", String.format("%,.0f VND", tongTien));
-        System.out.println("└" + "─".repeat(60) + "┘");
+        System.out.println("└──────────────────────────────────────────────────────────────┘");
     }
 
     // HIEN THI (giu de backward compatible)

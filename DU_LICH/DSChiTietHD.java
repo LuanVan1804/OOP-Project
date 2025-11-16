@@ -2,13 +2,11 @@ package DU_LICH;
 
 import java.io.*;
 import java.util.Arrays;
-import java.util.Scanner;
 
 public class DSChiTietHD {
     // THUOC TINH
     private ChiTietHD[] list;
     private int soLuong;
-    private static final String FILE_PATH = "DU_LICH/DSChiTietHD.txt";
 
     // CONSTRUCTOR
     public DSChiTietHD() {
@@ -54,7 +52,6 @@ public class DSChiTietHD {
                 
                 // Validation: Bo qua dong co maHD rong
                 if (maHD == null || maHD.isEmpty()) {
-                    System.out.println("[CANH BAO] Bo qua chi tiet hoa don co ma HD rong!");
                     continue;
                 }
                 
@@ -99,61 +96,29 @@ public class DSChiTietHD {
         bw.close();
     }
 
-    // ===== TU DONG TAO CHI TIET =====
-    // Tu dong tao chi tiet khi them hoa don (CASCADE INSERT)
-    public void taoChiTiet(HoaDon hd, int[] dsMaKhachHang) {
-        String maHD = hd.getMaHD();
-        
-        // Validation: Khong tao chi tiet neu maHD rong
-        if (maHD == null || maHD.trim().isEmpty()) {
-            System.out.println("[LOI] Khong the tao chi tiet: Ma hoa don rong!");
-            return;
-        }
-        
-        String maKHTour = hd.getMaKHTour().getMaKHTour();
-        double giaVe = hd.getMaKHTour().getGiaVe();
-        
-        ChiTietHD chiTiet = new ChiTietHD(maHD, maKHTour, dsMaKhachHang, giaVe);
-        
-        // Them vao mang
+    // ===== THEM CHI TIET =====
+    public void them(ChiTietHD chiTiet) {
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = chiTiet;
         soLuong++;
-        
-        // Luu file
-        try {
-            saveToFile(FILE_PATH);
-            System.out.println("Da tao chi tiet hoa don tu dong!");
-        } catch (IOException e) {
-            System.out.println("Loi luu chi tiet: " + e.getMessage());
-        }
     }
 
-    // ===== TU DONG XOA CHI TIET =====
-    // Tu dong xoa chi tiet khi xoa hoa don (CASCADE DELETE)
-    public void xoaChiTiet(String maHD) {
+    // ===== XOA CHI TIET =====
+    public boolean xoa(String maHD) {
         for (int i = 0; i < soLuong; i++) {
             if (list[i].getMaHD().equals(maHD)) {
                 // Xoa khoi mang
                 for (int j = i; j < soLuong - 1; j++) list[j] = list[j + 1];
                 list = Arrays.copyOf(list, list.length - 1);
                 soLuong--;
-                
-                // Luu file
-                try {
-                    saveToFile(FILE_PATH);
-                    System.out.println("Da xoa chi tiet hoa don tu dong!");
-                } catch (IOException e) {
-                    System.out.println("Loi luu chi tiet: " + e.getMessage());
-                }
-                return;
+                return true;
             }
         }
+        return false;
     }
 
-    // ===== XEM CHI TIET =====
-    // Xem chi tiet cua 1 hoa don
-    public ChiTietHD xemChiTiet(String maHD) {
+    // ===== TIM CHI TIET =====
+    public ChiTietHD tim(String maHD) {
         for (int i = 0; i < soLuong; i++) {
             if (list[i] != null && list[i].getMaHD().equals(maHD)) {
                 return list[i];
@@ -168,61 +133,12 @@ public class DSChiTietHD {
             System.out.println("Chua co chi tiet hoa don nao!");
             return;
         }
-        System.out.println("\n" + "=".repeat(80));
+        System.out.println("\n================================================================================");
         System.out.println("                    DANH SACH CHI TIET HOA DON");
-        System.out.println("=".repeat(80));
+        System.out.println("================================================================================");
         for (int i = 0; i < soLuong; i++) {
             System.out.println("\n[Chi tiet " + (i + 1) + "]");
             list[i].hienThiThongTin();
         }
-    }
-
-    // ===== MAIN TEST =====
-    public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
-        DSChiTietHD dsChiTiet = new DSChiTietHD();
-
-        // Load file
-        try {
-            dsChiTiet.loadFromFile(FILE_PATH);
-        } catch (IOException e) {
-            System.out.println("Loi load file: " + e.getMessage());
-        }
-
-        boolean exit = false;
-        while (!exit) {
-            System.out.println("\n=== MENU CHI TIET HOA DON ===");
-            System.out.println("1. Hien thi tat ca chi tiet");
-            System.out.println("2. Xem chi tiet theo ma hoa don");
-            System.out.println("3. Thoat");
-            System.out.print("Chon: ");
-
-            int choice = Integer.parseInt(sc.nextLine());
-
-            switch (choice) {
-                case 1:
-                    dsChiTiet.hienThiDanhSach();
-                    break;
-                case 2:
-                    System.out.print("Nhap ma hoa don: ");
-                    String maHD = sc.nextLine();
-                    ChiTietHD ct = dsChiTiet.xemChiTiet(maHD);
-                    if (ct != null) {
-                        System.out.println("\nChi tiet hoa don:");
-                        ct.hienThiThongTin();
-                    } else {
-                        System.out.println("Khong tim thay chi tiet!");
-                    }
-                    break;
-                case 3:
-                    exit = true;
-                    break;
-                default:
-                    System.out.println("Lua chon khong hop le.");
-            }
-        }
-
-        System.out.println("Thoat chuong trinh!");
-        sc.close();
     }
 }

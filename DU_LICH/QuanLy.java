@@ -22,6 +22,9 @@ public class QuanLy {
 	protected static DSKhachHang dsKhachHang;
 	protected static DSKHTour dsKeHoach;
 	protected static DSChiPhiKHTour dsChiPhi;
+	protected static DSHoaDon dsHoaDon;
+	protected static DSChiTietHD dsChiTietHD;
+	protected static DU_LICH.NH_KS_PT.DSPhuongTien dsPhuongTien;
 
 	// Các đường dẫn file mặc định (có thể thay đổi khi khởi tạo nếu cần)
 	protected static String pathQuocGia = "D:\\doanOOP\\DU_LICH\\DiaDiemDuLich\\quocGia.txt";
@@ -33,6 +36,9 @@ public class QuanLy {
 	protected static String pathHDV = "D:\\doanOOP\\DU_LICH\\Nguoi\\HDV.txt";
 	protected static String pathKeHoach = "D:\\doanOOP\\DU_LICH\\kehoachtour.txt";
 	protected static String pathChiPhi = "D:\\doanOOP\\DU_LICH\\ChiPhiKHTour.txt";
+	protected static String pathDSHoaDon = "D:\\doanOOP\\DU_LICH\\DSHoaDon.txt";
+	protected static String pathDSChiTiet = "D:\\doanOOP\\DU_LICH\\DSChiTietHD.txt";
+	protected static String pathPhuongTien = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\PhuongTien.txt";
 
 	public QuanLy() {
 		this(true);
@@ -94,6 +100,14 @@ public class QuanLy {
 			System.out.println("Loi doc NhaHang.txt: " + e.getMessage());
 		}
 
+		//Phuong Tien
+		dsPhuongTien = new DU_LICH.NH_KS_PT.DSPhuongTien();
+		try {
+			dsPhuongTien.loadFromFile(pathPhuongTien);
+		} catch (Exception e) {
+			System.out.println("Loi doc PhuongTien.txt: " + e.getMessage());
+		}
+
 		// Khach hang
 		dsKhachHang = new DSKhachHang();
 		try {
@@ -118,6 +132,21 @@ public class QuanLy {
 			System.out.println("Loi doc kehoachtour.txt: " + e.getMessage());
 		}
 
+		// Hoa don va chi tiet hoa don
+		dsHoaDon = new DSHoaDon();
+		try {
+			dsHoaDon.loadFromFile(pathDSHoaDon);
+		} catch (Exception e) {
+			System.out.println("Loi doc DSHoaDon.txt: " + e.getMessage());
+		}
+
+		dsChiTietHD = new DSChiTietHD();
+		try {
+			dsChiTietHD.loadFromFile(pathDSChiTiet);
+		} catch (Exception e) {
+			System.out.println("Loi doc DSChiTietHD.txt: " + e.getMessage());
+		}
+
 		// Chi phi ke hoach tour (phu thuoc vao dsKeHoach, dsKhachSan, dsNhaHang)
 		dsChiPhi = new DSChiPhiKHTour(dsKeHoach, dsKhachSan, dsNhaHang);
 		try {
@@ -125,6 +154,13 @@ public class QuanLy {
 		} catch (Exception e) {
 			System.out.println("Loi doc ChiPhiKHTour.txt: " + e.getMessage());
 		}
+
+		// Wire DSPhuongTien into DSChiPhi so chi phi creation can list/select vehicles
+		if (dsChiPhi != null && dsPhuongTien != null) {
+			dsChiPhi.setDsPhuongTien(dsPhuongTien);
+		}
+
+
 	}
 
 	// Menu chính của lớp QuanLy (sử dụng scanner do caller truyền vào)
@@ -143,6 +179,9 @@ public class QuanLy {
 			System.out.println("5. Quan ly khach hang");
 			System.out.println("6. Quan ly ke hoach tour");
 			System.out.println("7. Quan ly chi phi ke hoach tour");
+			System.out.println("8. Quan ly hoa don");
+			System.out.println("9. Quan ly chi tiet hoa don");
+			System.out.println("10. Quan ly phuong tien");
 			System.out.println("0. Thoat");
 			System.out.print("Chon chuc nang: ");
 
@@ -156,7 +195,6 @@ public class QuanLy {
 
 			switch (choice) {
 				case 1:
-					// Gọi menu quản lý tour (được quản lý tại đây)
 						new QuanLyTour().tourMenu(sc);
 					break;
 				case 2:
@@ -177,8 +215,16 @@ public class QuanLy {
 				case 7:
 						new QuanLyChiPhi().chiPhiMenu(sc);
 					break;
+				case 8:
+					new QuanLyHoaDon(dsHoaDon, dsHDV, dsKhachHang, dsKeHoach, dsChiTietHD, sc).menu();
+					break;
+				case 9:
+					new QuanLyChiTietHD(dsChiTietHD, sc).menu();
+					break;
+				case 10:
+					new DU_LICH.QuanLyPhuongTien(dsPhuongTien, sc, pathPhuongTien).menu();
+					break;
 				case 0:
-					// Khi thoát, lưu các danh sách nếu cần (DSTour đã lưu trong menu của nó)
 					try {
 						dsTour.saveToFile(pathDSTour);
 					} catch (IOException e) {
@@ -193,6 +239,21 @@ public class QuanLy {
 						dsChiPhi.saveToFile(pathChiPhi);
 					} catch (Exception e) {
 						System.out.println("Loi khi luu chi phi: " + e.getMessage());
+					}
+					try {
+						dsHoaDon.saveToFile(pathDSHoaDon);
+					} catch (IOException e) {
+						System.out.println("Loi luu DSHoaDon: " + e.getMessage());
+					}
+					try {
+						dsChiTietHD.saveToFile(pathDSChiTiet);
+					} catch (IOException e) {
+						System.out.println("Loi luu DSChiTietHD: " + e.getMessage());
+					}
+					try {
+						dsPhuongTien.saveToFile(pathPhuongTien);
+					} catch (IOException e) {
+						System.out.println("Loi luu PhuongTien: " + e.getMessage());
 					}
 					System.out.println("Thoat QuanLy.");
 					return;
@@ -242,5 +303,13 @@ public class QuanLy {
 
 	public DSKHTour getDsKeHoach() {
 		return dsKeHoach;
+	}
+
+	public DSChiPhiKHTour getDsChiPhi() {
+		return dsChiPhi;
+	}
+
+	public DU_LICH.NH_KS_PT.DSPhuongTien getDsPhuongTien() {
+		return dsPhuongTien;
 	}
 }
