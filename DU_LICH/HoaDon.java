@@ -59,8 +59,6 @@ public class HoaDon {
     public int getSoVe() { return soVe; }
     public void setSoVe(int soVe) { this.soVe = soVe; }
 
-    // Nhap thong tin hoa don (su dung Scanner mac dinh)
-    
     // Nhap thong tin hoa don (nhan Scanner tu ben ngoai)
     public void nhap(Scanner sc) {
         System.out.print("Nhap ma hoa don: ");
@@ -73,8 +71,8 @@ public class HoaDon {
         this.maKHDaiDien.setMaKH(Integer.parseInt(sc.nextLine().trim()));
         System.out.print("Nhap so khach di tour: ");
         this.soKhach = Integer.parseInt(sc.nextLine().trim());
-        // So ve = So khach (theo quyet dinh nhom)
-        this.soVe = this.soKhach;
+        System.out.print("Nhap so ve: ");
+        this.soVe = Integer.parseInt(sc.nextLine().trim());
     }
 
     // Xuat thong tin hoa don (in dep)
@@ -92,10 +90,7 @@ public class HoaDon {
         System.out.println("└──────────────────────────────────────────────────────────────┘");
     }
 
-    // Hien thi thong tin hoa don (giu de backward compatible)
-    public void hienThiThongTin() {
-        xuatThongTin();
-    }
+
 
     @Override
     public String toString() {
@@ -108,6 +103,10 @@ public class HoaDon {
 
     // Tinh tong tien ve
     public double tongTienVe() {
-        return maKHTour != null ? (double)soVe * maKHTour.getGiaVe() : 0.0;
+        // Kiểm tra maKHTour và giaVe hợp lệ
+        if (maKHTour != null && maKHTour.getGiaVe() > 0) {
+            return (double) soVe * maKHTour.getGiaVe();
+        }
+        return 0.0;
     }
 }

@@ -1,24 +1,40 @@
 package DU_LICH;
 
-import DU_LICH.Nguoi.*;
 import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
+import DU_LICH.Nguoi.*;
 
-public class DSHoaDon {
+public class DSHoaDonUpdate {
     // THUOC TINH
     private HoaDon[] list;
     private int soLuongHoaDon;
+    private static final String FILE_PATH = "DU_LICH/DSHoaDon.txt";
+    private Scanner sc = new Scanner(System.in);
+    private DSHDV dshdv;
+    private DSKhachHang dskhachHang;
+    private DSKHTour dsKHTour;
+    private DSChiTietHD dsChiTiet = new DSChiTietHD(); // Tu dong quan ly chi tiet
 
     // CONSTRUCTOR
-    public DSHoaDon() {
+    public DSHoaDonUpdate() {
         this.list = new HoaDon[0];
         this.soLuongHoaDon = 0;
+    }
+
+    public DSHoaDonUpdate(DSHDV dshdv, DSKhachHang dskhachHang, DSKHTour dsKHTour) {
+        this();
+        this.dshdv = dshdv;
+        this.dskhachHang = dskhachHang;
+        this.dsKHTour = dsKHTour;
     }
 
     // GETTER/SETTER
     public HoaDon[] getList() { return list; }
     public int getSoLuongHoaDon() { return soLuongHoaDon; }
+    public void setDsKHTour(DSKHTour dsKHTour) { this.dsKHTour = dsKHTour; }
 
+    
     // ===== DOC FILE =====
     // Doc danh sach hoa don tu file txt
     public void loadFromFile(String filePath) throws IOException {
@@ -50,10 +66,6 @@ public class DSHoaDon {
             if (parts.length >= 6) {
                 String maHD = parts[0];
                 String maKHTour = parts[1];
-<<<<<<< Updated upstream
-                KeHoachTour kht = new KeHoachTour();
-                kht.setMaKHTour(maKHTour);
-=======
                 KeHoachTour kht = dsKHTour.timTheoMaObject(maKHTour);
                 if (kht == null) {
                     System.out.println("[CANH BAO] Hoa don " + maHD + ": Khong tim thay KeHoachTour " + maKHTour);
@@ -61,7 +73,6 @@ public class DSHoaDon {
                     kht.setMaKHTour(maKHTour);
                     kht.setGiaVe(0.0);
                 }
->>>>>>> Stashed changes
 
                 HDV hdv = new HDV();
                 hdv.setMaHDV(Integer.parseInt(parts[2]));
@@ -98,8 +109,8 @@ public class DSHoaDon {
         }
         bw.close();
     }
-
-    // ===== KIEM TRA MA TON TAI =====
+                             // ===== KIEM TRA HOP LE =====
+    // Kiem tra ma hoa don da ton tai chua
     public boolean kiemTraMaHoaDonTonTai(String maHD) {
         for (HoaDon hd : list) {
             if (hd != null && hd.getMaHD().equals(maHD)) return true;
@@ -107,10 +118,6 @@ public class DSHoaDon {
         return false;
     }
 
-<<<<<<< Updated upstream
-    // ===== THEM HOA DON =====
-    public void them(HoaDon hoaDon) {
-=======
     // Kiem tra ma HDV co ton tai khong
     public boolean validateMaHDV(int maHDV) {
         for (HDV hdv : dshdv.getList()) {
@@ -137,17 +144,21 @@ public class DSHoaDon {
         return false;
     }
 
-    // Kiem tra so khach hop le (> 0)
-    public boolean kiemTraSoKhachHopLe(int soKhach) {
+    // Kiem tra so khach hop le (> 0 va <= so ve con lai)
+    public boolean kiemTraSoKhachHopLe(KeHoachTour kht, int soKhach) {
         if (soKhach <= 0) {
             System.out.println("So khach phai lon hon 0.");
+            return false;
+        }
+        if (kht != null && soKhach > kht.getTongSoVe()) {
+            System.out.println("So khach vuot qua so ve con lai (" + kht.getTongSoVe() + " ve).");
             return false;
         }
         return true;
     }
 
     // Kiem tra so ve con lai du khong (tongSoVe = ve con lai)
-    public boolean checkSoVeHopLe(KeHoachTour kht, int soVeDat) {
+    public boolean checkSoVeHopLe(KeHoachTour kht, int soVeDat, int soKhach) {
         if (kht == null) {
             System.out.println("Ke hoach tour khong ton tai.");
             return false;
@@ -158,6 +169,10 @@ public class DSHoaDon {
             return false;
         } else if (soVeDat > veConLai) {
             System.out.println("So ve dat vuot qua so ve con lai: " + veConLai);
+            return false;
+        }
+        else if (soVeDat > soKhach) {
+            System.out.println("So ve dat khong hop le so voi so khach : " + soKhach);
             return false;
         }
         return true;
@@ -189,107 +204,83 @@ public class DSHoaDon {
     // ===== THEM HOA DON THEO FORM CO GIAO =====
     // Them hoa don voi chi tiet, nhap tung khach hang, tinh tien ngay
     public void themHoaDon(HoaDon hoaDon) {
+        // BUOC 1: NHAP THONG TIN CHUNG
+        hoaDon = new HoaDon();
         System.out.println("\n" + "=".repeat(60));
         System.out.println("              TAO HOA DON TOUR DU LICH");
         System.out.println("=".repeat(60));
+        hoaDon.nhap(sc);
 
-        // BUOC 1: NHAP MA HOA DON (kh\u00f4ng r\u1ed7ng V\u00c0 kh\u00f4ng tr\u00f9ng)
-        String maHD = "";
-        while (true) {
-            System.out.print("[1] Nhap ma hoa don: ");
-            maHD = sc.nextLine().trim();
-            
-            if (maHD.isEmpty()) {
+        // kiem tra rang buoc ma hoa don (KHÔNG được rỗng VÀ KHÔNG được trùng)
+        while (hoaDon.getMaHD() == null || hoaDon.getMaHD().trim().isEmpty() || kiemTraMaHoaDonTonTai(hoaDon.getMaHD())) {
+            if (hoaDon.getMaHD() == null || hoaDon.getMaHD().trim().isEmpty()) {
                 System.out.println("[LOI] Ma hoa don khong duoc de trong!");
-                continue;
-            }
-            if (kiemTraMaHoaDonTonTai(maHD)) {
+            } else {
                 System.out.println("[LOI] Ma hoa don da ton tai!");
-                continue;
             }
-            break;
+            System.out.print("Nhap lai ma hoa don: ");
+            String maHD = sc.nextLine().trim();
+            hoaDon.setMaHD(maHD);
         }
-        hoaDon.setMaHD(maHD);
-
-        // BUOC 2: CHON HDV (hien thi danh sach)
-        System.out.println("\n[2] Chon huong dan vien:");
-        System.out.println("-".repeat(60));
-        for (HDV hdv : dshdv.getList()) {
-            if (hdv != null) {
-                System.out.printf("  [%d] %s\n", hdv.getMaHDV(), hdv.getTenHDV());
-            }
-        }
-        System.out.println("-".repeat(60));
-        
-        int maHDV = 0;
-        while (true) {
-            System.out.print("Nhap ma HDV phu trach: ");
-            maHDV = Integer.parseInt(sc.nextLine());
-            if (validateMaHDV(maHDV)) {
-                hoaDon.getMaHDV().setMaHDV(maHDV);
-                break;
-            }
+        // BUOC 2: kiem rang buoc ma HDV ton tai
+        while (!validateMaHDV(hoaDon.getMaHDV().getMaHDV())) {
             System.out.println("Ma HDV khong ton tai! Vui long chon lai.");
+            System.out.print("Nhap ma HDV phu trach: ");
+            int maHDV = Integer.parseInt(sc.nextLine().trim());
+            hoaDon.getMaHDV().setMaHDV(maHDV);
         }
 
-        // BUOC 3: CHON KE HOACH TOUR (hien thi danh sach)
-        System.out.println("\n[3] Chon ke hoach tour:");
-        System.out.println("-".repeat(60));
-        for (KeHoachTour kht : dsKHTour.getList()) {
-            if (kht != null) {
-                System.out.printf("  [%s] Tour: %s - Gia: %,.0f VND - Con: %d ve\n",
-                    kht.getMaKHTour(), kht.getMaTour(), kht.getGiaVe(), kht.getTongSoVe());
+        // BUOC 3: KIEM TRA MA KE HOACH TOUR (không rỗng VÀ tồn tại)
+        while (hoaDon.getMaKHTour().getMaKHTour() == null || 
+               hoaDon.getMaKHTour().getMaKHTour().trim().isEmpty() || 
+               !validateMaKHTour(hoaDon.getMaKHTour().getMaKHTour())) {
+            if (hoaDon.getMaKHTour().getMaKHTour() == null || hoaDon.getMaKHTour().getMaKHTour().trim().isEmpty()) {
+                System.out.println("[LOI] Ma ke hoach tour khong duoc de trong!");
+            } else {
+                System.out.println("[LOI] Ma ke hoach tour khong ton tai!");
             }
+            System.out.print("Nhap lai ma ke hoach tour: ");
+            String maKHTour = sc.nextLine().trim();
+            hoaDon.getMaKHTour().setMaKHTour(maKHTour);
         }
-        System.out.println("-".repeat(60));
-        
-        KeHoachTour kht = null;
-        while (true) {
-            System.out.print("Nhap ma KH Tour: ");
-            String maKHTour = sc.nextLine();
-            if (validateMaKHTour(maKHTour)) {
-                kht = dsKHTour.timTheoMaObject(maKHTour);
-                if (kht != null) {
-                    hoaDon.setMaKHTour(kht);
-                    break;
-                }
-            }
-            System.out.println("Ma tour khong ton tai! Vui long chon lai.");
-        }
-
-        // BUOC 4: CHON KHACH HANG DAI DIEN (hien thi danh sach)
-        System.out.println("\n[4] Chon khach hang dai dien:");
-        System.out.println("-".repeat(60));
-        for (KhachHang kh : dskhachHang.getList()) {
-            if (kh != null) {
-                System.out.printf("  [%d] %s\n", kh.getMaKH(), kh.getTenKH());
-            }
-        }
-        System.out.println("-".repeat(60));
-        
-        int maKHDaiDien = 0;
-        while (true) {
-            System.out.print("Nhap ma khach hang dai dien: ");
-            maKHDaiDien = Integer.parseInt(sc.nextLine());
-            if (validateMaKH(maKHDaiDien)) {
-                hoaDon.getMaKHDaiDien().setMaKH(maKHDaiDien);
-                break;
-            }
-            System.out.println("Ma KH khong ton tai! Vui long chon lai.");
-        }
-
-        // BUOC 5: NHAP CHI TIET - TUNG KHACH HANG (VONG FOR)
-        System.out.println("\n[5] Nhap chi tiet khach hang di tour:");
-        System.out.print("So luong khach hang: ");
-        int soKhach = Integer.parseInt(sc.nextLine());
-
-        // Kiem tra so ve con lai
-        if (soKhach > kht.getTongSoVe()) {
-            System.out.println("Khong du ve! Chi con " + kht.getTongSoVe() + " ve.");
+        //lay ke hoach tour de lam viec tiep -> de làm cac buoc sau
+        KeHoachTour kht = dsKHTour.timTheoMaObject(hoaDon.getMaKHTour().getMaKHTour());
+        if (kht == null) {
+            System.out.println("[LOI NGHIEM TRONG] Khong tim thay ke hoach tour! Huy tao hoa don.");
             return;
         }
+        
+        // FIX: Gan day du thong tin KeHoachTour vao HoaDon (bao gom ca giaVe)
+        hoaDon.setMaKHTour(kht);
 
-        int[] dsMaKH = new int[soKhach];
+        // BUOC 4: validate ma khach hang dai dien
+        while (!validateMaKH(hoaDon.getMaKHDaiDien().getMaKH())) {
+            System.out.println("Ma khach hang dai dien khong ton tai! Vui long chon lai.");
+            System.out.print("Nhap ma khach hang dai dien: ");
+            int maKHDaiDien = Integer.parseInt(sc.nextLine().trim());
+            hoaDon.getMaKHDaiDien().setMaKH(maKHDaiDien);
+        }
+
+        // BUOC 5: validate so khach hop le
+        while (!kiemTraSoKhachHopLe(kht, hoaDon.getSoKhach())) {
+            System.out.println("So khach khong hop le! Vui long nhap lai.");
+            System.out.print("Nhap so khach di tour: ");
+            int soKhach = Integer.parseInt(sc.nextLine().trim());
+            hoaDon.setSoKhach(soKhach);
+            
+        }
+
+        // BUOC 6: validate so ve hop le
+        while (!checkSoVeHopLe(kht, hoaDon.getSoVe(), hoaDon.getSoKhach())) {
+            System.out.println("So ve khong hop le! Vui long nhap lai.");
+            System.out.print("Nhap so ve: ");
+            int soVe = Integer.parseInt(sc.nextLine().trim());
+            hoaDon.setSoVe(soVe);
+        }
+
+        // buoc 7 : Nhap chi tiet khach hang di tour theo so ve da dat
+        System.out.println("\n[5] Nhap chi tiet khach hang di tour:");
+        int[] dsMaKH = new int[hoaDon.getSoVe()];
         double tongTien = 0.0;
         double giaVe = kht.getGiaVe();
 
@@ -297,17 +288,9 @@ public class DSHoaDon {
         System.out.println("                NHAP TUNG KHACH HANG");
         System.out.println("=".repeat(60));
 
-        for (int i = 0; i < soKhach; i++) {
+        for (int i = 0; i < hoaDon.getSoVe(); i++) {
             System.out.println("\n--- Khach hang thu " + (i + 1) + " ---");
-            
-            // Hien thi danh sach khach hang
-            System.out.println("Danh sach khach hang:");
-            for (KhachHang kh : dskhachHang.getList()) {
-                if (kh != null) {
-                    System.out.printf("  [%d] %s\n", kh.getMaKH(), kh.getTenKH());
-                }
-            }
-            
+            // Nhap ma khach hang voi cac kiem tra
             int maKH = 0;
             while (true) {
                 System.out.print("Nhap ma khach hang: ");
@@ -319,7 +302,7 @@ public class DSHoaDon {
                     continue;
                 }
                 
-                // Kiem tra trung lap
+                // Kiem tra trung lap --- dam bao khach hang khong bi trung lap trong cung 1 hoa don
                 boolean daTonTai = false;
                 for (int j = 0; j < i; j++) {
                     if (dsMaKH[j] == maKH) {
@@ -351,124 +334,167 @@ public class DSHoaDon {
         // BUOC 6: HIEN THI TONG KET
         System.out.println("\n" + "=".repeat(60));
         System.out.println("                   TONG KET HOA DON");
+        hoaDon.xuatThongTin();
         System.out.println("=".repeat(60));
-        System.out.println("Ma hoa don         : " + maHD);
-        System.out.println("Ma KH Tour         : " + kht.getMaKHTour());
-        System.out.println("Ma HDV             : " + maHDV);
-        System.out.println("Ma KH dai dien     : " + maKHDaiDien);
-        System.out.println("So khach           : " + soKhach);
-        System.out.println("So ve              : " + soKhach);
-        System.out.println("Gia moi ve         : " + String.format("%,.0f VND", giaVe));
-        System.out.println("TONG TIEN HOA DON  : " + String.format("%,.0f VND", tongTien));
-        System.out.println("=".repeat(60));
+ 
 
         // Cap nhat hoa don
-        hoaDon.setSoKhach(soKhach);
-        hoaDon.setSoVe(soKhach);
+        hoaDon.setSoKhach(hoaDon.getSoKhach());
+        hoaDon.setSoVe(hoaDon.getSoVe());
 
         // Them vao danh sach
->>>>>>> Stashed changes
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = hoaDon;
         soLuongHoaDon++;
+
+        // Cap nhat ke hoach tour (giam ve con lai, tang ve da ban)
+        kht.setTongSoVe(kht.getTongSoVe() - hoaDon.getSoKhach());
+        kht.setTongVeDaDat(kht.getTongVeDaDat() + hoaDon.getSoKhach());
+
+        // TU DONG TAO CHI TIET HOA DON (CASCADE INSERT)
+        dsChiTiet.taoChiTiet(hoaDon, dsMaKH);
+
+        // Luu file
+        try {
+            System.out.println("\n[DEBUG] Dang luu DSHoaDonUpdate.txt...");
+            System.out.println("[DEBUG] So luong hoa don: " + soLuongHoaDon);
+            System.out.println("[DEBUG] File path: " + FILE_PATH);
+            
+            saveToFile(FILE_PATH);
+            System.out.println("[DEBUG] Da luu DSHoaDonUpdate.txt thanh cong!");
+            
+            dsKHTour.saveToFile("DU_LICH/KeHoachTour.txt");
+            System.out.println("[DEBUG] Da luu KeHoachTour.txt thanh cong!");
+            
+            System.out.println("\n>>> TAO HOA DON THANH CONG! <<<");
+        } catch (IOException e) {
+            System.out.println("Loi luu file: " + e.getMessage());
+            e.printStackTrace(); // In stack trace de debug
+        }
     }
 
-    // ===== XOA HOA DON =====
-    public boolean xoa(String maHD) {
-        for (int i = 0; i < soLuongHoaDon; i++) {
-            if (list[i] != null && list[i].getMaHD().equals(maHD)) {
-<<<<<<< Updated upstream
-                for (int j = i; j < soLuongHoaDon - 1; j++) list[j] = list[j + 1];
-                list = Arrays.copyOf(list, list.length - 1);
-                soLuongHoaDon--;
-                return true;
-=======
-                HoaDon hdCu = list[i];
-                System.out.println("Thong tin hoa don hien tai:");
-                hdCu.xuatThongTin();
-                
-                // Nhap thong tin moi
-                System.out.println("\nNhap thong tin hoa don moi:");
-                HoaDon hdMoi = new HoaDon();
-                hdMoi.nhap(sc);
+    // ===== SUA HOA DON =====
+   public void suaHoaDon(String maHD) {
+    for (int i = 0; i < soLuongHoaDon; i++) {
 
-                // Validate
-                while (!validateMaHDV(hdMoi.getMaHDV().getMaHDV())) {
-                    System.out.println("Ma HDV khong ton tai. Nhap lai:");
-                    hdMoi.getMaHDV().setMaHDV(Integer.parseInt(sc.nextLine()));
-                }
-                while (!validateMaKH(hdMoi.getMaKHDaiDien().getMaKH())) {
-                    System.out.println("Ma KH khong ton tai. Nhap lai:");
-                    hdMoi.getMaKHDaiDien().setMaKH(Integer.parseInt(sc.nextLine()));
-                }
+        // 🔍 Tìm hóa đơn
+        if (list[i] != null && list[i].getMaHD().equals(maHD)) {
 
-                // Tim ke hoach tour moi
-                KeHoachTour khtMoi = null;
+            HoaDon hdCu = list[i];
+            System.out.println("\n===== THONG TIN HOA DON HIEN TAI =====");
+            hdCu.xuatThongTin();
+
+            System.out.println("\n===== NHAP THONG TIN MOI =====");
+
+            // Tạo mới hóa đơn để nhập lại giống như thêm
+            HoaDon hdMoi = new HoaDon();
+            hdMoi.nhap(sc);
+            
+            // FIX: Giu nguyen ma hoa don (khong cho thay doi ma)
+            System.out.println("Ma hoa don SE KHONG DUOC THAY DOI . Giữ nguyên ma: " + maHD);
+            hdMoi.setMaHD(maHD);
+
+            // ============ VALIDATE MÃ HDV ============
+            while (!validateMaHDV(hdMoi.getMaHDV().getMaHDV())) {
+                System.out.println("❌ Ma HDV khong ton tai! Nhap lai:");
+                hdMoi.getMaHDV().setMaHDV(Integer.parseInt(sc.nextLine()));
+            }
+
+            // ============ VALIDATE MÃ KẾ HOẠCH ============
+            while (!validateMaKHTour(hdMoi.getMaKHTour().getMaKHTour())) {
+                System.out.println(" Ma ke hoach tour khong ton tai! Nhap lai:");
+                hdMoi.getMaKHTour().setMaKHTour(sc.nextLine());
+            }
+
+            KeHoachTour khtMoi = dsKHTour.timTheoMaObject(
+                    hdMoi.getMaKHTour().getMaKHTour()
+            );
+            
+            // FIX: Gan day du thong tin KeHoachTour vao HoaDon (bao gom ca giaVe)
+            hdMoi.setMaKHTour(khtMoi);
+
+            // ============ VALIDATE KHÁCH HÀNG ĐẠI DIỆN ============
+            while (!validateMaKH(hdMoi.getMaKHDaiDien().getMaKH())) {
+                System.out.println(" Ma KH dai dien khong ton tai! Nhap lai:");
+                hdMoi.getMaKHDaiDien().setMaKH(Integer.parseInt(sc.nextLine()));
+            }
+
+            // ============ VALIDATE SỐ KHÁCH ============
+            while (!kiemTraSoKhachHopLe(khtMoi, hdMoi.getSoKhach())) {
+                System.out.println(" So khach khong hop le! Nhap lai:");
+                hdMoi.setSoKhach(Integer.parseInt(sc.nextLine()));
+            }
+
+            // ============ VALIDATE SỐ VÉ ============
+            while (!checkSoVeHopLe(khtMoi, hdMoi.getSoVe(), hdMoi.getSoKhach())) {
+                System.out.println(" So ve khong hop le! Nhap lai:");
+                hdMoi.setSoVe(Integer.parseInt(sc.nextLine()));
+            }
+
+            // HOÀN TRẢ VÉ CŨ TRƯỚC
+            KeHoachTour khtCu = dsKHTour.timTheoMaObject(
+                    hdCu.getMaKHTour().getMaKHTour()
+            );
+            khtCu.setTongSoVe(khtCu.getTongSoVe() + hdCu.getSoVe());
+            khtCu.setTongVeDaDat(khtCu.getTongVeDaDat() - hdCu.getSoVe());
+
+
+            // ============ NHẬP DS KHÁCH HÀNG MỚI ============
+            System.out.println("\n===== NHAP DS KHACH HANG DI TOUR =====");
+
+            int[] dsMaKH = new int[hdMoi.getSoVe()];
+            for (int j = 0; j < hdMoi.getSoVe(); j++) {
                 while (true) {
-                    String maKHTour = hdMoi.getMaKHTour().getMaKHTour();
-                    if (validateMaKHTour(maKHTour)) {
-                        khtMoi = dsKHTour.timTheoMaObject(maKHTour);
-                        if (khtMoi != null) {
-                            hdMoi.setMaKHTour(khtMoi);
-                            break;
+                    System.out.print("Nhap ma KH thu " + (j + 1) + ": ");
+                    int maKH = Integer.parseInt(sc.nextLine());
+
+                    if (!validateMaKH(maKH)) {
+                        System.out.println(" Ma KH khong ton tai!");
+                        continue;
+                    }
+
+                    boolean trung = false;
+                    for (int k = 0; k < j; k++) {
+                        if (dsMaKH[k] == maKH) {
+                            trung = true; break;
                         }
                     }
-                    System.out.println("Ma ke hoach tour khong ton tai. Nhap lai:");
-                    hdMoi.getMaKHTour().setMaKHTour(sc.nextLine());
+                    if (trung) {
+                        System.out.println(" KH da nhap roi!");
+                        continue;
+                    }
+
+                    dsMaKH[j] = maKH;
+                    break;
                 }
-
-                while (!kiemTraSoKhachHopLe(hdMoi.getSoKhach())) {
-                    System.out.println("So khach khong hop le. Nhap lai:");
-                    hdMoi.setSoKhach(Integer.parseInt(sc.nextLine()));
-                }
-
-                // BUOC 1: Hoan tra ve cu (tang ve con lai, giam ve da ban)
-                KeHoachTour khtCu = dsKHTour.timTheoMaObject(hdCu.getMaKHTour().getMaKHTour());
-                if (khtCu != null) {
-                    khtCu.setTongSoVe(khtCu.getTongSoVe() + hdCu.getSoVe());
-                    khtCu.setTongVeDaDat(khtCu.getTongVeDaDat() - hdCu.getSoVe());
-                }
-
-                // Validate so ve moi
-                while (!checkSoVeHopLe(khtMoi, hdMoi.getSoVe())) {
-                    System.out.println("So ve khong hop le. Nhap lai:");
-                    hdMoi.setSoVe(Integer.parseInt(sc.nextLine()));
-                }
-
-                // BUOC 2: Ban ve moi (giam ve con lai, tang ve da ban)
-                khtMoi.setTongSoVe(khtMoi.getTongSoVe() - hdMoi.getSoVe());
-                khtMoi.setTongVeDaDat(khtMoi.getTongVeDaDat() + hdMoi.getSoVe());
-
-                // Nhap danh sach khach hang moi
-                System.out.println("\nNhap danh sach ma khach hang di tour (cach nhau dau phay):");
-                System.out.print("Vi du: 1,2,3 hoac chi 1 nguoi: 5\nNhap: ");
-                String[] inputKH = sc.nextLine().split(",");
-                int[] dsMaKH = new int[inputKH.length];
-                for (int j = 0; j < inputKH.length; j++) {
-                    dsMaKH[j] = Integer.parseInt(inputKH[j].trim());
-                }
-
-                // TU DONG XOA CHI TIET CU va TAO MOI (CASCADE UPDATE)
-                dsChiTiet.xoaChiTiet(maHD);
-                dsChiTiet.taoChiTiet(hdMoi, dsMaKH);
-
-                // Cap nhat hoa don
-                list[i] = hdMoi;
-
-                // Luu file
-                try {
-                    saveToFile(FILE_PATH);
-                    dsKHTour.saveToFile("DU_LICH/KeHoachTour.txt");
-                    System.out.println("Sua hoa don thanh cong!");
-                } catch (IOException e) {
-                    System.out.println("Loi luu file: " + e.getMessage());
-                }
-                return;
->>>>>>> Stashed changes
             }
+
+            // ============ CẬP NHẬT VÉ CHO TOUR ============
+            khtMoi.setTongSoVe(khtMoi.getTongSoVe() - hdMoi.getSoVe());
+            khtMoi.setTongVeDaDat(khtMoi.getTongVeDaDat() + hdMoi.getSoVe());
+
+            // ============ CASCADE UPDATE CHI TIẾT ============
+            dsChiTiet.xoaChiTiet(maHD);  
+            dsChiTiet.taoChiTiet(hdMoi, dsMaKH);
+
+            // LƯU HOÁ ĐƠN MỚI
+            list[i] = hdMoi;
+
+            try {
+                saveToFile(FILE_PATH);
+                dsKHTour.saveToFile("DU_LICH/KeHoachTour.txt");
+                System.out.println("\n>>> SUA HOA DON THANH CONG!");
+            } catch (Exception e) {
+                System.out.println("Loi luu file: " + e.getMessage());
+            }
+
+            return;
         }
-        return false;
     }
+
+    System.out.println(" Khong tim thay ma hoa don!");
+}
+
 
     // ===== TIM KIEM =====
     // Tim 1 hoa don theo ma (tra ve HoaDon hoac null)
@@ -482,7 +508,7 @@ public class DSHoaDon {
     }
     
     // Tim nhieu hoa don theo ma khach hang (tra ve mang HoaDon[])
-    public HoaDon[] timHoaDonTheoKhachHang(int maKH) {
+    public HoaDon[] timHoaDonTheoKhachHangDaiDien(int maKH) {
         // Dem
         int count = 0;
         for (int i = 0; i < soLuongHoaDon; i++) {
@@ -499,30 +525,7 @@ public class DSHoaDon {
         }
         return ketQua;
     }
-
-    // ===== HIEN THI =====
-    // Hien thi tat ca hoa don
-    public void hienThiDanhSachHoaDon() {
-        if (soLuongHoaDon == 0) {
-            System.out.println("Danh sach hoa don trong!");
-            return;
-        }
-        System.out.println("\n================================================================================");
-        System.out.println("                        DANH SACH HOA DON");
-        System.out.println("================================================================================");
-        int count = 0;
-        for (int i = 0; i < soLuongHoaDon; i++) {
-            if (list[i] != null) {
-                count++;
-                System.out.println("\n[Hoa don " + count + "]");
-                list[i].hienThiThongTin();
-            }
-        }
-        if (count == 0) {
-            System.out.println("Khong co hoa don nao hop le!");
-        }
-    }
-
+    
     // ===== THONG KE =====
     // Tinh tong so hoa don, ve da ban va doanh thu
     public void thongKeHoaDon() {
@@ -531,9 +534,9 @@ public class DSHoaDon {
             return;
         }
         
-        System.out.println("\n================================================================================");
+        System.out.println("\n" + "=".repeat(80));
         System.out.println("                        THONG KE HOA DON");
-        System.out.println("================================================================================");
+        System.out.println("=".repeat(80));
         
         // Duyet va tinh tong
         int tongSoVe = 0;
@@ -553,11 +556,8 @@ public class DSHoaDon {
         System.out.println("Tong so khach:         " + tongSoKhach);
         System.out.println("Tong doanh thu:        " + String.format("%,.0f VND", tongDoanhThu));
         System.out.println("Doanh thu trung binh:  " + String.format("%,.0f VND", tongDoanhThu / soLuongHoaDon));
-        System.out.println("================================================================================\n");
+        System.out.println("=".repeat(80) + "\n");
     }
-<<<<<<< Updated upstream
-}
-=======
 
     // ===== XOA HOA DON =====
     // Xoa hoa don va hoan tra ve cho ke hoach tour
@@ -597,6 +597,37 @@ public class DSHoaDon {
         System.out.println("Khong tim thay ma hoa don.");
     }
 
+    // // ===== SUA DU LIEU BI LOI =====
+    // // Sua cac hoa don co giaVe = 0 trong chi tiet
+    // public void suaDuLieuGiaVe() {
+    //     System.out.println("\n[AUTO FIX] Dang kiem tra va sua du lieu giaVe = 0...");
+    //     int count = 0;
+    //     for (int i = 0; i < soLuongHoaDon; i++) {
+    //         if (list[i] != null) {
+    //             HoaDon hd = list[i];
+    //             // Neu giaVe = 0, load lai tu DSKHTour
+    //             if (hd.getMaKHTour().getGiaVe() == 0.0) {
+    //                 KeHoachTour kht = dsKHTour.timTheoMaObject(hd.getMaKHTour().getMaKHTour());
+    //                 if (kht != null && kht.getGiaVe() > 0) {
+    //                     hd.setMaKHTour(kht);
+    //                     count++;
+    //                     System.out.println("  - Sua hoa don " + hd.getMaHD() + ": " + kht.getMaKHTour() + " -> giaVe = " + String.format("%,.0f", kht.getGiaVe()));
+    //                 }
+    //             }
+    //         }
+    //     }
+    //     if (count > 0) {
+    //         try {
+    //             saveToFile(FILE_PATH);
+    //             System.out.println("[AUTO FIX] Da sua " + count + " hoa don thanh cong!");
+    //         } catch (IOException e) {
+    //             System.out.println("[AUTO FIX] Loi luu file: " + e.getMessage());
+    //         }
+    //     } else {
+    //         System.out.println("[AUTO FIX] Khong co hoa don nao can sua.");
+    //     }
+    // }
+    
     // ===== MAIN =====
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
@@ -615,11 +646,14 @@ public class DSHoaDon {
         }
 
         // Khoi tao danh sach hoa don
-        DSHoaDon dsHoaDon = new DSHoaDon(dshdv, dskh, dsKHTour);
-        dsHoaDon.setDsKHTour(dsKHTour);
+        DSHoaDonUpdate DSHoaDonUpdate = new DSHoaDonUpdate(dshdv, dskh, dsKHTour);
+        DSHoaDonUpdate.setDsKHTour(dsKHTour);
         try {
-            dsHoaDon.loadFromFile(FILE_PATH);
-            dsHoaDon.dsChiTiet.loadFromFile("DU_LICH/DSChiTietHD.txt");
+            DSHoaDonUpdate.loadFromFile(FILE_PATH);
+            DSHoaDonUpdate.dsChiTiet.loadFromFile("DU_LICH/DSChiTietHD.txt");
+            
+            // // Tu dong sua du lieu bi loi
+            // DSHoaDonUpdate.suaDuLieuGiaVe();
         } catch (IOException e) {
             System.out.println("Loi load hoa don: " + e.getMessage());
         }
@@ -643,23 +677,23 @@ public class DSHoaDon {
             int choice = Integer.parseInt(sc.nextLine());
 
             switch (choice) {
-                case 1: dsHoaDon.hienThiDanhSachHoaDon(); break;
+                case 1: DSHoaDonUpdate.hienThiDanhSachHoaDon(); break;
                 case 2:
                     // Tao hoa don moi (khong can nhap truoc)
                     HoaDon hdMoi = new HoaDon();
-                    dsHoaDon.themHoaDon(hdMoi);
+                    DSHoaDonUpdate.themHoaDon(hdMoi);
                     break;
                 case 3:
                     System.out.print("Nhap ma hoa don can sua: ");
-                    dsHoaDon.suaHoaDon(sc.nextLine());
+                    DSHoaDonUpdate.suaHoaDon(sc.nextLine());
                     break;
                 case 4:
                     System.out.print("Nhap ma hoa don can xoa: ");
-                    dsHoaDon.xoaHoaDon(sc.nextLine());
+                    DSHoaDonUpdate.xoaHoaDon(sc.nextLine());
                     break;
                 case 5:
                     System.out.print("Nhap ma hoa don: ");
-                    HoaDon hdTim = dsHoaDon.timHoaDonTheoMa(sc.nextLine());
+                    HoaDon hdTim = DSHoaDonUpdate.timHoaDonTheoMa(sc.nextLine());
                     if (hdTim != null) {
                         System.out.println("\nTim thay:");
                         hdTim.xuatThongTin();
@@ -667,7 +701,7 @@ public class DSHoaDon {
                     break;
                 case 6:
                     System.out.print("Nhap ma khach hang: ");
-                    HoaDon[] ketQua = dsHoaDon.timHoaDonTheoKhachHang(Integer.parseInt(sc.nextLine()));
+                    HoaDon[] ketQua = DSHoaDonUpdate.timHoaDonTheoKhachHangDaiDien(Integer.parseInt(sc.nextLine()));
                     if (ketQua.length > 0) {
                         System.out.println("\nTim thay " + ketQua.length + " hoa don:");
                         for (int i = 0; i < ketQua.length; i++) {
@@ -676,16 +710,16 @@ public class DSHoaDon {
                         }
                     } else System.out.println("Khong tim thay!");
                     break;
-                case 7: dsHoaDon.thongKeHoaDon(); break;
+                case 7: DSHoaDonUpdate.thongKeHoaDon(); break;
                 case 8:
                     System.out.print("Nhap ma hoa don: ");
-                    ChiTietHD ct = dsHoaDon.dsChiTiet.xemChiTiet(sc.nextLine());
+                    ChiTietHD ct = DSHoaDonUpdate.dsChiTiet.xemChiTiet(sc.nextLine());
                     if (ct != null) {
                         System.out.println("\nChi tiet hoa don:");
                         ct.xuatThongTin();
                     } else System.out.println("Khong tim thay chi tiet!");
                     break;
-                case 9: dsHoaDon.dsChiTiet.hienThiDanhSach(); break;
+                case 9: DSHoaDonUpdate.dsChiTiet.hienThiDanhSach(); break;
                 case 0: exit = true; break;
                 default: System.out.println("Lua chon khong hop le.");
             }
@@ -693,7 +727,7 @@ public class DSHoaDon {
 
         // Luu file truoc khi thoat
         try {
-            dsHoaDon.saveToFile(FILE_PATH);
+            DSHoaDonUpdate.saveToFile(FILE_PATH);
             dsKHTour.saveToFile("DU_LICH/KeHoachTour.txt");
         } catch (IOException e) {
             System.out.println("Loi luu file: " + e.getMessage());
@@ -703,4 +737,3 @@ public class DSHoaDon {
         sc.close();
     }
 }
->>>>>>> Stashed changes
