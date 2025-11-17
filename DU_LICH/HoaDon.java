@@ -2,6 +2,8 @@ package DU_LICH;
 
 import DU_LICH.Nguoi.HDV;
 import DU_LICH.Nguoi.KhachHang;
+
+import java.time.LocalDate;
 import java.util.Scanner;
 
 public class HoaDon {
@@ -11,6 +13,7 @@ public class HoaDon {
     private KhachHang maKHDaiDien;
     private int soKhach;
     private int soVe;
+    private LocalDate ngayLap;
 
     public HoaDon() {
         this.maHD = "";
@@ -19,6 +22,7 @@ public class HoaDon {
         this.maKHDaiDien = new KhachHang();
         this.soKhach = 0;
         this.soVe = 0;
+        this.ngayLap = LocalDate.now();
     }
 
     public HoaDon(String maHD, KeHoachTour maKHTour, HDV maHDV, KhachHang maKHDaiDien, int soKhach, int soVe) {
@@ -28,6 +32,7 @@ public class HoaDon {
         this.maKHDaiDien = maKHDaiDien;
         this.soKhach = soKhach;
         this.soVe = soVe;
+        this.ngayLap = LocalDate.now();
     }
 
     // Constructor sao chep
@@ -38,6 +43,7 @@ public class HoaDon {
         this.maKHDaiDien = hd.maKHDaiDien;
         this.soKhach = hd.soKhach;
         this.soVe = hd.soVe;
+        this.ngayLap = hd.ngayLap;
     }
 
     // Getter / Setter
@@ -59,8 +65,13 @@ public class HoaDon {
     public int getSoVe() { return soVe; }
     public void setSoVe(int soVe) { this.soVe = soVe; }
 
+    public LocalDate getNgayLap() { return ngayLap; }
+    public void setNgayLap(LocalDate ngayLap) { this.ngayLap = ngayLap; }
+
     // Nhap thong tin hoa don (nhan Scanner tu ben ngoai)
     public void nhap(Scanner sc) {
+        System.out.println("Ngay lap hoa don: " + LocalDate.now());
+        this.ngayLap = LocalDate.now();
         System.out.print("Nhap ma hoa don: ");
         this.maHD = sc.nextLine().trim();
         System.out.print("Nhap ma ke hoach tour: ");
@@ -80,6 +91,7 @@ public class HoaDon {
         System.out.println("┌──────────────────────────────────────────────────────────────┐");
         System.out.println("│                    HOA DON TOUR                              │");
         System.out.println("├──────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ Ngay lap              : %-33s │%n", getNgayLap());
         System.out.printf("│ Ma hoa don             : %-33s │%n", getMaHD());
         System.out.printf("│ Ma ke hoach tour       : %-33s │%n", getMaKHTour().getMaKHTour());
         System.out.printf("│ Ma HDV phu trach       : %-33d │%n", getMaHDV().getMaHDV());
