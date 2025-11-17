@@ -1,4 +1,0 @@
-bienKiemSoat,soChoNgoi,loaiPhuongTien,phiTheoNgay
-51812,2,xe may,100
-48175,4,oto,200
-79283,45,bus,300
