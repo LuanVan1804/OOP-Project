@@ -8,11 +8,12 @@ import DU_LICH.NH_KS_PT.PhuongTien;
 public class QuanLyPhuongTien {
     private DSPhuongTien ds;
     private final Scanner sc;
+    private String dataFile;
 
     public QuanLyPhuongTien(DSPhuongTien ds, Scanner sc, String dataFile) {
         this.ds = ds == null ? new DSPhuongTien() : ds;
         this.sc = sc == null ? new Scanner(System.in) : sc;
-
+        this.dataFile = (dataFile == null || dataFile.trim().isEmpty()) ? "DU_LICH/NH_KS_PT/PhuongTien.txt" : dataFile;
     }
 
     public void menu() {
@@ -64,7 +65,7 @@ public class QuanLyPhuongTien {
                     break;
                 case 0:
                     try {
-                        ds.saveToFile("D:\\doanOOP\\DU_LICH\\NH_KS_PT\\PhuongTien.txt");
+                        ds.saveToFile(this.dataFile);
                     } catch (java.io.IOException e) {
                         System.err.println("Loi khi luu file: " + e.getMessage());
                     }
