@@ -206,8 +206,8 @@ public class DSChiPhiKHTour {
             }
         }
 
-        // CCap nhat ngay → tinh lai tien phong
-        System.out.print("CCap nhat ngay den/di de tinh lai tien phong? (y/n): ");
+        // Cap nhat ngay → tinh lai tien phong
+        System.out.print("Cap nhat ngay den/di de tinh lai tien phong? (y/n): ");
         if (sc.nextLine().trim().equalsIgnoreCase("y")) {
             Date d1 = nhapNgay("Nhap ngay den moi (dd/MM/yyyy): ");
             Date d2 = nhapNgay("Nhap ngay di moi (dd/MM/yyyy): ");
