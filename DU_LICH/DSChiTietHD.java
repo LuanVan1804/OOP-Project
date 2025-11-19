@@ -141,4 +141,109 @@ public class DSChiTietHD {
             list[i].hienThiThongTin();
         }
     }
+
+    // ===== THONG KE CHI TIET HOA DON =====
+    
+    public void thongKeChiTiet() {
+        if (soLuong == 0) {
+            System.out.println("Chua co chi tiet hoa don nao!");
+            return;
+        }
+
+        // Use a BufferedWriter wrapping System.out so we can reuse the same write logic
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(System.out));
+        try {
+            writeThongKeTo(out);
+            out.flush();
+        } catch (IOException e) {
+            // If writing to console fails, print a short message to stderr
+            System.err.println("Loi khi in thong ke: " + e.getMessage());
+        }
+    }
+
+    // Internal helper: write the report to any BufferedWriter (does NOT close the writer)
+    private void writeThongKeTo(BufferedWriter bw) throws IOException {
+        // Step 1: compute aggregates
+        int totalDetails = 0;
+        int totalCustomers = 0;
+        double totalRevenue = 0.0;
+
+        // We will keep a parallel set of arrays for tour id, revenue and count
+        String[] tourIds = new String[0];
+        double[] tourRevenue = new double[0];
+        int[] tourCounts = new int[0];
+
+        for (int i = 0; i < soLuong; i++) {
+            ChiTietHD ct = list[i];
+            if (ct == null) continue;
+
+            totalDetails++;
+            double tongTien = ct.getTongTien();
+            totalRevenue += tongTien;
+
+            int numCustomers = (ct.getDsMaKhachHang() == null) ? 0 : ct.getDsMaKhachHang().length;
+            totalCustomers += numCustomers;
+
+            String tourId = ct.getMaKHTour();
+
+            // find tourId in tourIds
+            int found = -1;
+            for (int k = 0; k < tourIds.length; k++) {
+                if (tourIds[k].equals(tourId)) { found = k; break; }
+            }
+
+            if (found == -1) {
+                // add new entry
+                int newLen = tourIds.length + 1;
+                tourIds = Arrays.copyOf(tourIds, newLen);
+                tourRevenue = Arrays.copyOf(tourRevenue, newLen);
+                tourCounts = Arrays.copyOf(tourCounts, newLen);
+                tourIds[newLen - 1] = tourId;
+                tourRevenue[newLen - 1] = tongTien;
+                tourCounts[newLen - 1] = 1;
+            } else {
+                // update existing entry
+                tourRevenue[found] += tongTien;
+                tourCounts[found] += 1;
+            }
+        }
+
+        double avgCustomersPerDetail = (totalDetails == 0) ? 0.0 : (double) totalCustomers / totalDetails;
+
+        // Step 2: write the report (header, totals, per-tour, per-invoice)
+        bw.write("\n================================================================================\n");
+        bw.write("                     THONG KE CHI TIET HOA DON\n");
+        bw.write("================================================================================\n");
+        bw.write(String.format("Tong so chi tiet HD:    %d\n", totalDetails));
+        bw.write(String.format("Tong so khach:          %d\n", totalCustomers));
+        bw.write(String.format("Tong doanh thu:         %,.0f VND\n", totalRevenue));
+        bw.write(String.format("Trung binh khach/HD:    %.2f\n", avgCustomersPerDetail));
+
+        bw.write("\nDoanh thu theo KeHoachTour (maKHTour):\n");
+        for (int k = 0; k < tourIds.length; k++) {
+            bw.write(String.format("  - %s : %,.0f VND ( %d hoa don )\n", tourIds[k], tourRevenue[k], tourCounts[k]));
+        }
+
+        bw.write("\nDoanh thu theo hoa don (maHD):\n");
+        for (int i = 0; i < soLuong; i++) {
+            ChiTietHD ct = list[i];
+            if (ct == null) continue;
+            bw.write(String.format("  - %s : %,.0f VND\n", ct.getMaHD(), ct.getTongTien()));
+        }
+
+        bw.write("================================================================================\n");
+    }
+
+    // Luu thong ke vao file
+    public void saveThongKeToFile(String filePath) throws IOException {
+        File f = new File(filePath);
+        File parent = f.getParentFile();
+        if (parent != null && !parent.exists()) parent.mkdirs();
+        BufferedWriter bw = new BufferedWriter(new FileWriter(f));
+        try {
+            writeThongKeTo(bw);
+        } finally {
+            bw.close();
+        }
+    }
 }

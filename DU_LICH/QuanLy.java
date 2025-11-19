@@ -26,19 +26,19 @@ public class QuanLy {
 	protected static DSChiTietHD dsChiTietHD;
 	protected static DU_LICH.NH_KS_PT.DSPhuongTien dsPhuongTien;
 
-	// Các đường dẫn file mặc định (có thể thay đổi khi khởi tạo nếu cần)
-	protected static String pathQuocGia = "D:\\doanOOP\\DU_LICH\\DiaDiemDuLich\\quocGia.txt";
-	protected static String pathThanhPho = "D:\\doanOOP\\DU_LICH\\DiaDiemDuLich\\ThanhPho.txt";
-	protected static String pathDSTour = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTour.txt";
-	protected static String pathKhachSan = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\KhachSan.txt";
-	protected static String pathNhaHang = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\NhaHang.txt";
-	protected static String pathKhachHang = "D:\\doanOOP\\DU_LICH\\Nguoi\\KhachHang.txt";
-	protected static String pathHDV = "D:\\doanOOP\\DU_LICH\\Nguoi\\HDV.txt";
-	protected static String pathKeHoach = "D:\\doanOOP\\DU_LICH\\kehoachtour.txt";
-	protected static String pathChiPhi = "D:\\doanOOP\\DU_LICH\\ChiPhiKHTour.txt";
-	protected static String pathDSHoaDon = "D:\\doanOOP\\DU_LICH\\DSHoaDon.txt";
-	protected static String pathDSChiTiet = "D:\\doanOOP\\DU_LICH\\DSChiTietHD.txt";
-	protected static String pathPhuongTien = "D:\\doanOOP\\DU_LICH\\NH_KS_PT\\PhuongTien.txt";
+	// Các đường dẫn file mặc định (project-relative)
+	protected static String pathQuocGia = "DU_LICH/DiaDiemDuLich/quocGia.txt";
+	protected static String pathThanhPho = "DU_LICH/DiaDiemDuLich/ThanhPho.txt";
+	protected static String pathDSTour = "DU_LICH/TourDuLich/DSTour.txt";
+	protected static String pathKhachSan = "DU_LICH/NH_KS_PT/KhachSan.txt";
+	protected static String pathNhaHang = "DU_LICH/NH_KS_PT/NhaHang.txt";
+	protected static String pathKhachHang = "DU_LICH/Nguoi/KhachHang.txt";
+	protected static String pathHDV = "DU_LICH/Nguoi/HDV.txt";
+	protected static String pathKeHoach = "DU_LICH/KeHoachTour.txt";
+	protected static String pathChiPhi = "DU_LICH/ChiPhiKHTour.txt";
+	protected static String pathDSHoaDon = "DU_LICH/DSHoaDon.txt";
+	protected static String pathDSChiTiet = "DU_LICH/DSChiTietHD.txt";
+	protected static String pathPhuongTien = "DU_LICH/NH_KS_PT/PhuongTien.txt";
 
 	public QuanLy() {
 		this(true);

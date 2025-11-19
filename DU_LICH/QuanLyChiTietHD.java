@@ -18,6 +18,7 @@ public class QuanLyChiTietHD {
             System.out.println("\n=== MENU CHI TIET HOA DON ===");
             System.out.println("1. Hien thi tat ca chi tiet");
             System.out.println("2. Xem chi tiet theo ma hoa don");
+            System.out.println("3. Thong ke chi tiet hoa don");
             System.out.println("0. Thoat");
             System.out.print("Chon: ");
 
@@ -35,6 +36,9 @@ public class QuanLyChiTietHD {
                     break;
                 case 2:
                     xemChiTietTheoMa();
+                    break;
+                case 3:
+                     dsChiTiet.thongKeChiTiet();
                     break;
                 case 0:
                     exit = true;
