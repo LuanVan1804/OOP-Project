@@ -5,10 +5,11 @@ import DU_LICH.ClassDon.*;
 import DU_LICH.DanhSach.*;
 
 public class QuanLyHoaDon extends QuanLy {
-    private DSHoaDon dsHoaDon = new DSHoaDon();
+    private DSHoaDon dsHoaDon;
 
     public QuanLyHoaDon() {
         super(false);
+        dsHoaDon = QuanLy.getDsHoaDon();
     }
 
     public void menuHoaDon(Scanner sc) {
@@ -110,11 +111,12 @@ public class QuanLyHoaDon extends QuanLy {
         System.out.print("Nhap ma hoa don can xoa: ");
         String ma = sc.nextLine().trim();
         HoaDon hd = dsHoaDon.timTheoMa(ma);
+
         if (hd == null) {
             System.out.println("Khong tim thay hoa don!");
             return;
         }
-
+        QuanLy.getDsChiTietHD().xoa(ma); // xóa chi tiết hóa đơn nếu có
         // Hoàn vé lại cho kế hoạch tour
         KeHoachTour kht = dsKeHoach.timTheoMa(hd.getMaKHTour());
         if (kht != null) {

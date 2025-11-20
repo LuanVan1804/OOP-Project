@@ -2,11 +2,8 @@ package DU_LICH.QuanLy;
 
 import java.util.Scanner;
 import DU_LICH.ClassDon.*;
-import DU_LICH.DanhSach.*;
 
 public class QuanLyChiTietHD extends QuanLy {
-    private DSChiTietHD dsChiTiet = new DSChiTietHD();
-
     public QuanLyChiTietHD() {
         super(false);
     }
@@ -25,11 +22,11 @@ public class QuanLyChiTietHD extends QuanLy {
             catch (Exception e) { ch = -1; }
 
             switch (ch) {
-                case 1: dsChiTiet.hienThiDanhSach(); break;
+                case 1: dsChiTietHD.hienThiDanhSach(); break;
                 case 2: xemChiTietDayDu(sc); break;
-                case 3: dsChiTiet.thongKe(); break;
+                case 3: dsChiTietHD.thongKe(); break;
                 case 0:
-                    dsChiTiet.saveToFile(PATH_CHITIET);
+                    dsChiTietHD.saveToFile(PATH_CHITIET);
                     System.out.println("Da luu chi tiet hoa don.");
                     return;
                 default:
@@ -41,7 +38,7 @@ public class QuanLyChiTietHD extends QuanLy {
     private void xemChiTietDayDu(Scanner sc) {
         System.out.print("Nhap ma hoa don: ");
         String maHD = sc.nextLine().trim();
-        ChiTietHD ct = dsChiTiet.tim(maHD);
+        ChiTietHD ct = dsChiTietHD.tim(maHD);
         if (ct == null) {
             System.out.println("Khong tim thay chi tiet hoa don!");
             return;

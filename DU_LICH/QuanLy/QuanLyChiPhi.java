@@ -3,11 +3,8 @@ package DU_LICH.QuanLy;
 import java.util.Scanner;
 import DU_LICH.ClassDon.*;
 import DU_LICH.TourDuLich.Tour;
-import DU_LICH.DanhSach.*;
 
 public class QuanLyChiPhi extends QuanLy {
-    private DSChiPhiKHTour dsChiPhi = new DSChiPhiKHTour();
-
     public QuanLyChiPhi() {
         super(false);
     }

@@ -6,6 +6,7 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 
 import DU_LICH.ClassDon.KeHoachTour;
+import DU_LICH.QuanLy.QuanLy;
 
 public class DSKHTour {
     private KeHoachTour[] list;
@@ -83,22 +84,32 @@ public class DSKHTour {
 
     // 5. Hiển thị toàn bộ
     public void hienThiDanhSach() {
-        if (soLuong == 0) {
-            System.out.println("Danh sach trong!");
-            return;
-        }
-        System.out.println("════════════════════════════════════════════════════════════════════════════════════════");
-        System.out.printf("%-10s | %-20s | %-10s | %-23s | %-12s | %-12s | %-12s%n",
-                "Ma KH", "Ten Ke Hoach", "Ma Tour", "Ngay Di - Ve", "Ve Dat/Tong", "Doanh Thu", "Loi Nhuan");
-        System.out.println("════════════════════════════════════════════════════════════════════════════════════════");
-        for (int i = 0; i < soLuong; i++) {
-            list[i].hienThi();
-        }
-        System.out.println("════════════════════════════════════════════════════════════════════════════════════════");
+    if (soLuong == 0) {
+        System.out.println("Danh sach trong!");
+        return;
     }
+    // CẬP NHẬT CHI PHÍ + VÉ ĐÃ ĐẶT CHO TẤT CẢ KẾ HOẠCH
+    for (int i = 0; i < soLuong; i++) {
+        list[i].capNhatTongChi(QuanLy.getDsChiPhi());
+        list[i].capNhatVeDaDatVaDoanhThu(QuanLy.getDsHoaDon());
+    }
+
+    System.out.println("════════════════════════════════════════════════════════════════════════════════════════");
+    System.out.printf("%-10s | %-20s | %-10s | %-23s | %-12s | %-12s | %-14s%n",
+            "Ma KH", "Ten Ke Hoach", "Ma Tour", "Ngay Di - Ve", "Ve Dat/Tong", "Doanh Thu", "Loi Nhuan");
+    System.out.println("════════════════════════════════════════════════════════════════════════════════════════");
+    for (int i = 0; i < soLuong; i++) {
+        list[i].hienThi();
+    }
+    System.out.println("════════════════════════════════════════════════════════════════════════════════════════");
+}
 
     // 6. Thống kê đơn giản
     public void thongKe() {
+        for (int i = 0; i < soLuong; i++) {
+            list[i].capNhatTongChi(QuanLy.getDsChiPhi());
+        }
+
         if (soLuong == 0) {
             System.out.println("Khong co du lieu thong ke!");
             return;
@@ -137,11 +148,9 @@ public class DSKHTour {
 
     // 8. Đọc file
     public void loadFromFile(String path) throws IOException {
-        File f = new File(path);
-        if (!f.exists()) return;
 
         soLuong = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null && soLuong < MAX) {
                 line = line.trim();

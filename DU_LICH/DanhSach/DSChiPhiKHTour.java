@@ -113,10 +113,8 @@ public class DSChiPhiKHTour {
 
     // 7. Đọc file (tự động khi khởi tạo)
     public void loadFromFile(String path) {
-        File f = new File(path);
-        if (!f.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+        soLuong = 0;
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null && soLuong < MAX) {
                 line = line.trim();

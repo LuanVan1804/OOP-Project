@@ -100,10 +100,9 @@ public class DSChiTietHD {
     }
 
     public void loadFromFile(String path) {
-        File f = new File(path);
-        if (!f.exists()) return;
+        soLuong = 0;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
             while ((line = br.readLine()) != null && soLuong < MAX) {
                 line = line.trim();

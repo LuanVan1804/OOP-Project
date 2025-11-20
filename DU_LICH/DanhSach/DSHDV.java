@@ -24,8 +24,8 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
      // -------------------- load file --------------------
 
     @Override
-    public void loadFromFile(String fileName) throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader(fileName));
+    public void loadFromFile(String path) throws IOException {
+        BufferedReader br = new BufferedReader(new FileReader(path));
         String line;
         int count = 0;
 
@@ -40,7 +40,7 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
             return;
         }
         dsHDV = new HDV[count];
-        br = new BufferedReader(new FileReader(fileName));
+        br = new BufferedReader(new FileReader(path));
         int index = 0;
         while ((line = br.readLine()) != null) {
             String[] parts = line.split(",");

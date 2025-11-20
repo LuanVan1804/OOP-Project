@@ -106,35 +106,47 @@ public class DSHoaDon {
     }
 
     public void loadFromFile(String path) {
-        File f = new File(path);
-        if (!f.exists()) return;
-
-        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-            String line;
-            while ((line = br.readLine()) != null && soLuong < MAX) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-                String[] p = line.split(",", -1);
-                if (p.length >= 8) {
-                    try {
-                        HoaDon hd = new HoaDon(
-                            p[0].trim(),
-                            p[1].trim(),
-                            Integer.parseInt(p[2].trim()),
-                            Integer.parseInt(p[3].trim()),
-                            Integer.parseInt(p[4].trim()),
-                            Integer.parseInt(p[5].trim()),
-                            Double.parseDouble(p[6].trim())
-                        );
-                        hd.setNgayLap(LocalDate.parse(p[7].trim()));
-                        list[soLuong++] = hd;
-                    } catch (Exception e) {
-                        System.out.println("Loi dong file HoaDon: " + line);
-                    }
-                }
-            }
-        } catch (IOException e) {
-            System.out.println("Loi doc file HoaDon!");
-        }
+    soLuong = 0;
+    File f = new File(path);
+    if (!f.exists()) {
+        System.out.println("Khong tim thay file HoaDon: " + path);
+        return;
     }
+
+    try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+        String line;
+        int lineNum = 0;
+        while ((line = br.readLine()) != null && soLuong < MAX) {
+            lineNum++;
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            String[] p = line.split(",", -1);  // -1 để giữ phần tử rỗng
+            if (p.length < 8) {
+                System.out.println("Bo qua dong " + lineNum + " (qua it cot): " + line);
+                continue;
+            }
+
+            try {
+                HoaDon hd = new HoaDon(
+                    p[0].trim(),
+                    p[1].trim(),
+                    Integer.parseInt(p[2].trim()),
+                    Integer.parseInt(p[3].trim()),
+                    Integer.parseInt(p[4].trim()),
+                    Integer.parseInt(p[5].trim()),
+                    Double.parseDouble(p[6].trim())
+                );
+                hd.setNgayLap(LocalDate.parse(p[7].trim()));
+                list[soLuong++] = hd;
+                System.out.println("Da doc thanh cong HD: " + hd.getMaHD()); // DEBUG
+            } catch (Exception e) {
+                System.out.println("Loi doc dong " + lineNum + ": " + line + " -> " + e.getMessage());
+            }
+        }
+        System.out.println("=== DA TAI XONG HOA DON: " + soLuong + " hoa don ===");
+    } catch (IOException e) {
+        System.out.println("Loi mo file HoaDon: " + e.getMessage());
+    }
+}
 }

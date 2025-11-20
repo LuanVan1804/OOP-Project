@@ -3,19 +3,10 @@ package DU_LICH.QuanLy;
 import java.io.IOException;
 import java.util.Scanner;
 import DU_LICH.ClassDon.KeHoachTour;
-import DU_LICH.DanhSach.*;
 
 public class QuanLyKeHoach extends QuanLy {
-    private DSKHTour dsKHTour = new DSKHTour();
-    private final String FILE_KH = "KeHoachTour.txt";
-
     public QuanLyKeHoach() {
         super(false);
-        try {
-            dsKHTour.loadFromFile(FILE_KH);
-        } catch (Exception e) {
-            System.out.println("Khong doc duoc file KeHoachTour.txt");
-        }
     }
 
     public void menuKeHoach(Scanner sc) {
@@ -37,13 +28,13 @@ public class QuanLyKeHoach extends QuanLy {
             switch (ch) {
                 case 1: themMoi(sc); break;
                 case 2: xoa(sc); break;
-                case 3: dsKHTour.hienThiDanhSach(); break;
+                case 3: dsKeHoach.hienThiDanhSach(); break;
                 case 4: timMa(sc); break;
                 case 5: timTen(sc); break;
-                case 6: dsKHTour.thongKe(); break;
+                case 6: dsKeHoach.thongKe(); break;
                 case 0:
                     try {
-                        dsKHTour.saveToFile(PATH_KEHOACH);
+                        dsKeHoach.saveToFile(PATH_KEHOACH);
                         System.out.println("Da luu du lieu ke hoach tour.");
                     } catch (IOException e) {
                         System.out.println("Loi luu file!");
@@ -79,7 +70,7 @@ public class QuanLyKeHoach extends QuanLy {
             }
         }
 
-        if (dsKHTour.them(k)) {
+        if (dsKeHoach.them(k)) {
             System.out.println("Them thanh cong!");
         } else {
             System.out.println("Them that bai (trung ma hoac day danh sach)!");
@@ -89,7 +80,7 @@ public class QuanLyKeHoach extends QuanLy {
     private void xoa(Scanner sc) {
         System.out.print("Nhap ma ke hoach can xoa: ");
         String ma = sc.nextLine().trim();
-        if (dsKHTour.xoa(ma)) {
+        if (dsKeHoach.xoa(ma)) {
             System.out.println("Xoa thanh cong!");
         } else {
             System.out.println("Khong tim thay ma ke hoach!");
@@ -99,7 +90,7 @@ public class QuanLyKeHoach extends QuanLy {
     private void timMa(Scanner sc) {
         System.out.print("Nhap ma ke hoach: ");
         String ma = sc.nextLine().trim();
-        KeHoachTour k = dsKHTour.timTheoMa(ma);
+        KeHoachTour k = dsKeHoach.timTheoMa(ma);
         if (k == null) {
             System.out.println("Khong tim thay!");
         } else {
@@ -113,7 +104,7 @@ public class QuanLyKeHoach extends QuanLy {
     private void timTen(Scanner sc) {
         System.out.print("Nhap tu khoa ten ke hoach: ");
         String key = sc.nextLine().trim();
-        KeHoachTour[] kq = dsKHTour.timTheoTen(key);
+        KeHoachTour[] kq = dsKeHoach.timTheoTen(key);
         if (kq.length == 0) {
             System.out.println("Khong tim thay ket qua nao!");
         } else {

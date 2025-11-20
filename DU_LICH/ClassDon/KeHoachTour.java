@@ -5,6 +5,9 @@ import java.text.SimpleDateFormat;
 import java.util.Locale;
 import java.util.Scanner;
 
+import DU_LICH.DanhSach.DSChiPhiKHTour;
+import DU_LICH.DanhSach.DSHoaDon;
+
 public class KeHoachTour {
     private String maKHTour;
     private String tenKeHoach;      // THÊM MỚI
@@ -134,4 +137,28 @@ public class KeHoachTour {
                 maKHTour, tenKeHoach, maTour, maHDV, tongSoVe, giaVe,
                 SDF.format(ngayDi), SDF.format(ngayVe));
     }
+    // Cập nhật tổng chi phí từ danh sách chi phí
+    public void capNhatTongChi(DSChiPhiKHTour dsChiPhi) {
+        if (dsChiPhi == null) {
+            this.tongChi = 0.0;
+            return;
+        }
+        ChiPhiKHTour cp = dsChiPhi.timTheoMa(this.maKHTour);
+        this.tongChi = (cp != null) ? cp.getTongChi() : 0.0;
+    }
+
+    // Cập nhật tổng vé đã đặt từ danh sách hóa đơn
+    public void capNhatVeDaDatVaDoanhThu(DSHoaDon dsHoaDon) {
+    if (dsHoaDon == null) {
+        this.tongVeDaDat = 0;
+        return;
+    }
+    int tongVe = 0;
+    for (HoaDon hd : dsHoaDon.getList()) {
+        if (hd != null && hd.getMaKHTour().equals(this.maKHTour)) {
+            tongVe += hd.getSoVe();
+        }
+    }
+    this.tongVeDaDat = tongVe;
+}
 }
