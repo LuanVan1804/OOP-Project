@@ -135,7 +135,7 @@ public class QuanLy {
 		// Hoa don va chi tiet hoa don
 		dsHoaDon = new DSHoaDon();
 		try {
-			dsHoaDon.loadFromFile(pathDSHoaDon);
+			dsHoaDon.loadFromFile(pathDSHoaDon,dsKeHoach);
 		} catch (Exception e) {
 			System.out.println("Loi doc DSHoaDon.txt: " + e.getMessage());
 		}
@@ -147,23 +147,35 @@ public class QuanLy {
 			System.out.println("Loi doc DSChiTietHD.txt: " + e.getMessage());
 		}
 
-		// Chi phi ke hoach tour (phu thuoc vao dsKeHoach, dsKhachSan, dsNhaHang)
-		dsChiPhi = new DSChiPhiKHTour(dsKeHoach, dsKhachSan, dsNhaHang);
-		try {
-			dsChiPhi.loadFromFile(pathChiPhi);
-		} catch (Exception e) {
-			System.out.println("Loi doc ChiPhiKHTour.txt: " + e.getMessage());
-		}
-
-		// Wire DSPhuongTien into DSChiPhi so chi phi creation can list/select vehicles
-		if (dsChiPhi != null && dsPhuongTien != null) {
-			dsChiPhi.setDsPhuongTien(dsPhuongTien);
-		}
-
-
+	// Chi phi ke hoach tour (phu thuoc vao dsKeHoach, dsKhachSan, dsNhaHang)
+	dsChiPhi = new DSChiPhiKHTour(dsKeHoach, dsKhachSan, dsNhaHang);
+	try {
+		dsChiPhi.loadFromFile(pathChiPhi);
+	} catch (Exception e) {
+		System.out.println("Loi doc ChiPhiKHTour.txt: " + e.getMessage());
 	}
 
-	// Menu chính của lớp QuanLy (sử dụng scanner do caller truyền vào)
+	// Wire DSPhuongTien into DSChiPhi so chi phi creation can list/select vehicles
+	if (dsChiPhi != null && dsPhuongTien != null) {
+		dsChiPhi.setDsPhuongTien(dsPhuongTien);
+	}
+
+	// FIX: Gan dsChiPhi vao dsHoaDon sau khi load xong
+	if (dsHoaDon != null && dsChiPhi != null) {
+		dsHoaDon.setDsChiPhi(dsChiPhi);
+	}
+	
+	// FIX: Gan dsKHTour va dsChiPhi vao dsChiTietHD
+	if (dsChiTietHD != null) {
+		if (dsKeHoach != null) {
+			dsChiTietHD.setDsKHTour(dsKeHoach);
+		}
+		if (dsChiPhi != null) {
+			dsChiTietHD.setDsChiPhi(dsChiPhi);
+		}
+	}
+
+}	// Menu chính của lớp QuanLy (sử dụng scanner do caller truyền vào)
 	// Caller phải truyền Scanner hợp lệ. Nếu muốn tạo scanner mới, dùng menu()
 	// không tham số.
 	public void menu(Scanner sc) {
@@ -216,7 +228,7 @@ public class QuanLy {
 						new QuanLyChiPhi().chiPhiMenu(sc);
 					break;
 				case 8:
-					new QuanLyHoaDon(dsHoaDon, dsHDV, dsKhachHang, dsKeHoach, dsChiTietHD, sc).menu();
+					new QuanLyHoaDon(dsHoaDon, dsHDV, dsKhachHang, dsKeHoach, dsChiTietHD, dsChiPhi, sc).menu();
 					break;
 				case 9:
 					new QuanLyChiTietHD(dsChiTietHD, sc).menu();

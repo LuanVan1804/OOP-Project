@@ -54,8 +54,7 @@ public class QuanLyChiTietHD {
         String maHD = sc.nextLine();
         ChiTietHD ct = dsChiTiet.tim(maHD);
         if (ct != null) {
-            System.out.println("\nChi tiet hoa don:");
-            ct.hienThiThongTin();
+            ct.xuatThongTin();
         } else {
             System.out.println("Khong tim thay chi tiet!");
         }
