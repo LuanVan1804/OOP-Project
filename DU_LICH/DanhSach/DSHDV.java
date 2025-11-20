@@ -2,26 +2,30 @@ package DU_LICH.DanhSach;
 
 import java.io.*;
 import java.util.Arrays;
+import java.util.Scanner;
 
 import DU_LICH.ClassDon.HDV;
 
 public class DSHDV implements DU_LICH.Interfaces<HDV> {
-    private HDV[] dsHDV;
+    private HDV[] list;
     private int soLuongHDV;
 
     public DSHDV() {
-        this.dsHDV = new HDV[0];
+        this.list = new HDV[0];
         this.soLuongHDV = 0;
     }
-    public DSHDV(HDV[] dsHDV, int soLuongHDV) {
-        this.dsHDV = dsHDV;
+
+    public DSHDV(HDV[] list, int soLuongHDV) {
+        this.list = list;
         this.soLuongHDV = soLuongHDV;
     }
 
     // Getter for compatibility
-    public HDV[] getList() { return dsHDV; }
+    public HDV[] getList() {
+        return list;
+    }
 
-     // -------------------- load file --------------------
+    // -------------------- load file --------------------
 
     @Override
     public void loadFromFile(String path) throws IOException {
@@ -29,17 +33,17 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         String line;
         int count = 0;
 
-        // đếm số dòng trong file
+        // dem so dong trong file
         while ((line = br.readLine()) != null) {
             count++;
         }
         br.close();
 
         if (count == 0) {
-            this.dsHDV = new HDV[0];
+            this.list = new HDV[0];
             return;
         }
-        dsHDV = new HDV[count];
+        list = new HDV[count];
         br = new BufferedReader(new FileReader(path));
         int index = 0;
         while ((line = br.readLine()) != null) {
@@ -51,7 +55,7 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
                 String CCCD = parts[3];
                 String gioiTinh = parts[4];
                 double kinhNghiem = Double.parseDouble(parts[5]);
-                dsHDV[index++] = new HDV(maHDV, tenHDV, soDienThoai, CCCD, gioiTinh, kinhNghiem);
+                list[index++] = new HDV(maHDV, tenHDV, soDienThoai, CCCD, gioiTinh, kinhNghiem);
             }
         }
         br.close();
@@ -59,7 +63,7 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
 
     @Override
     public boolean MaDuyNhat(int ma) {
-        for (HDV hdv : dsHDV) {
+        for (HDV hdv : list) {
             if (hdv.getMaHDV() == ma) {
                 return false;
             }
@@ -67,11 +71,10 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         return true;
     }
 
-  
     @Override
     public void saveToFile(String Path) throws IOException {
         BufferedWriter bw = new BufferedWriter(new FileWriter(Path));
-        for (HDV hdv : dsHDV) {
+        for (HDV hdv : list) {
             String line = String.format("%d,%s,%s,%s,%s,%.2f",
                     hdv.getMaHDV(),
                     hdv.getTenHDV(),
@@ -85,96 +88,145 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         bw.close();
     }
 
-
-    // Thêm HDV (thuần dữ liệu, không in, không hỏi lại mã)
-    @Override
-    public void them(HDV obj) {
-        if (obj == null) return;
-        if (!MaDuyNhat(obj.getMaHDV())) return;
-        dsHDV = Arrays.copyOf(dsHDV, dsHDV.length + 1);
-        dsHDV[dsHDV.length - 1] = obj;
+    // xuat danh sach HDV
+    public void xuatDanhSach() {
+        if (list == null || list.length == 0) {
+            System.out.println("Danh sach HDV rong.");
+            return;
+        }
+        System.out.println("===== DANH SACH HUONG DAN VIEN (" + list.length + ") =====");
+        for (HDV hdv : list) {
+            hdv.hienThiThongTinHDV();
+        }
     }
 
-    // Sửa theo đối tượng đã được validate ở tầng quản lý
-    public boolean sua(int maHDV, HDV updated) {
-        if (updated == null) return false;
-        for (int i = 0; i < dsHDV.length; i++) {
-            if (dsHDV[i] != null && dsHDV[i].getMaHDV() == maHDV) {
-                dsHDV[i].setTenHDV(updated.getTenHDV());
-                dsHDV[i].setSoDienThoai(updated.getSoDienThoai());
-                dsHDV[i].setCCCD(updated.getCCCD());
-                dsHDV[i].setGioiTinh(updated.getGioiTinh());
-                dsHDV[i].setKinhNghiem(updated.getKinhNghiem());
-                return true;
+    // Them HDV (thuan du lieu, khong in, khong hoi lai ma)
+    @Override
+    public void them(HDV obj) {
+        if (obj == null)
+            return;
+        if (!MaDuyNhat(obj.getMaHDV()))
+            return;
+        list = Arrays.copyOf(list, list.length + 1);
+        list[list.length - 1] = obj;
+    }
+
+    public void suaHDV(int maHDV) {
+        HDV hdv = timTheoMa(maHDV);
+        if (hdv == null) {
+            System.out.println("Khong tim thay HDV voi ma: " + maHDV);
+            return;
+        }
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("=== THONG TIN HIEN TAI ===");
+        hdv.hienThiThongTinHDV();
+        System.out.println("=== NHAP THONG TIN MOI (ENTER DE BO QUA) ===");
+
+        System.out.print("Ten HDV [" + hdv.getTenHDV() + "]: ");
+        String s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            hdv.setTenHDV(s);
+
+        System.out.print("So dien thoai [" + hdv.getSoDienThoai() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            hdv.setSoDienThoai(s);
+
+        System.out.print("CCCD [" + hdv.getCCCD() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            hdv.setCCCD(s);
+
+        System.out.print("Gioi tinh [" + hdv.getGioiTinh() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            hdv.setGioiTinh(s);
+
+        System.out.print("Kinh nghiem [" + hdv.getKinhNghiem() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty()) {
+            try {
+                hdv.setKinhNghiem(Double.parseDouble(s));
+            } catch (NumberFormatException e) {
+                System.out.println("Gia tri khong hop le, giu nguyen kinh nghiem cu!");
             }
         }
-        return false;
+
+        System.out.println("=== Cap nhat thanh cong! ===");
     }
 
     @Override
     public void sua(int maHDV) {
-        // Không sử dụng trong flow mới (tương tác console sẽ nằm ở lớp quản lý)
+        // Khong su dung trong flow moi (tuong tac console se nam o lop quan ly)
     }
 
-    // Xóa HDV theo mã (thuần dữ liệu, không in)
+    // Xoa HDV theo ma (thuan du lieu, khong in)
     @Override
     public void xoa(int maHDV) {
         int index = -1;
-        for (int i = 0; i < dsHDV.length; i++) {
-            if (dsHDV[i] != null && dsHDV[i].getMaHDV() == maHDV) {
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] != null && list[i].getMaHDV() == maHDV) {
                 index = i;
                 break;
             }
         }
         if (index != -1) {
-            for (int i = index; i < dsHDV.length - 1; i++) {
-                dsHDV[i] = dsHDV[i + 1];
+            for (int i = index; i < list.length - 1; i++) {
+                list[i] = list[i + 1];
             }
-            dsHDV[dsHDV.length - 1] = null;
-            dsHDV = Arrays.copyOf(dsHDV, dsHDV.length - 1);
+            list[list.length - 1] = null;
+            list = Arrays.copyOf(list, list.length - 1);
         }
     }
 
-    // Tìm kiếm theo kinh nghiệm, trả về mảng kết quả
+    // Tim kiem theo kinh nghiem, tra ve mang ket qua
     public HDV[] timKiemTheoKinhNghiem(double kinhNghiem) {
         int count = 0;
-        for (HDV hdv : dsHDV) {
-            if (hdv != null && hdv.getKinhNghiem() == kinhNghiem) count++;
+        for (HDV hdv : list) {
+            if (hdv != null && hdv.getKinhNghiem() == kinhNghiem)
+                count++;
         }
         HDV[] kq = new HDV[count];
         int idx = 0;
-        for (HDV hdv : dsHDV) {
-            if (hdv != null && hdv.getKinhNghiem() == kinhNghiem) kq[idx++] = hdv;
+        for (HDV hdv : list) {
+            if (hdv != null && hdv.getKinhNghiem() == kinhNghiem)
+                kq[idx++] = hdv;
         }
         return kq;
     }
 
-    // Tìm kiếm theo tên, trả về mảng kết quả
+    // Tim kiem theo ten, tra ve mang ket qua
     public HDV[] timKiemTheoTen(String tenHDV) {
-        if (tenHDV == null) return new HDV[0];
+        if (tenHDV == null)
+            return new HDV[0];
         String keyword = tenHDV.toLowerCase();
         int count = 0;
-        for (HDV hdv : dsHDV) {
-            if (hdv != null && hdv.getTenHDV().toLowerCase().contains(keyword)) count++;
+        for (HDV hdv : list) {
+            if (hdv != null && hdv.getTenHDV().toLowerCase().contains(keyword))
+                count++;
         }
         HDV[] kq = new HDV[count];
         int idx = 0;
-        for (HDV hdv : dsHDV) {
-            if (hdv != null && hdv.getTenHDV().toLowerCase().contains(keyword)) kq[idx++] = hdv;
+        for (HDV hdv : list) {
+            if (hdv != null && hdv.getTenHDV().toLowerCase().contains(keyword))
+                kq[idx++] = hdv;
         }
         return kq;
     }
 
-    // Trả về đối tượng HDV theo mã (nếu có) — hỗ trợ resolve khi load các liên kết
+    // Tra ve doi tuong HDV theo ma (neu co) — ho tro resolve khi load cac lien ket
     public HDV timTheoMa(int maHDV) {
-        if (dsHDV == null) return null;
-        for (HDV hdv : dsHDV) {
-            if (hdv != null && hdv.getMaHDV() == maHDV) return hdv;
+        if (list == null)
+            return null;
+        for (HDV hdv : list) {
+            if (hdv != null && hdv.getMaHDV() == maHDV)
+                return hdv;
         }
         return null;
     }
 
-    // Thống kê theo kinh nghiệm: trả về cấu trúc dữ liệu, không in
+    // Thong ke theo kinh nghiem: tra ve cau truc du lieu, khong in
     public static class ThongKeKinhNghiem {
         public double[] kinhNghiemValues;
         public int[] dem;
@@ -183,20 +235,21 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
 
     public ThongKeKinhNghiem thongKeTheoKinhNghiem() {
         ThongKeKinhNghiem tk = new ThongKeKinhNghiem();
-        if (dsHDV.length == 0) {
+        if (list.length == 0) {
             tk.kinhNghiemValues = new double[0];
             tk.dem = new int[0];
             tk.soLoai = 0;
             return tk;
         }
 
-        double[] kinhNghiemValues = new double[dsHDV.length];
-        int[] dem = new int[dsHDV.length];
+        double[] kinhNghiemValues = new double[list.length];
+        int[] dem = new int[list.length];
         int soLoai = 0;
 
-        for (int i = 0; i < dsHDV.length; i++) {
-            HDV hdv = dsHDV[i];
-            if (hdv == null) continue;
+        for (int i = 0; i < list.length; i++) {
+            HDV hdv = list[i];
+            if (hdv == null)
+                continue;
             double kn = hdv.getKinhNghiem();
             boolean daCo = false;
             for (int j = 0; j < soLoai; j++) {

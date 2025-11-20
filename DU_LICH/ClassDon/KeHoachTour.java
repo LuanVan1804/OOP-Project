@@ -10,15 +10,15 @@ import DU_LICH.DanhSach.DSHoaDon;
 
 public class KeHoachTour {
     private String maKHTour;
-    private String tenKeHoach;      // THÊM MỚI
+    private String tenKeHoach;      // THEM MOI
     private String maTour;
     private String maHDV;
     private int tongSoVe;
     private double giaVe;
-    private int tongVeDaDat;        // Sẽ được cập nhật từ Hóa đơn
+    private int tongVeDaDat;        // Se duoc cap nhat tu Hoa don
     private Date ngayDi;
     private Date ngayVe;
-    private double tongChi;         // Sẽ được cập nhật từ Chi phí
+    private double tongChi;         // Se duoc cap nhat tu Chi phi
 
     private static final String DATE_PATTERN = "dd/MM/yyyy";
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));
@@ -66,7 +66,7 @@ public class KeHoachTour {
     public double getTongChi() { return tongChi; }
     public void setTongChi(double tongChi) { this.tongChi = tongChi; }
 
-    // Hàm nhập (không nhập tongVeDaDat và tongChi)
+    // Ham nhap (khong nhap tongVeDaDat va tongChi)
     public void nhap() {
         System.out.print("Nhap Ma Ke Hoach Tour: ");
         this.maKHTour = sc.nextLine().trim();
@@ -120,7 +120,7 @@ public class KeHoachTour {
         }
     }
 
-    // Hàm hiển thị
+    // Ham hien thi
     public void hienThi() {
         String di = (ngayDi != null) ? SDF.format(ngayDi) : "Chua co";
         String ve = (ngayVe != null) ? SDF.format(ngayVe) : "Chua co";
@@ -137,7 +137,7 @@ public class KeHoachTour {
                 maKHTour, tenKeHoach, maTour, maHDV, tongSoVe, giaVe,
                 SDF.format(ngayDi), SDF.format(ngayVe));
     }
-    // Cập nhật tổng chi phí từ danh sách chi phí
+    // Cap nhat tong chi phi tu danh sach chi phi
     public void capNhatTongChi(DSChiPhiKHTour dsChiPhi) {
         if (dsChiPhi == null) {
             this.tongChi = 0.0;
@@ -147,7 +147,7 @@ public class KeHoachTour {
         this.tongChi = (cp != null) ? cp.getTongChi() : 0.0;
     }
 
-    // Cập nhật tổng vé đã đặt từ danh sách hóa đơn
+    // Cap nhat tong ve da dat tu danh sach hoa don
     public void capNhatVeDaDatVaDoanhThu(DSHoaDon dsHoaDon) {
     if (dsHoaDon == null) {
         this.tongVeDaDat = 0;

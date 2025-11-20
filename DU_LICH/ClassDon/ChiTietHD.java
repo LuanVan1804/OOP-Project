@@ -3,9 +3,9 @@ package DU_LICH.ClassDon;
 public class ChiTietHD {
     private String maHD;
     private String maKHTour;
-    private int[] dsMaKhachHang;  // Danh sách mã khách hàng trong đoàn
+    private int[] dsMaKhachHang;  // Danh sach ma khach hang trong doan
     private double giaVe;
-    private double tongTien;      // Tự tính = số khách * giá vé (sẽ cộng chi phí ở QuanLy)
+    private double tongTien;      // Tu tinh = so khach * gia ve (se cong chi phi o QuanLy)
 
     public ChiTietHD() {
         this.dsMaKhachHang = new int[0];
@@ -38,14 +38,14 @@ public class ChiTietHD {
 
     public int getSoKhach() { return dsMaKhachHang.length; }
 
-    public double getTongTienVe() { return tongTien; } // Chỉ tiền vé
-    public double getTongTien() { return tongTien; }   // Sẽ được override ở QuanLy nếu có chi phí
+    public double getTongTienVe() { return tongTien; } // Chi tien ve
+    public double getTongTien() { return tongTien; }   // Se duoc override o QuanLy neu co chi phi
 
     private void capNhatTongTien() {
         this.tongTien = this.dsMaKhachHang.length * this.giaVe;
     }
 
-    // Hiển thị ngắn gọn (dùng trong danh sách)
+    // Hien thi ngan gon (dung trong danh sach)
     public void hienThiNgan() {
         System.out.printf("%-12s | %-12s | %4d khach | %,15.0f VND%n",
                 maHD, maKHTour, getSoKhach(), tongTien);

@@ -26,10 +26,10 @@ public class DSPhuongTien {
     }
 
     public void them() {
-        System.out.print("Nhập số lượng phương tiện cần thêm: ");
+        System.out.print("Nhap so luong phuong tien can them: ");
         int so;
         while (!sc.hasNextInt()) {
-            System.out.print("Số nguyên, nhập lại: ");
+            System.out.print("So nguyen, nhap lai: ");
             sc.next();
         }
         so = sc.nextInt();
@@ -38,11 +38,11 @@ public class DSPhuongTien {
         for (int i = 0; i < so; i++) {
             dspt = Arrays.copyOf(dspt, soLuongpt + 1);
             dspt[soLuongpt] = new PhuongTien();
-            System.out.println("-- Nhập thông tin phương tiện thứ " + (soLuongpt + 1) + " --");
+            System.out.println("-- Nhap thong tin phuong tien thu " + (soLuongpt + 1) + " --");
             dspt[soLuongpt].nhap(sc);
             soLuongpt++;
         }
-        System.out.println("Thêm thành công.\n");
+        System.out.println("Them thanh cong.\n");
     }
 
     public void xoa() {
@@ -50,7 +50,7 @@ public class DSPhuongTien {
         if (soLuongpt == 0)
             return;
 
-        System.out.print("Nhập biển số xe cần xóa: ");
+        System.out.print("Nhap bien so xe can xoa: ");
         String bienso = sc.nextLine().trim();
 
         int idx = -1;
@@ -62,7 +62,7 @@ public class DSPhuongTien {
         }
 
         if (idx == -1) {
-            System.out.println("Không tìm thấy phương tiện.\n");
+            System.out.println("Khong tim thay phuong tien.\n");
             return;
         }
 
@@ -72,7 +72,7 @@ public class DSPhuongTien {
         }
         soLuongpt--;
         dspt = Arrays.copyOf(dspt, soLuongpt); // shrink array
-        System.out.println("Xóa thành công.\n");
+        System.out.println("Xoa thanh cong.\n");
     }
 
     public void sua() {
@@ -80,19 +80,19 @@ public class DSPhuongTien {
         if (soLuongpt == 0)
             return;
 
-        System.out.print("Nhập biển số xe cần sửa: ");
+        System.out.print("Nhap bien so xe can sua: ");
         String bienso = sc.nextLine().trim();
 
         for (int i = 0; i < soLuongpt; i++) {
             if (dspt[i].getBienKiemSoat().equalsIgnoreCase(bienso)) {
-                System.out.println("1. Sửa biển số xe");
-                System.out.println("2. Sửa số chỗ ngồi");
-                System.out.println("3. Sửa loại phương tiện");
-                System.out.print("Chọn thông tin cần sửa (1-3): ");
+                System.out.println("1. Sua bien so xe");
+                System.out.println("2. Sua so cho ngoi");
+                System.out.println("3. Sua loai phuong tien");
+                System.out.print("Chon thong tin can sua (1-3): ");
 
                 int chon;
                 while (!sc.hasNextInt()) {
-                    System.out.print("Số nguyên, nhập lại: ");
+                    System.out.print("So nguyen, nhap lai: ");
                     sc.next();
                 }
                 chon = sc.nextInt();
@@ -100,14 +100,14 @@ public class DSPhuongTien {
 
                 switch (chon) {
                     case 1:
-                        System.out.print("Nhập biển kiểm soát mới: ");
+                        System.out.print("Nhap bien kiem soat moi: ");
                         String bienMoi = sc.nextLine().trim();
                         dspt[i].setBienKiemSoat(bienMoi);
                         break;
                     case 2:
-                        System.out.print("Nhập số chỗ ngồi mới: ");
+                        System.out.print("Nhap so cho ngoi moi: ");
                         while (!sc.hasNextInt()) {
-                            System.out.print("Số nguyên, nhập lại: ");
+                            System.out.print("So nguyen, nhap lai: ");
                             sc.next();
                         }
                         int soChoMoi = sc.nextInt();
@@ -115,26 +115,26 @@ public class DSPhuongTien {
                         dspt[i].setSoChoNgoi(soChoMoi);
                         break;
                     case 3:
-                        System.out.print("Nhập loại phương tiện mới: ");
+                        System.out.print("Nhap loai phuong tien moi: ");
                         String loaiMoi = sc.nextLine().trim();
                         dspt[i].setLoaiPhuongTien(loaiMoi);
                         break;
                     default:
-                        System.out.println("Lựa chọn không hợp lệ.");
+                        System.out.println("Lua chon khong hop le.");
                         return;
                 }
 
                 System.out.println("=================================");
-                System.out.println("========= Sửa thành công ========");
+                System.out.println("========= Sua thanh cong ========");
                 System.out.println("=================================\n");
                 return;
             }
         }
-        System.out.println("Không tìm thấy phương tiện.\n");
+        System.out.println("Khong tim thay phuong tien.\n");
     }
 
     public void timKiem() {
-        System.out.print("Nhập biển số xe cần tìm: ");
+        System.out.print("Nhap bien so xe can tim: ");
         String tim = sc.nextLine().trim();
         for (int i = 0; i < soLuongpt; i++) {
             if (dspt[i].getBienKiemSoat().equalsIgnoreCase(tim)) {
@@ -142,10 +142,10 @@ public class DSPhuongTien {
                 return;
             }
         }
-        System.out.println("Không tìm thấy phương tiện.\n");
+        System.out.println("Khong tim thay phuong tien.\n");
     }
 
-    // Tìm phương tiện theo biển số, trả về đối tượng hoặc null
+    // Tim phuong tien theo bien so, tra ve doi tuong hoac null
     public PhuongTien timTheoBien(String bien) {
         if (bien == null) return null;
         String b = bien.trim();
@@ -155,7 +155,7 @@ public class DSPhuongTien {
         return null;
     }
 
-    // Tìm theo tên/loại phương tiện (case-insensitive, contains)
+    // Tim theo ten/loai phuong tien (case-insensitive, contains)
     public PhuongTien[] timTheoTen(String ten) {
         if (ten == null)
             return new PhuongTien[0];
@@ -177,8 +177,8 @@ public class DSPhuongTien {
         return result;
     }
 
-    // Thống kê đơn giản: tổng phương tiện, tổng chỗ, trung bình phí theo ngày, số
-    // theo loại
+    // Thong ke don gian: tong phuong tien, tong cho, trung binh phi theo ngay, so
+    // theo loai
     public void thongKe() {
         if (soLuongpt == 0) {
             System.out.println("Chua co phuong tien nao!");
@@ -253,12 +253,12 @@ public class DSPhuongTien {
 
     public void xuat() {
         if (soLuongpt == 0) {
-            System.out.println("Danh sách phương tiện trống.\n");
+            System.out.println("Danh sach phuong tien trong.\n");
             return;
         }
-        System.out.println("Danh sách phương tiện:");
+        System.out.println("Danh sach phuong tien:");
         // header for compact list
-        System.out.println("# | Biển | Số chỗ | Loại | Phí/ngày");
+        System.out.println("# | Bien | So cho | Loai | Phi/ngay");
         for (int i = 0; i < soLuongpt; i++) {
             System.out.print((i + 1) + ") ");
             if (dspt[i] != null) {
@@ -274,17 +274,17 @@ public class DSPhuongTien {
     public void showMenu() {
         int chon;
         do {
-            System.out.println("=== MENU PHƯƠNG TIỆN ===");
-            System.out.println("1. Thêm phương tiện");
-            System.out.println("2. Xóa phương tiện");
-            System.out.println("3. Sửa phương tiện");
-            System.out.println("4. Tìm kiếm phương tiện");
-            System.out.println("5. Xuất danh sách phương tiện");
-            System.out.println("6. Thoát");
-            System.out.print("Vui lòng chọn (1-6): ");
+            System.out.println("=== MENU PHUONG TIEN ===");
+            System.out.println("1. Them phuong tien");
+            System.out.println("2. Xoa phuong tien");
+            System.out.println("3. Sua phuong tien");
+            System.out.println("4. Tim kiem phuong tien");
+            System.out.println("5. Xuat danh sach phuong tien");
+            System.out.println("6. Thoat");
+            System.out.print("Vui long chon (1-6): ");
 
             while (!sc.hasNextInt()) {
-                System.out.print("Số nguyên, nhập lại: ");
+                System.out.print("So nguyen, nhap lai: ");
                 sc.next();
             }
             chon = sc.nextInt();
@@ -309,7 +309,7 @@ public class DSPhuongTien {
                 case 6:
                     return;
                 default:
-                    System.out.println("Nhập sai! Vui lòng chọn lại.\n");
+                    System.out.println("Nhap sai! Vui long chon lai.\n");
             }
         } while (true);
     }

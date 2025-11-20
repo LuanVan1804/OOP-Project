@@ -11,10 +11,10 @@ public abstract class Tour {
     protected String diaDiemDen;
     protected String diaDiemDi;
 
-    // Scanner dùng chung
+    // Scanner dung chung
     protected static final Scanner sc = new Scanner(System.in);
 
-    // constructor không tham số
+    // constructor khong tham so
     public Tour() {
         this.maTour = "";
         this.tenTour = "";
@@ -25,7 +25,7 @@ public abstract class Tour {
         this.diaDiemDi = "";
     }
 
-    // constructor có tham số
+    // constructor co tham so
     public Tour(String maTour, String tenTour, int soNgay, double donGia, String maThanhPho, String diaDiemDen, String diaDiemDi) {
         this.maTour = maTour;
         this.tenTour = tenTour;
@@ -36,7 +36,7 @@ public abstract class Tour {
         this.diaDiemDi = diaDiemDi;
     }
 
-    // Constructor sao chép
+    // Constructor sao chep
     public Tour(Tour other) {
         this.maTour = other.maTour;
         this.tenTour = other.tenTour;
@@ -69,8 +69,8 @@ public abstract class Tour {
 // hien thi tour 
     
    public String toString() {
-    // Sắp xếp lại thông tin cho trực quan: Mã | Tên | Số ngày | Đơn giá | Điểm đi -> Điểm đến (Thành phố)
-    return String.format("%-8s | %-28s | %2d ngày | %,12.0f đ | %s -> %s (TP: %s)",
+    // Sap xep lai thong tin cho truc quan: Ma | Ten | So ngay | Don gia | Diem di -> Diem den (Thanh pho)
+    return String.format("%-8s | %-28s | %2d ngay | %,12.0f d | %s -> %s (TP: %s)",
         maTour,
         tenTour,
         soNgay,
@@ -98,7 +98,7 @@ public abstract class Tour {
         diaDiemDi = sc.nextLine();
     };
     
-    // Hiển thị thông tin cơ bản của tour (các lớp con có thể override và gọi super)
+    // Hien thi thong tin co ban cua tour (cac lop con co the override va goi super)
     public void hienThiThongTin() {
         System.out.println(this.toString());
     }

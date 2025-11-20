@@ -17,15 +17,15 @@ public class DSThanhPho {
     public void setList(ThanhPho[] list) { this.list = list; }
 
     /**
-     * Đọc file thành phố có dạng: countryCode,cityCode,cityName
-     * Ví dụ:
+     * Doc file thanh pho co dang: countryCode,cityCode,cityName
+     * Vi du:
      * 1,1,Ha Noi
      * 1,2,Ho Chi Minh
      */
     public DSThanhPho loadFromFile(String path) throws IOException {
         DSThanhPho ds = new DSThanhPho();
 
-        // đếm số dòng hợp lệ trước
+        // dem so dong hop le truoc
         int count = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
@@ -47,7 +47,7 @@ public class DSThanhPho {
             return ds;
         }
 
-        // Tạo mảng thành phố với kích thước đã đếm
+        // Tao mang thanh pho voi kich thuoc da dem
         ThanhPho[] tp = new ThanhPho[count];
         int idx = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
@@ -64,14 +64,14 @@ public class DSThanhPho {
                 tp[idx++] = new ThanhPho(countryCode, cityCode, cityName);
             }
         }
-        // gán mảng vào danh sách
+        // gan mang vao danh sach
         ds.setList(tp);
         return ds;
     }
-    // hàm lấy danh sách thành phố theo mã quốc gia
+    // ham lay danh sach thanh pho theo ma quoc gia
     public ThanhPho[] getCitiesByCountry(String countryCode) {
         if (list == null || list.length == 0) return new ThanhPho[0];
-        // đếm số thành phố thuộc quốc gia đó
+        // dem so thanh pho thuoc quoc gia do
         int c = 0;
         for (int i = 0; i < list.length; i++) {
             if (list[i] != null && countryCode.equals(list[i].getMaQuocGia())) c++;
@@ -84,10 +84,10 @@ public class DSThanhPho {
                 res[j++] = list[i];
             }
         }
-        // trả về danh sách thành phố thuộc quốc gia đó
+        // tra ve danh sach thanh pho thuoc quoc gia do
         return res;
     }
-    // HIỂN THỊ DANH SÁCH THÀNH PHỐ THEO QUỐC GIA
+    // HIEN THI DANH SACH THANH PHO THEO QUOC GIA
     public void hienThiDanhSachTheoQuocGia(String maQG) {
         ThanhPho[] cities = getCitiesByCountry(maQG);
         if (cities.length == 0) {
@@ -100,7 +100,7 @@ public class DSThanhPho {
         }
     }
 
-    // KIỂM TRA MÃ THÀNH PHỐ HỢP LỆ TRONG QUỐC GIA
+    // KIEM TRA MA THANH PHO HOP LE TRONG QUOC GIA
     public boolean isValidCityCode(String maQG, String maTP) {
         ThanhPho[] cities = getCitiesByCountry(maQG);
         for (ThanhPho tp : cities) {
@@ -109,7 +109,7 @@ public class DSThanhPho {
         return false;
     }
 
-    // HIỂN THỊ DANH SÁCH THÀNH PHỐ NỘI ĐỊA
+    // HIEN THI DANH SACH THANH PHO NOI DIA
     public void hienThiDanhSachNoiDia(DSQuocGia dsqg) {
         QuocGia domestic = dsqg.getDomesticCountry();
         if (domestic == null) {
@@ -119,7 +119,7 @@ public class DSThanhPho {
         hienThiDanhSachTheoQuocGia(domestic.getMaQuocGia());
     }
 
-    // KIỂM TRA MÃ THÀNH PHỐ NỘI ĐỊA
+    // KIEM TRA MA THANH PHO NOI DIA
     public boolean isValidDomesticCityCode(DSQuocGia dsqg, String maTP) {
         QuocGia domestic = dsqg.getDomesticCountry();
         if (domestic == null) return false;

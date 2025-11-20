@@ -25,7 +25,7 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         String line;
         int count = 0;
 
-        // Đếm số dòng để tạo mảng
+        // Dem so dong de tao mang
         while ((line = br.readLine()) != null) {
             count++;
         }
@@ -40,7 +40,7 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         br = new BufferedReader(new FileReader(path));
         int index = 0;
         while ((line = br.readLine()) != null) {
-            // Sử dụng dấu , thay vì |
+            // Su dung dau , thay vi |
             String[] parts = line.split(",");
             if (parts.length == 5) {
                 int maKH = Integer.parseInt(parts[0]);
@@ -55,24 +55,22 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
 
     }
 
-    // ---------------------- check mã duy nhất --------------------
+    // ---------------------- check ma duy nhat --------------------
     @Override
-   public boolean MaDuyNhat (int maKH)
-   {
-     for(KhachHang kh :list)
-     {
-        if (kh!=null && kh.getMaKH()==maKH)
-            return false;   
-     }
-     return true;
-   }
+    public boolean MaDuyNhat(int maKH) {
+        for (KhachHang kh : list) {
+            if (kh != null && kh.getMaKH() == maKH)
+                return false;
+        }
+        return true;
+    }
 
     // ---------------------- save to file --------------------
     @Override
     public void saveToFile(String path) throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
             for (KhachHang kh : list) {
-                // Sử dụng dấu , thay vì |
+                // Su dung dau , thay vi |
                 String line = String.format("%d,%s,%s,%s,%s",
                         kh.getMaKH(),
                         kh.getTenKH(),
@@ -85,58 +83,90 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         }
     }
 
-    // ---------------------- thêm khách hàng với Scanner (cho phép nhập lại mã) --------------------
+    // hien thi danh sach khach hang
+    public void hienThiDanhSachKH() {
+        if (list == null || list.length == 0) {
+            System.out.println("Danh sach khach hang rong!");
+            return;
+        }
+        System.out.println("Danh sach khach hang:");
+        for (KhachHang kh : list) {
+            kh.hienThiThongTinKH();
+            System.out.println("-----------------------");
+        }
+    }
+    // -
+
+    // ---------------------- them khach hang voi Scanner (cho phep nhap lai ma)
+    // --------------------
     public void them(KhachHang kh) {
         Scanner sc = new Scanner(System.in);
         if (kh == null)
             return;
-        
-        // Kiểm tra mã duy nhất
+
+        // Kiem tra ma duy nhat
         while (!MaDuyNhat(kh.getMaKH())) {
             System.out.print("Ma khach hang da ton tai, vui long nhap ma khac: ");
             int maMoi = Integer.parseInt(sc.nextLine());
             kh.setMaKH(maMoi);
         }
 
-        // Thêm vào mảng
+        // Them vao mang
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = kh;
     }
 
-
-    public boolean sua(int maKH, KhachHang updatedKH) {
-        if (updatedKH == null)
-            return false;
-
-        for (KhachHang kh : list) {
-            if (kh != null && kh.getMaKH() == maKH) {
-                kh.setTenKH(updatedKH.getTenKH());
-                kh.setSoDienThoai(updatedKH.getSoDienThoai());
-                kh.setCCCD(updatedKH.getCCCD());
-                kh.setGioiTinh(updatedKH.getGioiTinh());
-                return true;
-            }
+    public void chinhSuaKhachHang(int maKH) {
+        KhachHang kh = timKiemKHTheoMa(maKH); // giả sử có phương thức tìm theo mã
+        if (kh == null) {
+            System.out.println("Khong tim thay khach hang voi ma: " + maKH);
+            return;
         }
-        return false;
+
+        Scanner sc = new Scanner(System.in);
+        System.out.println("=== THONG TIN HIEN TAI ===");
+        kh.hienThiThongTinKH();
+        System.out.println("=== NHAP THONG TIN MOI (ENTER DE BO QUA) ===");
+
+        System.out.print("Ten KH [" + kh.getTenKH() + "]: ");
+        String s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            kh.setTenKH(s);
+
+        System.out.print("So dien thoai [" + kh.getSoDienThoai() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            kh.setSoDienThoai(s);
+
+        System.out.print("CCCD [" + kh.getCCCD() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            kh.setCCCD(s);
+
+        System.out.print("Gioi tinh [" + kh.getGioiTinh() + "]: ");
+        s = sc.nextLine();
+        if (!s.trim().isEmpty())
+            kh.setGioiTinh(s);
+
+        System.out.println("=== Cap nhat khach hang thanh cong! ===");
     }
 
     @Override
     public void sua(int maKH) {
-        // Không dùng trong flow mới; dùng sua(int, KhachHang) từ lớp quản lý.
+        // Khong dung trong flow moi; dung sua(int, KhachHang) tu lop quan ly.
     }
 
-    // ---------------------- tìm kiếm khách hàng theo mã (trả về đối tượng)
+    // ---------------------- tim kiem khach hang theo ma (tra ve doi tuong)
     // --------------------
-    public KhachHang timKiemKHTheoMa (int maKH)
-    {
-        for (KhachHang kh : list){
+    public KhachHang timKiemKHTheoMa(int maKH) {
+        for (KhachHang kh : list) {
             if (kh.getMaKH() == maKH)
                 return kh;
         }
         return null;
     }
 
-    // ---------------------- tìm kiếm khách hàng theo tên (trả về mảng)
+    // ---------------------- tim kiem khach hang theo ten (tra ve mang)
     // --------------------
     public KhachHang[] timKiemTheoTen(String tenKH) {
         if (tenKH == null)
@@ -156,7 +186,7 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         return kq;
     }
 
-    // ---------------------- Thống kê theo giới tính (trả về mảng kết quả)
+    // ---------------------- Thong ke theo gioi tinh (tra ve mang ket qua)
     // --------------------
     public int[] thongKeTheoGioiTinh() {
         int countNam = 0, countNu = 0;
@@ -165,13 +195,13 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
                 continue;
             if (kh.getGioiTinh().equalsIgnoreCase("Nam"))
                 countNam++;
-            else if (kh.getGioiTinh().equalsIgnoreCase("Nu") || kh.getGioiTinh().equalsIgnoreCase("Nữ"))
+            else if (kh.getGioiTinh().equalsIgnoreCase("Nu") || kh.getGioiTinh().equalsIgnoreCase("Nu"))
                 countNu++;
         }
         return new int[] { countNam, countNu };
     }
 
-    // ---------------------- xóa khách hàng --------------------
+    // ---------------------- xoa khach hang --------------------
     @Override
     public void xoa(int maKH) {
         int index = -1;
@@ -186,7 +216,7 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
                 list[i] = list[i + 1];
             }
         }
-        list[list.length -1 ] = null;
-        list =Arrays.copyOf(list,list.length -1);
+        list[list.length - 1] = null;
+        list = Arrays.copyOf(list, list.length - 1);
     }
 }

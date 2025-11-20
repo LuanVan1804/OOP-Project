@@ -12,7 +12,7 @@ public class TourNuocNgoai extends Tour {
         this.maQuocGia = "";
     }
 
-    //constructor sao chép
+    //constructor sao chep
     public TourNuocNgoai(TourNuocNgoai other) {
         super(other); 
         this.maQuocGia = other.maQuocGia;
@@ -39,16 +39,16 @@ public class TourNuocNgoai extends Tour {
 
     @Override
     public void hienThiThongTin() {
-        // Hiển thị tất cả thông tin trên một hàng, dựa trên toString() của lớp cha
+        // Hien thi tat ca thong tin tren mot hang, dua tren toString() cua lop cha
         System.out.printf("%s | Ma Quoc Gia: %s | Visa: %,.0f | Don Vi Tien Te: %s | Tong Gia Tour: %,.0f%n",
                 super.toString(), maQuocGia, visa, donViTienTe, tinhGiaTour());
     }
 
     @Override
     public void nhapThongTin() {
-        // kế thừa nhập thông tin cơ bản
+        // ke thua nhap thong tin co ban
         super.nhapThongTin();
-        // Nhập phần mở rộng
+        // Nhap phan mo rong
         System.out.print("Nhap Ma Quoc Gia: ");
         maQuocGia = sc.nextLine();
         System.out.print("Nhap Phi Visa: ");
@@ -58,7 +58,7 @@ public class TourNuocNgoai extends Tour {
         donViTienTe = sc.nextLine();
     }
 
-    //Loại tour
+    //Loai tour
     @Override
     public String loai() {
         return "NuocNgoai";

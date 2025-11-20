@@ -52,13 +52,13 @@ public class QuanLyKeHoach extends QuanLy {
         KeHoachTour k = new KeHoachTour();
         k.nhap();
 
-        // Validate mã tour tồn tại
+        // Validate ma tour ton tai
         if (dsTour.timTheoMa(k.getMaTour()) == null) {
             System.out.println("Ma tour khong ton tai!");
             return;
         }
 
-        // Validate HDV nếu có nhập
+        // Validate HDV neu co nhap
         if (!k.getMaHDV().isEmpty()) {
             try {
                 int maHDV = Integer.parseInt(k.getMaHDV());

@@ -49,13 +49,13 @@ public class QuanLyChiPhi extends QuanLy {
             return;
         }
 
-        // Kiểm tra kế hoạch tồn tại
+        // Kiem tra ke hoach ton tai
         if (dsKeHoach.timTheoMa(maKH) == null) {
             System.out.println("Khong tim thay ke hoach tour nay!");
             return;
         }
 
-        // Kiểm tra đã có chi phí chưa
+        // Kiem tra da co chi phi chua
         if (dsChiPhi.timTheoMa(maKH) != null) {
             System.out.println("Da co chi phi cho ke hoach nay! Hay chinh sua.");
             return;
@@ -64,7 +64,7 @@ public class QuanLyChiPhi extends QuanLy {
         ChiPhiKHTour cp = new ChiPhiKHTour();
         cp.setMaKHTour(maKH);
 
-        // Nhập các chi phí (bạn có thể mở rộng sau)
+        // Nhap cac chi phi (ban co the mo rong sau)
         System.out.print("Tong tien an (VND): ");
         cp.setTongTienAn(nhapSoDouble(sc));
         System.out.print("Tong tien phong (VND): ");
@@ -72,7 +72,7 @@ public class QuanLyChiPhi extends QuanLy {
         System.out.print("Tong tien phuong tien (VND): ");
         cp.setTongTienPhuongTien(nhapSoDouble(sc));
 
-        // Tự động lấy tiền tour từ KeHoachTour
+        // Tu dong lay tien tour tu KeHoachTour
         KeHoachTour kh = dsKeHoach.timTheoMa(maKH);
         if (kh != null) {
             Tour t = dsTour.timTheoMa(kh.getMaTour());

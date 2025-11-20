@@ -7,7 +7,7 @@ import DU_LICH.DanhSach.*;
 import DU_LICH.TourDuLich.*;
 
 public class QuanLy {
-    // Các danh sách toàn cục (static để tất cả QuanLy con truy cập được)
+    // Cac danh sach toan cuc (static de tat ca QuanLy con truy cap duoc)
     protected static DSQuocGia dsQuocGia;
     protected static DSThanhPho dsThanhPho;
     protected static DSTour dsTour;
@@ -21,19 +21,19 @@ public class QuanLy {
     protected static DSChiTietHD dsChiTietHD;
     protected static DSPhuongTien dsPhuongTien;
 
-    // Đường dẫn file (đơn giản, dễ quản lý)
-    protected static final String PATH_QUOCGIA = "D:\\doanOOP\\DU_LICH\\Data\\quocGia.txt";
-    protected static final String PATH_THANHPHO = "D:\\doanOOP\\DU_LICH\\Data\\ThanhPho.txt";
-    protected static final String PATH_TOUR = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTour.txt";
-    protected static final String PATH_KHACHSAN = "D:\\doanOOP\\DU_LICH\\Data\\KhachSan.txt";
-    protected static final String PATH_NHAHANG = "D:\\doanOOP\\DU_LICH\\Data\\NhaHang.txt";
-    protected static final String PATH_KHACHHANG = "D:\\doanOOP\\DU_LICH\\Data\\KhachHang.txt";
-    protected static final String PATH_HDV = "D:\\doanOOP\\DU_LICH\\Data\\HDV.txt";
-    protected static final String PATH_KEHOACH = "D:\\doanOOP\\DU_LICH\\Data\\KeHoachTour.txt";
-    protected static final String PATH_CHIPHI = "D:\\doanOOP\\DU_LICH\\Data\\ChiPhiKHTour.txt";
-    protected static final String PATH_HOADON = "D:\\doanOOP\\DU_LICH\\Data\\DSHoaDon.txt";
-    protected static final String PATH_CHITIET = "D:\\doanOOP\\DU_LICH\\Data\\DSChiTietHD.txt";
-    protected static final String PATH_PHUONGTIEN = "D:\\doanOOP\\DU_LICH\\Data\\PhuongTien.txt";
+    // Duong dan file (su dung duong dan tuong doi)
+    protected static final String PATH_QUOCGIA = "DU_LICH/Data/quocGia.txt";
+    protected static final String PATH_THANHPHO = "DU_LICH/Data/ThanhPho.txt";
+    protected static final String PATH_TOUR = "DU_LICH/TourDuLich/DSTour.txt";
+    protected static final String PATH_KHACHSAN = "DU_LICH/Data/KhachSan.txt";
+    protected static final String PATH_NHAHANG = "DU_LICH/Data/NhaHang.txt";
+    protected static final String PATH_KHACHHANG = "DU_LICH/Data/KhachHang.txt";
+    protected static final String PATH_HDV = "DU_LICH/Data/HDV.txt";
+    protected static final String PATH_KEHOACH = "DU_LICH/Data/KeHoachTour.txt";
+    protected static final String PATH_CHIPHI = "DU_LICH/Data/ChiPhiKHTour.txt";
+    protected static final String PATH_HOADON = "DU_LICH/Data/DSHoaDon.txt";
+    protected static final String PATH_CHITIET = "DU_LICH/Data/DSChiTietHD.txt";
+    protected static final String PATH_PHUONGTIEN = "DU_LICH/Data/PhuongTien.txt";
 
     public QuanLy() {
         this(true);
@@ -45,7 +45,7 @@ public class QuanLy {
         }
     }
 
-    // Tạo mới tất cả danh sách và đọc file tự động
+    // Tao moi tat ca danh sach va doc file tu dong
     private static void khoiTaoVaLoad() {
         dsQuocGia = new DSQuocGia();
         dsThanhPho = new DSThanhPho();
@@ -74,7 +74,7 @@ public class QuanLy {
         try { dsPhuongTien.loadFromFile(PATH_PHUONGTIEN);}catch (Exception e) { System.out.println("Khong tai duoc PhuongTien"); }
     }
 
-    // MENU CHÍNH - SIÊU SẠCH
+    // MENU CHINH - SIEU SACH
     public void menu(Scanner sc) {
         while (true) {
             System.out.println("\n════════════════════════════════════════════════");
@@ -143,7 +143,7 @@ public class QuanLy {
         }
     }
 
-    // Lưu tất cả dữ liệu trước khi thoát
+    // Luu tat ca du lieu truoc khi thoat
     private static void luuTatCa() {
         try {
             dsTour.saveToFile(PATH_TOUR);
@@ -163,7 +163,7 @@ public class QuanLy {
     }
 
 
-    // Getters để các lớp con truy cập (nếu cần)
+    // Getters de cac lop con truy cap (neu can)
     public static DSKHTour getDsKeHoach() { return dsKeHoach; }
     public static DSChiPhiKHTour getDsChiPhi() { return dsChiPhi; }
     public static DSHoaDon getDsHoaDon() { return dsHoaDon; }

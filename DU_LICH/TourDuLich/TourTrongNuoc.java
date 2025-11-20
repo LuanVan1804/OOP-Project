@@ -14,7 +14,7 @@ public class TourTrongNuoc extends Tour {
         this.phiDichVu = phiDichVu;
     }
 
-    //constructor sao chép
+    //constructor sao chep
     public TourTrongNuoc(TourTrongNuoc other) {
         super(other); 
         this.phiDichVu = other.phiDichVu;
@@ -25,7 +25,7 @@ public class TourTrongNuoc extends Tour {
 
     @Override
     public void hienThiThongTin() {
-        // Hiển thị tất cả thông tin trên một hàng, dựa trên toString() của lớp cha
+        // Hien thi tat ca thong tin tren mot hang, dua tren toString() cua lop cha
         System.out.printf("%s | Phi Dich Vu: %,.0f | Tong Gia Tour: %,.0f%n", super.toString(), phiDichVu, tinhGiaTour());
     }
 
@@ -34,10 +34,10 @@ public class TourTrongNuoc extends Tour {
        super.nhapThongTin();
         System.out.print("Nhap Phi Dich Vu: ");
         phiDichVu = sc.nextDouble();
-        sc.nextLine(); // bỏ dòng trống
+        sc.nextLine(); // bo dong trong
     }
 
-    //Loại tour
+    //Loai tour
     @Override
     public String loai() {
         return "TrongNuoc";

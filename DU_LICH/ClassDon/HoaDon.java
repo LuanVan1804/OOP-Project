@@ -4,14 +4,14 @@ import java.time.LocalDate;
 
 public class HoaDon {
     private String maHD;
-    private String maKHTour;      // Chỉ lưu mã, không lưu object
+    private String maKHTour;      // Chi luu ma, khong luu object
     private int maHDV;
     private int maKHDaiDien;
     private int soKhach;
     private int soVe;
     private LocalDate ngayLap;
-    private double giaVe;         // Lấy từ kế hoạch tour khi cần tính tiền
-    private double tongTien;      // Tự động tính = soVe * giaVe
+    private double giaVe;         // Lay tu ke hoach tour khi can tinh tien
+    private double tongTien;      // Tu dong tinh = soVe * giaVe
 
     public HoaDon() {
         this.ngayLap = LocalDate.now();
@@ -58,12 +58,12 @@ public class HoaDon {
 
     public double getTongTien() { return tongTien; }
 
-    // Tự động cập nhật tổng tiền
+    // Tu dong cap nhat tong tien
     private void capNhatTongTien() {
         this.tongTien = this.soVe * this.giaVe;
     }
 
-    // Hiển thị đẹp
+    // Hien thi dep
     public void hienThi() {
         System.out.printf("%-12s | %-12s | %-8d | %-8d | %6d | %6d | %-12s | %,15.0f VND%n",
                 maHD, maKHTour, maHDV, maKHDaiDien, soKhach, soVe,
