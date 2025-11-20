@@ -337,9 +337,12 @@ public class DSTour {
                 if (loai.equals("TrongNuoc")) {
                     TourTrongNuoc tt = (TourTrongNuoc) t;
                     bw.write(String.join(",",
-                        tt.getMaTour(), tt.getTenTour(), String.valueOf(tt.getSoNgay()),
+                        tt.getMaTour(), tt.getTenTour(), 
+                        String.valueOf(tt.getSoNgay()),
                         String.valueOf(tt.getDonGia()),
-                        tt.getMaThanhPho(), tt.getDiaDiemDen(), tt.getDiaDiemDi(),
+                        tt.getMaThanhPho(), 
+                        tt.getDiaDiemDen(), 
+                        tt.getDiaDiemDi(),
                         String.valueOf(tt.getPhiDichVu())
                     ));
                     bw.newLine();
