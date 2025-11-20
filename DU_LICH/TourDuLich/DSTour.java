@@ -261,8 +261,7 @@ public class DSTour {
 
     public void saveToFile(String path) throws IOException {
         File f = new File(path);
-        if (f.getParentFile() != null) f.getParentFile().mkdirs();
-
+        
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             for (int i = 0; i < soLuongTour; i++) {
                 Tour t = list[i];

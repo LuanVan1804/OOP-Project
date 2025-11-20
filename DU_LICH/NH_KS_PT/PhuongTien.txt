@@ -1,4 +1,0 @@
-bienKiemSoat,soChoNgoi,loaiPhuongTien,phiTheoNgay
-PT01,45,Xe khach,500000.0
-PT02,16,Xe Van,300000.0
-PT03,7,Xe 7 cho,200000.0

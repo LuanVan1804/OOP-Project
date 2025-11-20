@@ -1,6 +1,11 @@
-101,DuLichHaNoi,3,1500000.0,1,Hanoi,HoChiMinh,200000.0
-102,BienDaNang,4,1800000.0,3,DaNang,HoChiMinh,250000.0
-103,Tour3,2,300000.0,1,Hanoi,HCM,50000.0
-201,TourChinaClassic,5,4500000.0,2,1,Beijing,Shanghai,500.0,USD
-202,TourJapanHighlights,4,3200000.0,3,1,Tokyo,Osaka,0.0,JPY
-2,dihcm,3,1000000.0,2,hcm,quangbinh,50000.0
+T001,Hanoi Heritage Tour,3,1500000.0,TP01,Hoan Kiem,Noi Bai,200000.0
+T002,Da Nang Beach Relax,4,2200000.0,TP02,My Khe Beach,Da Nang Airport,250000.0
+T003,Ho Chi Minh City Quick Trip,2,1200000.0,TP03,Ben Thanh District,Tan Son Nhat,150000.0
+T004,Phu Quoc Island Escape,5,4500000.0,TP04,Long Beach,Phu Quoc Airport,300000.0
+T005,Da Lat Coffee & Flowers,3,1800000.0,TP05,Xuan Huong Lake,Lien Khuong Airport,200000.0
+T006,Bangkok Adventure,5,500.0,QG01,TP02,Grand Palace,Suvarnabhumi,25.0,USD
+T007,Seoul Highlights,6,900.0,QG02,TP06,Gyeongbokgung,Incheon Airport,40.0,USD
+T008,Tokyo Cultural Journey,7,1200.0,QG03,TP07,Asakusa,Narita Airport,50.0,USD
+T009,Phuket Beach Holiday,6,700.0,QG01,TP08,Patong Beach,Phuket Airport,30.0,USD
+T010,Siem Reap Angkor Tour,3,350.0,QG04,TP09,Angkor Wat,Siem Reap Airport,20.0,USD
+T011,Di ha noi,3,500000.0,1,hanoi,hcm,100000.0
