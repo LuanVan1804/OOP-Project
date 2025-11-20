@@ -5,7 +5,9 @@ import java.util.Scanner;
 import DU_LICH.Nguoi.KhachHang;
 
 public class QuanLyKhachHang extends QuanLy {
-    public QuanLyKhachHang() { super(false); }
+    public QuanLyKhachHang() {
+        super(false);
+    }
 
     public void khachHangMenu(Scanner sc) {
         while (true) {
@@ -27,17 +29,19 @@ public class QuanLyKhachHang extends QuanLy {
                         System.out.println("Danh sach khach hang rong!");
                     } else {
                         System.out.println("Danh sach khach hang:");
-                        for (KhachHang kh : all) if (kh != null) System.out.println(kh);
+                        for (KhachHang kh : all)
+                            if (kh != null)
+                                System.out.println(kh);
                     }
                     break;
                 case 2: {
-                    KhachHang kh = new KhachHang();
-                    kh.nhapThongTinKH();
-                    if (!dsKhachHang.MaDuyNhat(kh.getMaKH())) {
-                        System.out.println("Ma khach hang da ton tai, khong the them.");
-                    } else {
-                        dsKhachHang.them(kh);
-                        System.out.println("Da them khach hang moi!");
+                    System.out.println("Nhap k phan tu muon theo vao");
+                    int k = sc.nextInt();
+                    sc.nextLine(); // Clear buffer
+                    for (int i = 0; i < k; i++) {
+                        KhachHang newKH = new KhachHang();
+                        newKH.nhapThongTinKH();
+                        dsKhachHang.them(newKH);
                     }
                     break;
                 }
@@ -56,8 +60,10 @@ public class QuanLyKhachHang extends QuanLy {
                         System.out.println("Ma khach hang moi da ton tai, giu nguyen ma cu.");
                         updated.setMaKH(old.getMaKH());
                     }
-                    if (dsKhachHang.sua(ma, updated)) System.out.println("Cap nhat khach hang thanh cong!");
-                    else System.out.println("Cap nhat that bai!");
+                    if (dsKhachHang.sua(ma, updated))
+                        System.out.println("Cap nhat khach hang thanh cong!");
+                    else
+                        System.out.println("Cap nhat that bai!");
                     break;
                 }
                 case 4: {
@@ -75,7 +81,8 @@ public class QuanLyKhachHang extends QuanLy {
                     System.out.print("Nhap ma khach hang can tim: ");
                     int maT = Integer.parseInt(sc.nextLine());
                     KhachHang kh = dsKhachHang.timKiemKHTheoMa(maT);
-                    if (kh == null) System.out.println("Khong tim thay khach hang co ma: " + maT);
+                    if (kh == null)
+                        System.out.println("Khong tim thay khach hang co ma: " + maT);
                     else {
                         System.out.println("Khach hang tim thay:");
                         System.out.println(kh);
@@ -90,7 +97,9 @@ public class QuanLyKhachHang extends QuanLy {
                         System.out.println("Khong tim thay khach hang co ten: " + ten);
                     } else {
                         System.out.println("Khach hang tim thay:");
-                        for (KhachHang kh : kq) if (kh != null) System.out.println(kh);
+                        for (KhachHang kh : kq)
+                            if (kh != null)
+                                System.out.println(kh);
                     }
                     break;
                 }

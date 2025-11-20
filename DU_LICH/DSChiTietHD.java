@@ -7,6 +7,10 @@ public class DSChiTietHD {
     // THUOC TINH
     private ChiTietHD[] list;
     private int soLuong;
+    
+    // NEW: Tham chieu den cac DS de truyen vao ChiTietHD
+    private DSKHTour dsKHTour;
+    private DSChiPhiKHTour dsChiPhi;
 
     // CONSTRUCTOR
     public DSChiTietHD() {
@@ -17,6 +21,27 @@ public class DSChiTietHD {
     // GETTER
     public ChiTietHD[] getList() { return list; }
     public int getSoLuong() { return soLuong; }
+    
+    // NEW: Setter cho cac DS
+    public void setDsKHTour(DSKHTour dsKHTour) {
+        this.dsKHTour = dsKHTour;
+        // Cap nhat cho tat ca ChiTietHD da load
+        for (int i = 0; i < soLuong; i++) {
+            if (list[i] != null) {
+                list[i].setDsKHTour(dsKHTour);
+            }
+        }
+    }
+    
+    public void setDsChiPhi(DSChiPhiKHTour dsChiPhi) {
+        this.dsChiPhi = dsChiPhi;
+        // Cap nhat cho tat ca ChiTietHD da load
+        for (int i = 0; i < soLuong; i++) {
+            if (list[i] != null) {
+                list[i].setDsChiPhi(dsChiPhi);
+            }
+        }
+    }
 
     // ===== DOC FILE =====
     // Doc danh sach chi tiet hoa don tu file txt
@@ -98,6 +123,8 @@ public class DSChiTietHD {
 
     // ===== THEM CHI TIET =====
     public void them(ChiTietHD chiTiet) {
+        chiTiet.setDsKHTour(dsKHTour);
+        chiTiet.setDsChiPhi(dsChiPhi);
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = chiTiet;
         soLuong++;
@@ -137,8 +164,7 @@ public class DSChiTietHD {
         System.out.println("                    DANH SACH CHI TIET HOA DON");
         System.out.println("================================================================================");
         for (int i = 0; i < soLuong; i++) {
-            System.out.println("\n[Chi tiet " + (i + 1) + "]");
-            list[i].hienThiThongTin();
+            list[i].xuatThongTin();
         }
     }
 

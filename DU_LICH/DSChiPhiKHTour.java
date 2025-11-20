@@ -304,12 +304,7 @@ public class DSChiPhiKHTour {
                     String maKS = p[2].trim();
                     double tienAn = Double.parseDouble(p[3].trim());
                     double tienPhong = Double.parseDouble(p[4].trim());
-
                     // Validate tham chiếu
-                    if (dsKHTour != null && dsKHTour.timTheoMaObject(ma) == null) continue;
-                    if (dsNhaHang != null && dsNhaHang.timTheoMa(maNH) == null) continue;
-                    if (dsKhachSan != null && dsKhachSan.timTheoMa(maKS) == null) continue;
-
                     String maPT = "";
                     double tienPT = 0.0;
                     if (p.length >= 7) {
@@ -319,7 +314,7 @@ public class DSChiPhiKHTour {
                     dsChiPhi[soLuong++] = new ChiPhiKHTour(ma, maNH, maKS, maPT, tienPhong, tienAn, tienPT);
                     dem++;
                 } catch (Exception e) {
-                    System.out.println("Bo qua dong loi: " + line);
+                    System.out.println("Bo qua dong loi: " + line + " - Loi: " + e.getMessage());
                 }
             }
         } catch (IOException e) {
