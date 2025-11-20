@@ -1,14 +1,18 @@
 package DU_LICH.Nguoi;
 
 import java.io.*;
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Scanner;
 
 public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
     private KhachHang[] list;
-    
+
     // Getter for compatibility
-    public KhachHang[] getList() { return list; }
-    
+    public KhachHang[] getList() {
+        return list;
+    }
+
     public DSKhachHang() {
         this.list = new KhachHang[0];
     }
@@ -52,13 +56,15 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
 
     // ---------------------- check mã duy nhất --------------------
     @Override
-    public boolean MaDuyNhat(int maKH) {
-        for (KhachHang kh : list) {
-            if (kh != null && kh.getMaKH() == maKH)
-                return false;
-        }
-        return true;
-    }
+   public boolean MaDuyNhat (int maKH)
+   {
+     for(KhachHang kh :list)
+     {
+        if (kh!=null && kh.getMaKH()==maKH)
+            return false;   
+     }
+     return true;
+   }
 
     // ---------------------- save to file --------------------
     @Override
@@ -78,23 +84,35 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         }
     }
 
-    // ---------------------- thêm khách hàng (thuần dữ liệu) --------------------
-    public void them(KhachHang khachHang) {
-        if (khachHang == null) return;
-        if (!MaDuyNhat(khachHang.getMaKH())) return;
+    // ---------------------- thêm khách hàng với Scanner (cho phép nhập lại mã) --------------------
+    public void them(KhachHang kh) {
+        Scanner sc = new Scanner(System.in);
+        if (kh == null)
+            return;
+        
+        // Kiểm tra mã duy nhất
+        while (!MaDuyNhat(kh.getMaKH())) {
+            System.out.print("Ma khach hang da ton tai, vui long nhap ma khac: ");
+            int maMoi = Integer.parseInt(sc.nextLine());
+            kh.setMaKH(maMoi);
+        }
+
+        // Thêm vào mảng
         list = Arrays.copyOf(list, list.length + 1);
-        list[list.length - 1] = khachHang;
+        list[list.length - 1] = kh;
     }
 
-    // Sửa dựa trên đối tượng đã validate ở tầng quản lý
-    public boolean sua(int maKH, KhachHang updated) {
-        if (updated == null) return false;
-        for (int i = 0; i < list.length; i++) {
-            if (list[i] != null && list[i].getMaKH() == maKH) {
-                list[i].setTenKH(updated.getTenKH());
-                list[i].setSoDienThoai(updated.getSoDienThoai());
-                list[i].setCCCD(updated.getCCCD());
-                list[i].setGioiTinh(updated.getGioiTinh());
+
+    public boolean sua(int maKH, KhachHang updatedKH) {
+        if (updatedKH == null)
+            return false;
+
+        for (KhachHang kh : list) {
+            if (kh != null && kh.getMaKH() == maKH) {
+                kh.setTenKH(updatedKH.getTenKH());
+                kh.setSoDienThoai(updatedKH.getSoDienThoai());
+                kh.setCCCD(updatedKH.getCCCD());
+                kh.setGioiTinh(updatedKH.getGioiTinh());
                 return true;
             }
         }
@@ -106,35 +124,44 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         // Không dùng trong flow mới; dùng sua(int, KhachHang) từ lớp quản lý.
     }
 
-    // ---------------------- tìm kiếm khách hàng theo mã (trả về đối tượng) --------------------
-    public KhachHang timKiemKHTheoMa(int maKH) {
-        for (KhachHang kh : list) {
-            if (kh != null && kh.getMaKH() == maKH) return kh;
+    // ---------------------- tìm kiếm khách hàng theo mã (trả về đối tượng)
+    // --------------------
+    public KhachHang timKiemKHTheoMa (int maKH)
+    {
+        for (KhachHang kh : list){
+            if (kh.getMaKH() == maKH)
+                return kh;
         }
         return null;
     }
 
-    // ---------------------- tìm kiếm khách hàng theo tên (trả về mảng) --------------------
+    // ---------------------- tìm kiếm khách hàng theo tên (trả về mảng)
+    // --------------------
     public KhachHang[] timKiemTheoTen(String tenKH) {
-        if (tenKH == null) return new KhachHang[0];
+        if (tenKH == null)
+            return new KhachHang[0];
         String keyword = tenKH.toLowerCase();
         int count = 0;
         for (KhachHang kh : list) {
-            if (kh != null && kh.getTenKH().toLowerCase().contains(keyword)) count++;
+            if (kh != null && kh.getTenKH().toLowerCase().contains(keyword))
+                count++;
         }
         KhachHang[] kq = new KhachHang[count];
         int idx = 0;
         for (KhachHang kh : list) {
-            if (kh != null && kh.getTenKH().toLowerCase().contains(keyword)) kq[idx++] = kh;
+            if (kh != null && kh.getTenKH().toLowerCase().contains(keyword))
+                kq[idx++] = kh;
         }
         return kq;
     }
 
-    // ---------------------- Thống kê theo giới tính (trả về mảng kết quả) --------------------
+    // ---------------------- Thống kê theo giới tính (trả về mảng kết quả)
+    // --------------------
     public int[] thongKeTheoGioiTinh() {
         int countNam = 0, countNu = 0;
         for (KhachHang kh : list) {
-            if (kh == null) continue;
+            if (kh == null)
+                continue;
             if (kh.getGioiTinh().equalsIgnoreCase("Nam"))
                 countNam++;
             else if (kh.getGioiTinh().equalsIgnoreCase("Nu") || kh.getGioiTinh().equalsIgnoreCase("Nữ"))
@@ -148,15 +175,17 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
     public void xoa(int maKH) {
         int index = -1;
         for (int i = 0; i < list.length; i++) {
-            if (list[i].getMaKH() == maKH) { index = i; break; }
+            if (list[i].getMaKH() == maKH) {
+                index = i;
+                break;
+            }
         }
         if (index != -1) {
             for (int i = index; i < list.length - 1; i++) {
                 list[i] = list[i + 1];
             }
-            list[list.length - 1] = null;
-            list = Arrays.copyOf(list, list.length - 1);
         }
+        list[list.length -1 ] = null;
+        list =Arrays.copyOf(list,list.length -1);
     }
 }
-
