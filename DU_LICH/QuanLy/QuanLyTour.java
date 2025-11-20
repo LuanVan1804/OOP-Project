@@ -38,7 +38,7 @@ public class QuanLyTour extends QuanLy {
                 case 3:
                     System.out.print("Nhap ma tour can chinh sua: ");
                     String maSua = sc.nextLine();
-                    dsTour.chinhSuaTour(maSua);
+                    dsTour.chinhSuaTourAnToan(maSua);
                     break;
                 case 4:
                     dsTour.hienThiDanhSachTour();
