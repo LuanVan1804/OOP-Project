@@ -7,7 +7,9 @@ import DU_LICH.ClassDon.HDV;
 import DU_LICH.DanhSach.DSHDV;
 
 public class QuanLyHDV extends QuanLy {
-    public QuanLyHDV() { super(false); }
+    public QuanLyHDV() {
+        super(false);
+    }
 
     public void hdvMenu(Scanner sc) {
         while (true) {
@@ -24,13 +26,14 @@ public class QuanLyHDV extends QuanLy {
             int chon = Integer.parseInt(sc.nextLine());
             switch (chon) {
                 case 1: {
-                    HDV[] all = dsHDV.timKiemTheoTen(""); // lấy toàn bộ nếu DS hỗ trợ; ở đây có thể thêm getter nếu cần
+                    HDV[] all = dsHDV.timKiemTheoTen(""); // lay toan bo neu DS ho tro; o day co the them getter neu can
                     if (all == null || all.length == 0) {
                         System.out.println("Danh sach HDV rong!");
                     } else {
                         System.out.println("Danh sach HDV:");
                         for (HDV h : all) {
-                            if (h != null) System.out.println(h);
+                            if (h != null)
+                                System.out.println(h);
                         }
                     }
                     break;
@@ -48,22 +51,17 @@ public class QuanLyHDV extends QuanLy {
                 }
                 case 3: {
                     System.out.print("Nhap ma HDV can sua: ");
-                    int ma = Integer.parseInt(sc.nextLine());
-                    HDV old = dsHDV.timTheoMa(ma);
-                    if (old == null) {
-                        System.out.println("Khong tim thay HDV voi ma: " + ma);
+                    String input = sc.nextLine();
+                    if (input == null || input.trim().isEmpty()) {
+                        System.out.println("Ma HDV khong hop le!");
                         break;
                     }
-                    System.out.println("Thong tin hien tai: " + old);
-                    HDV updated = new HDV();
-                    updated.nhapThongTinHDV();
-                    // Không cho phép đổi mã nếu trùng
-                    if (updated.getMaHDV() != old.getMaHDV() && !dsHDV.MaDuyNhat(updated.getMaHDV())) {
-                        System.out.println("Ma HDV moi da ton tai, giu nguyen ma cu.");
-                        updated.setMaHDV(old.getMaHDV());
+                    try {
+                        int ma = Integer.parseInt(input);
+                        dsHDV.chinhSuaHDV(ma);
+                    } catch (NumberFormatException e) {
+                        System.out.println("Ma HDV phai la so nguyen!");
                     }
-                    if (dsHDV.sua(ma, updated)) System.out.println("Cap nhat thanh cong!");
-                    else System.out.println("Cap nhat that bai!");
                     break;
                 }
                 case 4: {
@@ -85,7 +83,9 @@ public class QuanLyHDV extends QuanLy {
                         System.out.println("Khong tim thay HDV voi ten: " + ten);
                     } else {
                         System.out.println("Danh sach HDV tim thay:");
-                        for (HDV h : kq) if (h != null) System.out.println(h);
+                        for (HDV h : kq)
+                            if (h != null)
+                                System.out.println(h);
                     }
                     break;
                 }
@@ -97,7 +97,9 @@ public class QuanLyHDV extends QuanLy {
                         System.out.println("Khong tim thay HDV voi kinh nghiem: " + kn);
                     } else {
                         System.out.println("Danh sach HDV co kinh nghiem " + kn + " nam:");
-                        for (HDV h : kq) if (h != null) System.out.println(h);
+                        for (HDV h : kq)
+                            if (h != null)
+                                System.out.println(h);
                     }
                     break;
                 }
@@ -106,9 +108,11 @@ public class QuanLyHDV extends QuanLy {
                     if (tk.soLoai == 0) {
                         System.out.println("Danh sach HDV rong, khong the thong ke.");
                     } else {
-                        System.out.println("------------------ Thong ke HDV theo kinh nghiem -------------------------");
+                        System.out
+                                .println("------------------ Thong ke HDV theo kinh nghiem -------------------------");
                         for (int i = 0; i < tk.soLoai; i++) {
-                            System.out.printf("Kinh nghiem: %.1f - So luong HDV: %d%n", tk.kinhNghiemValues[i], tk.dem[i]);
+                            System.out.printf("Kinh nghiem: %.1f - So luong HDV: %d%n", tk.kinhNghiemValues[i],
+                                    tk.dem[i]);
                         }
                     }
                     break;

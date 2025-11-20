@@ -30,16 +30,16 @@ public class QuocGia {
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
-        sb.append(maQuocGia).append(" | ").append(tenNuoc).append(" | Thành phố: ");
+        sb.append(maQuocGia).append(" | ").append(tenNuoc).append(" | Thanh pho: ");
 
         if (listTPhos == null || listTPhos.length == 0) {
-            sb.append("Chưa có");
+            sb.append("Chua co");
         } else {
             for (int i = 0; i < listTPhos.length; i++) {
                 if (i > 0) sb.append(", ");
-                sb.append(listTPhos[i].getMaTPho())   // mã thành phố
+                sb.append(listTPhos[i].getMaTPho())   // ma thanh pho
                 .append("-")
-                .append(listTPhos[i].getTenTPho()); // tên thành phố
+                .append(listTPhos[i].getTenTPho()); // ten thanh pho
             }
         }
         return sb.toString();

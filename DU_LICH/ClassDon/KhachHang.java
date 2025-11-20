@@ -64,5 +64,10 @@ public class KhachHang {
         return String.format("KhachHang [Ma: %d, Ten: %s, SDT: %s, CCCD: %s, GT: %s]",
                 maKH, tenKH, soDienThoai, CCCD, gioiTinh);
     }
+
+    public void hienThiThongTinKH() {
+    System.out.printf("KhachHang [Ma: %d, Ten: %s, SDT: %s, CCCD: %s, GT: %s]%n",
+            maKH, tenKH, soDienThoai, CCCD, gioiTinh);
+}
 }
 

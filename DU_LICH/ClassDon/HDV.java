@@ -83,4 +83,9 @@ public class HDV {
         System.out.print("Nhap kinh nghiem (nam): ");
         this.kinhNghiem = Double.parseDouble(sc.nextLine());
     }
+
+    public void hienThiThongTinHDV() {
+    System.out.printf("HDV [Ma: %d, Ten: %s, SDT: %s, CCCD: %s, GT: %s, KN: %.1f nam]%n",
+            maHDV, tenHDV, soDienThoai, CCCD, gioiTinh, kinhNghiem);
+}
 }

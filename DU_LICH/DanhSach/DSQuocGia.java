@@ -23,9 +23,9 @@ public class DSQuocGia {
     public void setCurrentCountryIndex(int idx) { this.currentCountryIndex = idx; }
 
     public DSQuocGia loadFromFile(String path) throws IOException {
-        // Tạo đối tượng DSQuocGia để lưu danh sách quốc gia
+        // Tao doi tuong DSQuocGia de luu danh sach quoc gia
         DSQuocGia dsqg = new DSQuocGia();
-        // Mẫu file quocGia.txt: mỗi dòng là "maQuocGia,tenQuocGia"
+        // Mau file quocGia.txt: moi dong la "maQuocGia,tenQuocGia"
         int count = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
@@ -40,7 +40,7 @@ public class DSQuocGia {
             }
         }
 
-        // Tạo mảng quốc gia với kích thước đã đếm
+        // Tao mang quoc gia voi kich thuoc da dem
         QuocGia[] countries = new QuocGia[count];
         if (count > 0) {
             int idx = 0;
@@ -59,19 +59,19 @@ public class DSQuocGia {
                 }
             }
         }
-        // Gán mảng quốc gia vào DSQuocGia và trả về
+        // Gan mang quoc gia vao DSQuocGia va tra ve
         dsqg.setList(countries);
         dsqg.setCurrentCountryIndex(0);
         return dsqg;
     }
 
-    // LẤY QUỐC GIA NỘI ĐỊA
+    // LAY QUOC GIA NOI DIA
     public QuocGia getDomesticCountry() {
         if (list.length == 0) return null;
         return list[currentCountryIndex];
     }
 
-    // LẤY DANH SÁCH QUỐC GIA NƯỚC NGOÀI (loại trừ nội địa)
+    // LAY DANH SACH QUOC GIA NUOC NGOAI (loai tru noi dia)
     public QuocGia[] getForeignCountries() {
         if (list.length <= 1) return new QuocGia[0];
         QuocGia[] res = new QuocGia[list.length - 1];
@@ -84,7 +84,7 @@ public class DSQuocGia {
         return res;
     }
 
-    // KIỂM TRA MÃ QUỐC GIA CÓ HỢP LỆ VÀ KHÔNG PHẢI NỘI ĐỊA
+    // KIEM TRA MA QUOC GIA CO HOP LE VA KHONG PHAI NOI DIA
     public boolean isValidForeignCountryCode(String maQG) {
         if (maQG == null) return false;
         for (QuocGia qg : list) {
@@ -95,7 +95,7 @@ public class DSQuocGia {
         return false;
     }
 
-    // LẤY QUỐC GIA THEO MÃ
+    // LAY QUOC GIA THEO MA
     public QuocGia getCountryByCode(String maQG) {
         for (QuocGia qg : list) {
             if (qg.getMaQuocGia().equals(maQG)) return qg;

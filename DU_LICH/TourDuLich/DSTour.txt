@@ -8,4 +8,4 @@ T007,Seoul Highlights,6,900.0,QG02,TP06,Gyeongbokgung,Incheon Airport,40.0,USD
 T008,Tokyo Cultural Journey,7,1200.0,QG03,TP07,Asakusa,Narita Airport,50.0,USD
 T009,Phuket Beach Holiday,6,700.0,QG01,TP08,Patong Beach,Phuket Airport,30.0,USD
 T010,Siem Reap Angkor Tour,3,350.0,QG04,TP09,Angkor Wat,Siem Reap Airport,20.0,USD
-T011,Di ha noi,3,500000.0,1,hanoi,hcm,100000.0
+123,2,3,4.0,4,4,4,4.0

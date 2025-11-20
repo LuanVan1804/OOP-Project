@@ -2,63 +2,72 @@ package DU_LICH.DanhSach;
 
 import DU_LICH.ClassDon.ChiPhiKHTour;
 import java.io.*;
+import java.util.Arrays;
 
 public class DSChiPhiKHTour {
     private ChiPhiKHTour[] list;
-    private int soLuong;
-    private static final int MAX = 100;
 
     public DSChiPhiKHTour() {
-        list = new ChiPhiKHTour[MAX];
-        soLuong = 0;
+        list = new ChiPhiKHTour[0];
     }
 
-    public int getSoLuong() { return soLuong; }
+    public int getSoLuong() { return list.length; }
+    
+    public ChiPhiKHTour[] getList() {
+        return Arrays.copyOf(list, list.length);
+    }
 
-    // Kiểm tra trùng mã kế hoạch
+    // Kiem tra trung ma ke hoach
     private boolean isExist(String maKHTour) {
-        for (int i = 0; i < soLuong; i++) {
-            if (list[i].getMaKHTour().equalsIgnoreCase(maKHTour)) return true;
+        for (ChiPhiKHTour cp : list) {
+            if (cp != null && cp.getMaKHTour().equalsIgnoreCase(maKHTour)) return true;
         }
         return false;
     }
 
-    // 1. Thêm (không validate mã KHTour ở đây)
+    // 1. Them (khong validate ma KHTour o day)
     public boolean them(ChiPhiKHTour cp) {
-        if (soLuong >= MAX || cp == null || isExist(cp.getMaKHTour())) {
+        if (cp == null || isExist(cp.getMaKHTour())) {
             return false;
         }
-        list[soLuong++] = cp;
+        list = Arrays.copyOf(list, list.length + 1);
+        list[list.length - 1] = cp;
         return true;
     }
 
-    // 2. Xóa theo mã kế hoạch
+    // 2. Xoa theo ma ke hoach
     public boolean xoa(String maKHTour) {
-        for (int i = 0; i < soLuong; i++) {
-            if (list[i].getMaKHTour().equalsIgnoreCase(maKHTour)) {
-                for (int j = i; j < soLuong - 1; j++) {
-                    list[j] = list[j + 1];
-                }
-                list[--soLuong] = null;
-                return true;
+        int index = -1;
+        for (int i = 0; i < list.length; i++) {
+            if (list[i] != null && list[i].getMaKHTour().equalsIgnoreCase(maKHTour)) {
+                index = i;
+                break;
             }
+        }
+        if (index != -1) {
+            for (int i = index; i < list.length - 1; i++) {
+                list[i] = list[i + 1];
+            }
+            list[list.length - 1] = null;
+            list = Arrays.copyOf(list, list.length - 1);
+            return true;
         }
         return false;
     }
 
-    // 3. Tìm theo mã (trả về object)
+    // 3. Tim theo ma (tra ve object)
     public ChiPhiKHTour timTheoMa(String maKHTour) {
-        for (int i = 0; i < soLuong; i++) {
-            if (list[i].getMaKHTour().equalsIgnoreCase(maKHTour)) {
-                return list[i];
+        for (ChiPhiKHTour cp : list) {
+            if (cp != null && cp.getMaKHTour().equalsIgnoreCase(maKHTour)) {
+                return cp;
             }
         }
         return null;
     }
 
-    // 4. Hiển thị danh sách
+    // 4. Hien thi danh sach
     public void hienThiDanhSach() {
-        if (soLuong == 0) {
+        if (list.length == 0) {
             System.out.println("Chua co chi phi ke hoach tour nao!");
             return;
         }
@@ -68,29 +77,30 @@ public class DSChiPhiKHTour {
         System.out.printf("%-10s | %-10s | %-10s | %-15s | %-12s | %-12s | %-12s | %-12s | %-14s%n",
                 "Ma KH", "Nha Hang", "Khach San", "Phuong Tien", "Tien An", "Tien Phong", "Tien PT", "Tien Tour", "TONG CHI");
         System.out.println("--------------------------------------------------------------------------------------------------");
-        for (int i = 0; i < soLuong; i++) {
-            list[i].hienThi();
+        for (ChiPhiKHTour cp : list) {
+            if (cp != null) cp.hienThi();
         }
         System.out.println("==================================================================================================");
     }
 
-    // 5. Thống kê đơn giản
+    // 5. Thong ke don gian
     public void thongKe() {
-        if (soLuong == 0) {
+        if (list.length == 0) {
             System.out.println("Khong co du lieu de thong ke!");
             return;
         }
         double tongAn = 0, tongPhong = 0, tongPT = 0, tongTour = 0, tongChi = 0;
-        for (int i = 0; i < soLuong; i++) {
-            ChiPhiKHTour cp = list[i];
-            tongAn += cp.getTongTienAn();
-            tongPhong += cp.getTongTienPhong();
-            tongPT += cp.getTongTienPhuongTien();
-            tongTour += cp.getTienTour();
-            tongChi += cp.getTongChi();
+        for (ChiPhiKHTour cp : list) {
+            if (cp != null) {
+                tongAn += cp.getTongTienAn();
+                tongPhong += cp.getTongTienPhong();
+                tongPT += cp.getTongTienPhuongTien();
+                tongTour += cp.getTienTour();
+                tongChi += cp.getTongChi();
+            }
         }
         System.out.println("============================= THONG KE CHI PHI KE HOACH TOUR =============================");
-        System.out.printf("So ke hoach co chi phi   : %,d%n", soLuong);
+        System.out.printf("So ke hoach co chi phi   : %,d%n", list.length);
         System.out.printf("Tong tien an             : %,15.0f VND%n", tongAn);
         System.out.printf("Tong tien phong          : %,15.0f VND%n", tongPhong);
         System.out.printf("Tong tien phuong tien    : %,15.0f VND%n", tongPT);
@@ -102,21 +112,23 @@ public class DSChiPhiKHTour {
     // 6. Ghi file
     public void saveToFile(String path) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
-            for (int i = 0; i < soLuong; i++) {
-                bw.write(list[i].toString());
-                bw.newLine();
+            for (ChiPhiKHTour cp : list) {
+                if (cp != null) {
+                    bw.write(cp.toString());
+                    bw.newLine();
+                }
             }
         } catch (IOException e) {
             System.out.println("Loi ghi file chi phi!");
         }
     }
 
-    // 7. Đọc file (tự động khi khởi tạo)
+    // 7. Doc file (tu dong khi khoi tao)
     public void loadFromFile(String path) {
-        soLuong = 0;
+        list = new ChiPhiKHTour[0];
         try (BufferedReader br = new BufferedReader(new FileReader(path))) {
             String line;
-            while ((line = br.readLine()) != null && soLuong < MAX) {
+            while ((line = br.readLine()) != null) {
                 line = line.trim();
                 if (line.isEmpty()) continue;
                 String[] p = line.split(",", -1);
@@ -129,7 +141,8 @@ public class DSChiPhiKHTour {
                             Double.parseDouble(p[6].trim()),
                             Double.parseDouble(p[7].trim())
                         );
-                        list[soLuong++] = cp;
+                        list = Arrays.copyOf(list, list.length + 1);
+                        list[list.length - 1] = cp;
                     } catch (Exception e) {
                         System.out.println("Bo qua dong loi trong file chi phi: " + line);
                     }
