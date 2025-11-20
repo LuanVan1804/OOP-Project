@@ -139,12 +139,10 @@ public class DSHoaDon {
                 );
                 hd.setNgayLap(LocalDate.parse(p[7].trim()));
                 list[soLuong++] = hd;
-                System.out.println("Da doc thanh cong HD: " + hd.getMaHD()); // DEBUG
             } catch (Exception e) {
                 System.out.println("Loi doc dong " + lineNum + ": " + line + " -> " + e.getMessage());
             }
         }
-        System.out.println("=== DA TAI XONG HOA DON: " + soLuong + " hoa don ===");
     } catch (IOException e) {
         System.out.println("Loi mo file HoaDon: " + e.getMessage());
     }

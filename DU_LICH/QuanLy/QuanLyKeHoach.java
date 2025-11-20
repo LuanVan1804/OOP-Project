@@ -18,6 +18,7 @@ public class QuanLyKeHoach extends QuanLy {
             System.out.println("4. Tim kiem theo ma");
             System.out.println("5. Tim kiem theo ten ke hoach");
             System.out.println("6. Thong ke");
+            System.out.println("7. Sua ke hoach");
             System.out.println("0. Thoat (luu du lieu)");
             System.out.print("Chon: ");
 
@@ -32,6 +33,7 @@ public class QuanLyKeHoach extends QuanLy {
                 case 4: timMa(sc); break;
                 case 5: timTen(sc); break;
                 case 6: dsKeHoach.thongKe(); break;
+                case 7: sua(sc); break;
                 case 0:
                     try {
                         dsKeHoach.saveToFile(PATH_KEHOACH);
@@ -114,6 +116,16 @@ public class QuanLyKeHoach extends QuanLy {
             for (KeHoachTour k : kq) {
                 k.hienThi();
             }
+        }
+    }
+
+    private void sua(Scanner sc) {
+        System.out.print("Nhap ma ke hoach can sua: ");
+        String ma = sc.nextLine().trim();
+        if (dsKeHoach.sua(ma)) {
+            System.out.println("Sua thanh cong!");
+        } else {
+            System.out.println("Khong tim thay ke hoach!");
         }
     }
 }

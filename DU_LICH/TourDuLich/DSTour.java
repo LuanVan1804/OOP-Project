@@ -143,7 +143,7 @@ public class DSTour {
         System.out.println("--------------------------------------------------");
 
         // === NHẬP CÁC TRƯỜNG CHUNG ===
-    System.out.print("Ten Tour [" + tour.getTenTour() + "]: ");
+        System.out.print("Ten Tour [" + tour.getTenTour() + "]: ");
         String input = sc.nextLine();
         if (!input.trim().isEmpty()) tour.setTenTour(input);
 
@@ -195,6 +195,8 @@ public class DSTour {
         System.out.println("Thong tin sau khi chinh sua:");
         tour.hienThiThongTin();
     }
+
+
     //---------------------tim kiem theo ten-------------------
     public Tour[] timKiemTheoTen(String key) {
         if (key == null || key.trim().isEmpty()) {
@@ -326,9 +328,8 @@ public class DSTour {
     }
 
     public void saveToFile(String path) throws IOException {
-        File f = new File(path);
         
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
             for (int i = 0; i < soLuongTour; i++) {
                 Tour t = list[i];
                 String loai = t.loai();  // "TrongNuoc" hoặc "NuocNgoai"

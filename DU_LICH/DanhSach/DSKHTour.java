@@ -4,6 +4,7 @@ import java.io.*;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.Scanner;
 
 import DU_LICH.ClassDon.KeHoachTour;
 import DU_LICH.QuanLy.QuanLy;
@@ -14,6 +15,7 @@ public class DSKHTour {
     private static final int MAX = 100;
     private static final String DATE_PATTERN = "dd/MM/yyyy";
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));
+    private static final Scanner sc = new Scanner(System.in);
 
     public DSKHTour() {
         list = new KeHoachTour[MAX];
@@ -62,6 +64,78 @@ public class DSKHTour {
             }
         }
         return null;
+    }
+
+    // 3.5. Sửa theo mã
+    public boolean sua(String ma) {
+        KeHoachTour k = timTheoMa(ma);
+        if (k == null) return false;
+
+        System.out.println("Thong tin hien tai:");
+        k.hienThi();
+
+        System.out.print("Nhap Ten Ke Hoach Tour moi (Enter de giu nguyen): ");
+        String ten = sc.nextLine().trim();
+        if (!ten.isEmpty()) k.setTenKeHoach(ten);
+
+        System.out.print("Nhap Ma Tour moi (Enter de giu nguyen): ");
+        String maT = sc.nextLine().trim();
+        if (!maT.isEmpty()) k.setMaTour(maT);
+
+        System.out.print("Nhap Ma HDV moi (Enter de giu nguyen): ");
+        String maH = sc.nextLine().trim();
+        if (!maH.isEmpty()) k.setMaHDV(maH);
+
+        System.out.print("Nhap Tong So Ve moi (Enter de giu nguyen): ");
+        String soVeStr = sc.nextLine().trim();
+        if (!soVeStr.isEmpty()) {
+            try {
+                int soVe = Integer.parseInt(soVeStr);
+                k.setTongSoVe(soVe);
+            } catch (Exception e) {
+                System.out.println("So ve khong hop le, giu nguyen.");
+            }
+        }
+
+        System.out.print("Nhap Gia Ve moi (Enter de giu nguyen): ");
+        String giaStr = sc.nextLine().trim();
+        if (!giaStr.isEmpty()) {
+            try {
+                double gia = Double.parseDouble(giaStr);
+                k.setGiaVe(gia);
+            } catch (Exception e) {
+                System.out.println("Gia ve khong hop le, giu nguyen.");
+            }
+        }
+
+        try {
+            System.out.print("Nhap Ngay Di moi (dd/MM/yyyy, Enter de giu nguyen): ");
+            String ngayDiStr = sc.nextLine().trim();
+            if (!ngayDiStr.isEmpty()) {
+                java.util.Date d = SDF.parse(ngayDiStr);
+                k.setNgayDi(new Date(d.getTime()));
+            }
+        } catch (Exception e) {
+            System.out.println("Ngay di khong hop le, giu nguyen.");
+        }
+
+        try {
+            System.out.print("Nhap Ngay Ve moi (dd/MM/yyyy, Enter de giu nguyen): ");
+            String ngayVeStr = sc.nextLine().trim();
+            if (!ngayVeStr.isEmpty()) {
+                java.util.Date d = SDF.parse(ngayVeStr);
+                Date ve = new Date(d.getTime());
+                if (ve.before(k.getNgayDi())) {
+                    System.out.println("Ngay ve phai sau ngay di! Khong sua.");
+                } else {
+                    k.setNgayVe(ve);
+                }
+            }
+        } catch (Exception e) {
+            System.out.println("Ngay ve khong hop le, giu nguyen.");
+        }
+
+        return true;
     }
 
     // 4. Tìm theo tên kế hoạch (trả về mảng)
