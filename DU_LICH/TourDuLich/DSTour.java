@@ -14,7 +14,7 @@ public class DSTour {
     private static final Scanner sc = new Scanner(System.in);
 
     public DSTour() {
-        this.list = new Tour[20];
+        this.list = new Tour[100];
         this.soLuongTour = 0;
     }
 

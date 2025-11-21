@@ -20,6 +20,7 @@ public class QuanLyHoaDon extends QuanLy {
             System.out.println("3. Hien thi danh sach");
             System.out.println("4. Tim kiem theo ma hoa don");
             System.out.println("5. Thong ke doanh thu");
+            System.out.println("6. Thong ke nang cao theo quy (Doanh thu - Chi phi - Loi nhuan)");
             System.out.println("0. Thoat (luu du lieu)");
             System.out.print("Chon: ");
 
@@ -33,6 +34,7 @@ public class QuanLyHoaDon extends QuanLy {
                 case 3: dsHoaDon.hienThiDanhSach(); break;
                 case 4: timKiem(sc); break;
                 case 5: dsHoaDon.thongKe(); break;
+                case 6: dsHoaDon.thongKeTheoQuy(); break;
                 case 0:
                     dsHoaDon.saveToFile(PATH_HOADON);
                     System.out.println("Da luu danh sach hoa don.");
