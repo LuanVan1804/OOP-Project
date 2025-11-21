@@ -139,7 +139,7 @@ public class DSChiTietHD {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Loi doc file ChiTietHD!");
+            System.out.println("Loi doc file ChiTietHD: " + e.getMessage());
         }
     }
 }

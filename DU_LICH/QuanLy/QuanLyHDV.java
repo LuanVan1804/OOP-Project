@@ -19,8 +19,7 @@ public class QuanLyHDV extends QuanLy {
             System.out.println("3. Sua thong tin HDV");
             System.out.println("4. Xoa HDV");
             System.out.println("5. Tim kiem theo ten");
-            System.out.println("6. Tim kiem theo kinh nghiem");
-            System.out.println("7. Thong ke theo kinh nghiem");
+            System.out.println("6. Thong ke theo kinh nghiem");
             System.out.println("0. Thoat (luu)");
             System.out.print("Chon: ");
             int chon = Integer.parseInt(sc.nextLine());
@@ -58,7 +57,7 @@ public class QuanLyHDV extends QuanLy {
                     }
                     try {
                         int ma = Integer.parseInt(input);
-                        dsHDV.suaHDV(ma);
+                        dsHDV.sua(ma);
                     } catch (NumberFormatException e) {
                         System.out.println("Ma HDV phai la so nguyen!");
                     }
@@ -90,20 +89,6 @@ public class QuanLyHDV extends QuanLy {
                     break;
                 }
                 case 6: {
-                    System.out.print("Nhap so nam kinh nghiem can tim: ");
-                    double kn = Double.parseDouble(sc.nextLine());
-                    HDV[] kq = dsHDV.timKiemTheoKinhNghiem(kn);
-                    if (kq == null || kq.length == 0) {
-                        System.out.println("Khong tim thay HDV voi kinh nghiem: " + kn);
-                    } else {
-                        System.out.println("Danh sach HDV co kinh nghiem " + kn + " nam:");
-                        for (HDV h : kq)
-                            if (h != null)
-                                System.out.println(h);
-                    }
-                    break;
-                }
-                case 7: {
                     DSHDV.ThongKeKinhNghiem tk = dsHDV.thongKeTheoKinhNghiem();
                     if (tk.soLoai == 0) {
                         System.out.println("Danh sach HDV rong, khong the thong ke.");
