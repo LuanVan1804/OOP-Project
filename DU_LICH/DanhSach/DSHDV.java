@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import DU_LICH.ClassDon.HDV;
-import DU_LICH.DanhSach.sdhdv.ThongKe;
 
 public class DSHDV implements DU_LICH.Interfaces<HDV> {
     private HDV[] list;
