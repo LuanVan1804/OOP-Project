@@ -96,7 +96,7 @@ public class QuanLyHoaDon extends QuanLy {
         }
         hd.setSoVe(soVe);
 
-        // Cập nhật số vé đã đặt trong kế hoạch tour
+        // Cap nhat so ve da dat trong ke hoach tour
         kht.setTongVeDaDat(kht.getTongVeDaDat() + soVe);
 
         if (dsHoaDon.them(hd)) {
@@ -116,8 +116,8 @@ public class QuanLyHoaDon extends QuanLy {
             System.out.println("Khong tim thay hoa don!");
             return;
         }
-        QuanLy.getDsChiTietHD().xoa(ma); // xóa chi tiết hóa đơn nếu có
-        // Hoàn vé lại cho kế hoạch tour
+        QuanLy.getDsChiTietHD().xoa(ma); // xoa chi tiet hoa don neu co
+        // Hoan ve lai cho ke hoach tour
         KeHoachTour kht = dsKeHoach.timTheoMa(hd.getMaKHTour());
         if (kht != null) {
             kht.setTongVeDaDat(kht.getTongVeDaDat() - hd.getSoVe());

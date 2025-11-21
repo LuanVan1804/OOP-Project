@@ -15,22 +15,22 @@ import java.util.Scanner;
 import DU_LICH.ClassDon.KhachSan;
 
 public class DSKhachSan {
-    private KhachSan[] dsKhachSan;  // Mảng chứa danh sách khách sạn
-    private int soLuong;             // Số lượng khách sạn hiện có
-    private final int MAX = 100;     // Số lượng tối đa
+    private KhachSan[] dsKhachSan;  // Mang chua danh sach khach san
+    private int soLuong;             // So luong khach san hien co
+    private final int MAX = 100;     // So luong toi da
 
-    // Khởi tạo danh sách rỗng
+    // Khoi tao danh sach rong
     public DSKhachSan() {
         this.dsKhachSan = new KhachSan[MAX];
         this.soLuong = 0;
     }
 
-    // ================== CÁC HÀM HỖ TRỢ NGÀY THÁNG ==================
-    private static final String DATE_PATTERN = "dd/MM/yyyy"; // Định dạng ngày trong file và nhập liệu
+    // ================== CAC HAM HO TRO NGAY THANG ==================
+    private static final String DATE_PATTERN = "dd/MM/yyyy"; // Dinh dang ngay trong file va nhap lieu
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));
 
     private Date parseDate(String s) throws ParseException {
-        // Chuyển chuỗi dd/MM/yyyy -> java.sql.Date
+        // Chuyen chuoi dd/MM/yyyy -> java.sql.Date
         java.util.Date utilDate = SDF.parse(s.trim());
         return new Date(utilDate.getTime());
     }
@@ -40,7 +40,7 @@ public class DSKhachSan {
         return SDF.format(new java.util.Date(d.getTime()));
     }
 
-    // ================== CÁC CHỨC NĂNG CƠ BẢN ==================
+    // ================== CAC CHUC NANG CO BAN ==================
     public int getSoLuong() { return soLuong; }
 
     private int findIndexByMa(String ma) {
@@ -70,7 +70,7 @@ public class DSKhachSan {
     public boolean xoaTheoMa(String ma) {
         int idx = findIndexByMa(ma);
         if (idx == -1) return false;
-        // Dịch các phần tử phía sau lên
+        // Dich cac phan tu phia sau len
         for (int i = idx; i < soLuong - 1; i++) {
             dsKhachSan[i] = dsKhachSan[i + 1];
         }
@@ -113,7 +113,7 @@ public class DSKhachSan {
         }
     }
 
-    // Nhập 1 khách sạn từ bàn phím theo định dạng dd/MM/yyyy
+    // Nhap 1 khach san tu ban phim theo dinh dang dd/MM/yyyy
     public KhachSan nhapKhachSan(Scanner sc) {
         KhachSan ks = new KhachSan();
         System.out.print("Nhap ma khach san: ");
@@ -135,7 +135,7 @@ public class DSKhachSan {
             sc.nextLine();
         }
         ks.setGiaDatPhong(sc.nextDouble());
-        sc.nextLine(); // bỏ dòng
+        sc.nextLine(); // bo dong
         return ks;
     }
 
@@ -163,13 +163,13 @@ public class DSKhachSan {
         System.out.print("Gia dat phong hien tai (" + ks.getGiaDatPhong() + "): ");
         String giaStr = sc.nextLine();
         if (!giaStr.trim().isEmpty()) {
-            try { ks.setGiaDatPhong(Double.parseDouble(giaStr.trim())); } catch (NumberFormatException e) { System.out.println("Giá không hợp lệ, giữ nguyên."); }
+            try { ks.setGiaDatPhong(Double.parseDouble(giaStr.trim())); } catch (NumberFormatException e) { System.out.println("Gia khong hop le, giu nguyen."); }
         }
         return true;
     }
 
-    // ================== ĐỌC / GHI FILE ==================
-    // Định dạng dòng: ma,ten,dd/MM/yyyy,dd/MM/yyyy,gia
+    // ================== DOC / GHI FILE ==================
+    // Dinh dang dong: ma,ten,dd/MM/yyyy,dd/MM/yyyy,gia
     public int loadFromFile(String filePath) {
         int dem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -179,7 +179,7 @@ public class DSKhachSan {
                 if (line.trim().isEmpty()) continue;
                 // accept comma or semicolon as separator
                 String[] p = line.split("[,;]");
-                if (p.length < 5) { System.out.println("Bỏ qua dòng không hợp lệ: " + line); continue; }
+                if (p.length < 5) { System.out.println("Bo qua dong khong hop le: " + line); continue; }
                 try {
                     KhachSan ks = new KhachSan(
                         p[0].trim(),
@@ -194,7 +194,7 @@ public class DSKhachSan {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Không thể đọc file: " + e.getMessage());
+            System.out.println("Khong the doc file: " + e.getMessage());
         }
         return dem;
     }
@@ -218,12 +218,12 @@ public class DSKhachSan {
                 dem++;
             }
         } catch (IOException e) {
-            System.out.println("Không thể ghi file: " + e.getMessage());
+            System.out.println("Khong the ghi file: " + e.getMessage());
         }
         return dem;
     }
 
-    // hàm thống kê đơn giản
+    // ham thong ke don gian
     public void thongKeDonGian() {
         System.out.println("--- Thong ke don gian ---");
         System.out.println("So luong khach san: " + soLuong);
@@ -235,7 +235,7 @@ public class DSKhachSan {
                 if (k != null) { tong += k.getGiaDatPhong(); dem++; }
             }
             double avg = dem == 0 ? 0.0 : (tong / dem);
-            System.out.println("Gia trung binh dat phong: " + avg);
+            System.out.printf("Gia trung binh dat phong: %,.0f\n", avg);
         }
     }
     // Menus have been moved to QuanLy

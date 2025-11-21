@@ -105,7 +105,7 @@ public class KhachSan {
         sc.nextLine();
     }
 
-    // Giữ lại bản nhap() không tham số (nếu ai đó dùng), nhưng sẽ dùng dd/MM/yyyy
+    // Giu lai ban nhap() khong tham so (neu ai do dung), nhung se dung dd/MM/yyyy
     public void nhap(){
         Scanner sc = new Scanner(System.in);
         nhap(sc);

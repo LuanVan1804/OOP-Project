@@ -8,8 +8,8 @@ public class ChiPhiKHTour {
     private double tongTienAn;
     private double tongTienPhong;
     private double tongTienPhuongTien;
-    private double tienTour;        // NEW: tiền từ Tour (lấy từ giá tour * số vé)
-    private double tongChi;         // Tổng chi = ăn + ở + phương tiện + tiền tour
+    private double tienTour;        // NEW: tien tu Tour (lay tu gia tour * so ve)
+    private double tongChi;         // Tong chi = an + o + phuong tien + tien tour
 
     public ChiPhiKHTour() {
         this.tongChi = 0.0;
@@ -50,12 +50,12 @@ public class ChiPhiKHTour {
 
     public double getTongChi() { return tongChi; }
 
-    // Tự động cập nhật tổng chi
+    // Tu dong cap nhat tong chi
     private void capNhatTongChi() {
         this.tongChi = tongTienAn + tongTienPhong + tongTienPhuongTien + tienTour;
     }
 
-    // Hiển thị đẹp
+    // Hien thi dep
     public void hienThi() {
         System.out.printf("%-10s | %-10s | %-10s | %-15s | %,12.0f | %,12.0f | %,12.0f | %,12.0f | %,14.0f%n",
                 maKHTour,

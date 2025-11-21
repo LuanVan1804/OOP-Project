@@ -34,8 +34,8 @@ public class DSNhaHang {
 
     public boolean them(NhaHang nh) {
         if (nh == null) return false;
-        if (soLuong >= MAX) { System.out.println("Danh sách đã đầy (" + MAX + ")!"); return false; }
-        if (findIndexByMa(nh.getMaNhaHang()) != -1) { System.out.println("Trùng mã nhà hàng: " + nh.getMaNhaHang()); return false; }
+        if (soLuong >= MAX) { System.out.println("Danh sach da day (" + MAX + ")!"); return false; }
+        if (findIndexByMa(nh.getMaNhaHang()) != -1) { System.out.println("Trung ma nha hang: " + nh.getMaNhaHang()); return false; }
         dsNhaHang[soLuong++] = nh; return true;
     }
 
@@ -65,7 +65,7 @@ public class DSNhaHang {
         return dem;
     }
 
-    // Thống kê đơn giản cho nhà hàng
+    // Thong ke don gian cho nha hang
     public void thongKeDonGian() {
         System.out.println("--- Thong ke don gian ---");
         System.out.println("So luong nha hang: " + soLuong);
@@ -77,15 +77,15 @@ public class DSNhaHang {
                 if (n != null) { tong += n.getGiaCombo(); dem++; }
             }
             double avg = dem == 0 ? 0.0 : (tong / dem);
-            System.out.println("Gia trung binh combo: " + avg);
+            System.out.printf("Gia trung binh combo: %,.0f\n", avg);
         }
     }
 
     public void xuatDanhSach() {
-        if (soLuong == 0) { System.out.println("Danh sách trống."); return; }
-        System.out.println("===== DANH SÁCH NHÀ HÀNG (" + soLuong + ") =====");
+        if (soLuong == 0) { System.out.println("Danh sach trong."); return; }
+        System.out.println("===== DANH SACH NHA HANG (" + soLuong + ") =====");
         for (int i = 0; i < soLuong; i++) {
-            System.out.println("-- Nhà hàng thứ " + (i+1) + " --");
+            System.out.println("-- Nha hang thu " + (i+1) + " --");
             dsNhaHang[i].xuat();
             System.out.println();
         }
@@ -113,7 +113,7 @@ public class DSNhaHang {
     }
 
     // File format: ma,ten,combo,gia 
-    // Đọc danh sách nhà hàng từ file (mỗi dòng: ma,ten,combo,gia)
+    // Doc danh sach nha hang tu file (moi dong: ma,ten,combo,gia)
     public int loadFromFile(String filePath) {
         int dem = 0;
         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
@@ -132,16 +132,16 @@ public class DSNhaHang {
                     );
                     if (them(nh)) dem++;
                 } catch (Exception ex) {
-                    System.out.println("Lỗi phân tích dòng: " + line + " -> " + ex.getMessage());
+                    System.out.println("Loi phan tich dong: " + line + " -> " + ex.getMessage());
                 }
             }
         } catch (IOException e) {
-            System.out.println("Không thể đọc file: " + e.getMessage());
+            System.out.println("Khong the doc file: " + e.getMessage());
         }
         return dem;
     }
 
-    // Ghi danh sách nhà hàng ra file (định dạng tương tự)
+    // Ghi danh sach nha hang ra file (dinh dang tuong tu)
     public int saveToFile(String filePath) {
         int dem = 0;
         File f = new File(filePath);
@@ -160,7 +160,7 @@ public class DSNhaHang {
                 dem++;
             }
         } catch (IOException e) {
-            System.out.println("Không thể ghi file: " + e.getMessage());
+            System.out.println("Khong the ghi file: " + e.getMessage());
         }
         return dem;
     }

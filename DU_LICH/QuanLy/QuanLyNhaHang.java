@@ -9,7 +9,7 @@ public class QuanLyNhaHang extends QuanLy {
 
     public void nhaHangMenu(Scanner sc) {
         while (true) {
-            System.out.println("\n========= MENU QUẢN LÝ NHÀ HÀNG =========");
+            System.out.println("\n========= MENU QUAN LY NHA HANG =========");
             System.out.println("1. Them");
             System.out.println("2. Sua");
             System.out.println("3. Xoa");

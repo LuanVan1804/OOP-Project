@@ -48,25 +48,22 @@ public class QuanLyKhachHang extends QuanLy {
                 }
                 case 3: {
                     System.out.print("Nhap ma khach hang can sua: ");
-                    int ma = Integer.parseInt(sc.nextLine());
-                    KhachHang old = dsKhachHang.timKiemKHTheoMa(ma);
-                    if (old == null) {
-                        System.out.println("Khong tim thay khach hang voi ma: " + ma);
+                    String input = sc.nextLine();
+
+                    if (input == null || input.trim().isEmpty()) {
+                        System.out.println("Ma khach hang khong hop le!");
                         break;
                     }
-                    System.out.println("Thong tin hien tai: " + old);
-                    KhachHang updated = new KhachHang();
-                    updated.nhapThongTinKH();
-                    if (updated.getMaKH() != old.getMaKH() && !dsKhachHang.MaDuyNhat(updated.getMaKH())) {
-                        System.out.println("Ma khach hang moi da ton tai, giu nguyen ma cu.");
-                        updated.setMaKH(old.getMaKH());
+
+                    try {
+                        int maKH = Integer.parseInt(input);
+                        dsKhachHang.chinhSuaKhachHang(maKH); // gọi hàm sửa kiểu form HDV
+                    } catch (NumberFormatException e) {
+                        System.out.println("Ma khach hang phai la so nguyen!");
                     }
-                    if (dsKhachHang.sua(ma, updated))
-                        System.out.println("Cap nhat khach hang thanh cong!");
-                    else
-                        System.out.println("Cap nhat that bai!");
                     break;
                 }
+
                 case 4: {
                     System.out.print("Nhap ma khach hang can xoa: ");
                     int maX = Integer.parseInt(sc.nextLine());

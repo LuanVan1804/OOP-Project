@@ -26,7 +26,7 @@ public class DSTour {
         return soLuongTour;
     }
 
-    // Kiểm tra mã tour có duy nhất không
+    // Kiem tra ma tour co duy nhat khong
     private boolean isMaTourUnique(String maTour) {
         if (maTour == null)
             return false;
@@ -37,7 +37,7 @@ public class DSTour {
         return true;
     }
 
-    // 1. THÊM TOUR
+    // 1. THEM TOUR
     // ========================================
     public void themTour() {
         if (soLuongTour >= list.length) {
@@ -75,7 +75,7 @@ public class DSTour {
     }
     
     // ========================================
-    // 2. HIỂN THỊ DANH SÁCH TOUR
+    // 2. HIEN THI DANH SACH TOUR
     public void hienThiDanhSachTour() {
         if (soLuongTour == 0) {
             System.out.println("Danh sach tour rong!");
@@ -90,7 +90,7 @@ public class DSTour {
 
 
     
-    // 3. XÓA TOUR THEO MÃ
+    // 3. XOA TOUR THEO MA
     public void xoaTour(String maTour) {
         int index = -1;
         for (int i = 0; i < soLuongTour; i++) {
@@ -110,8 +110,8 @@ public class DSTour {
         System.out.println("Xoa tour thanh cong!");
     }
 
-        // 4. CHỈNH SỬA TOUR THEO MÃ - KHÔNG CHO PHÉP ĐỔI MÃ TOUR
-    public void chinhSuaTourAnToan(String maTour) {
+    // 4. CHINH SUA TOUR THEO MA
+    public void chinhSuaTour(String maTour) {
         if (soLuongTour == 0) {
             System.out.println("Danh sach tour rong!");
             return;
@@ -120,93 +120,25 @@ public class DSTour {
             System.out.println("Ma tour khong hop le!");
             return;
         }
-        Tour tour = null;
-        int index = -1;
-
-        // Tìm tour theo mã
         for (int i = 0; i < soLuongTour; i++) {
             if (list[i] != null && maTour.equals(list[i].getMaTour())) {
-                tour = list[i];
-                index = i;
-                break;
+                System.out.println("Nhap thong tin moi cho tour (ma tour khong doi):");
+                list[i].nhapThongTin();
+                System.out.println("Chinh sua tour thanh cong!");
+                return;
             }
         }
-
-        if (tour == null) {
-            System.out.println("Khong tim thay tour voi ma " + maTour);
-            return;
-        }
-
-        System.out.println("=== CHINH SUA THONG TIN TOUR (Ma tour giu nguyen: " + maTour + ") ===");
-        System.out.println("Thong tin hien tai:");
-        tour.hienThiThongTin();
-        System.out.println("--------------------------------------------------");
-
-        // === NHẬP CÁC TRƯỜNG CHUNG ===
-        System.out.print("Ten Tour [" + tour.getTenTour() + "]: ");
-        String input = sc.nextLine();
-        if (!input.trim().isEmpty()) tour.setTenTour(input);
-
-        System.out.print("So Ngay [" + tour.getSoNgay() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tour.setSoNgay(Integer.parseInt(input));
-
-        System.out.print("Don Gia [" + tour.getDonGia() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tour.setDonGia(Double.parseDouble(input));
-
-        System.out.print("Ma Thanh Pho [" + tour.getMaThanhPho() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tour.setMaThanhPho(input);
-
-        System.out.print("Dia Diem Den [" + tour.getDiaDiemDen() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tour.setDiaDiemDen(input);
-
-        System.out.print("Dia Diem Di [" + tour.getDiaDiemDi() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tour.setDiaDiemDi(input);
-
-        // === NHẬP RIÊNG THEO LOẠI TOUR - Dùng loai() thay vì instanceof ===
-    if ("TrongNuoc".equals(tour.loai())) {
-        TourTrongNuoc ttn = (TourTrongNuoc) tour;  // ép kiểu an toàn vì đã kiểm tra loai()
-        System.out.print("Phi Dich Vu [" + ttn.getPhiDichVu() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) {
-            ttn.setPhiDichVu(Double.parseDouble(input));
-        }
-
-    } else if ("NuocNgoai".equals(tour.loai())) {
-        TourNuocNgoai tnn = (TourNuocNgoai) tour;
-        System.out.print("Ma Quoc Gia [" + tnn.getMaQuocGia() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tnn.setMaQuocGia(input);
-
-        System.out.print("Phi Visa [" + tnn.getVisa() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tnn.setVisa(Double.parseDouble(input));
-
-        System.out.print("Don Vi Tien Te [" + tnn.getDonViTienTe() + "]: ");
-        input = sc.nextLine();
-        if (!input.trim().isEmpty()) tnn.setDonViTienTe(input);
     }
-
-        System.out.println("=== Chinh sua tour thanh cong! ===");
-        System.out.println("Thong tin sau khi chinh sua:");
-        tour.hienThiThongTin();
-    }
-
-
     //---------------------tim kiem theo ten-------------------
     public Tour[] timKiemTheoTen(String key) {
         if (key == null || key.trim().isEmpty()) {
-            return new Tour[0]; // mảng rỗng
+            return new Tour[0]; // mang rong
         }
 
         String tuKhoa = key.trim().toLowerCase();
         int count = 0;
 
-        // 1. Đếm số tour khớp
+        // 1. Dem so tour khop
         for (int i = 0; i < soLuongTour; i++) {
             String tenTour = list[i].getTenTour();
             if (tenTour != null && tenTour.toLowerCase().contains(tuKhoa)) {
@@ -214,11 +146,11 @@ public class DSTour {
             }
         }
 
-        // 2. Tạo mảng kết quả
+        // 2. Tao mang ket qua
         Tour[] ketQua = new Tour[count];
         int index = 0;
 
-        // 3. Đổ dữ liệu vào mảng
+        // 3. Do du lieu vao mang
         for (int i = 0; i < soLuongTour; i++) {
             String tenTour = list[i].getTenTour();
             if (tenTour != null && tenTour.toLowerCase().contains(tuKhoa)) {
@@ -239,7 +171,7 @@ public class DSTour {
         System.out.println("Khong tim thay tour voi ma " + ma);
     }
 
-    // Trả về đối tượng Tour theo mã (không in ra). Dùng cho logic nghiệp vụ.
+    // Tra ve doi tuong Tour theo ma (khong in ra). Dung cho logic nghiep vu.
     public Tour timTheoMa(String ma) {
         if (ma == null) return null;
         for (int i = 0; i < soLuongTour; i++) {
@@ -272,11 +204,11 @@ public class DSTour {
             }
         }
 
-        // Tổng
+        // Tong
         int tongSoTour = countTrongNuoc + countNuocNgoai;
         double tongDoanhThu = doanhThuTrongNuoc + doanhThuNuocNgoai;
 
-        // In kết quả
+        // In ket qua
         System.out.println("=== THONG KE DOANH THU TOUR ===");
         System.out.printf("Tour trong nuoc: %,d tour | Doanh thu: %, .0f\n", countTrongNuoc, doanhThuTrongNuoc);
         System.out.printf("Tour nuoc ngoai: %,d tour | Doanh thu: %, .0f\n", countNuocNgoai, doanhThuNuocNgoai);
@@ -328,11 +260,12 @@ public class DSTour {
     }
 
     public void saveToFile(String path) throws IOException {
+        File f = new File(path);
         
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(f))) {
             for (int i = 0; i < soLuongTour; i++) {
                 Tour t = list[i];
-                String loai = t.loai();  // "TrongNuoc" hoặc "NuocNgoai"
+                String loai = t.loai();  // "TrongNuoc" hoac "NuocNgoai"
 
                 if (loai.equals("TrongNuoc")) {
                     TourTrongNuoc tt = (TourTrongNuoc) t;

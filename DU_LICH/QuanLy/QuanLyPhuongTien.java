@@ -28,7 +28,7 @@ public class QuanLyPhuongTien {
             System.out.println("6. Xuat danh sach");
             System.out.println("7. Thong ke");
             System.out.println("0. Quay lai");
-            System.out.print("Chọn (0-7): ");
+            System.out.print("Chon (0-7): ");
 
             while (!sc.hasNextInt()) {
                 System.out.print("So nguyen, nhap lai: "); sc.next();

@@ -8,7 +8,7 @@ public class PhuongTien {
     private String loaiPhuongTien;
     private double phiTheoNgay;
     
-    // Constructor mặc định
+    // Constructor mac dinh
     public PhuongTien() {
         this.bienKiemSoat = "";
         this.soChoNgoi = 0;
@@ -16,7 +16,7 @@ public class PhuongTien {
         this.phiTheoNgay = 0.0;
     }
  
-    // Constructor có tham số
+    // Constructor co tham so
     public PhuongTien(String bienKiemSoat, int soChoNgoi, String loaiPhuongTien) {
         this.bienKiemSoat = bienKiemSoat;
         this.soChoNgoi = soChoNgoi;
@@ -64,7 +64,7 @@ public class PhuongTien {
         this.phiTheoNgay = phiTheoNgay;
     }
     
-    // Nhập thông tin (có kiểm tra nhập số nguyên cho số chỗ)
+    // Nhap thong tin (co kiem tra nhap so nguyen cho so cho)
     public void nhap(Scanner sc){
         System.out.print("Nhap bien kiem soat: ");
         this.bienKiemSoat = sc.nextLine().trim();
@@ -89,7 +89,7 @@ public class PhuongTien {
         sc.nextLine();
     }
     
-    // Xuất thông tin
+    // Xuat thong tin
     public void xuat(){
         // Single-line summary: Bien | SoCho | Loai | Phi/ngay
         String fee = String.format("%,.0f VND", phiTheoNgay);
