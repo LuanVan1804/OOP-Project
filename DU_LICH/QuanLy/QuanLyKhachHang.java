@@ -57,7 +57,7 @@ public class QuanLyKhachHang extends QuanLy {
 
                     try {
                         int maKH = Integer.parseInt(input);
-                        dsKhachHang.chinhSuaKhachHang(maKH); // gọi hàm sửa kiểu form HDV
+                        dsKhachHang.sua(maKH); // gọi hàm sửa kiểu form HDV
                     } catch (NumberFormatException e) {
                         System.out.println("Ma khach hang phai la so nguyen!");
                     }

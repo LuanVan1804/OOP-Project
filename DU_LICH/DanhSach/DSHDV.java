@@ -5,19 +5,17 @@ import java.util.Arrays;
 import java.util.Scanner;
 
 import DU_LICH.ClassDon.HDV;
+import DU_LICH.DanhSach.sdhdv.ThongKe;
 
 public class DSHDV implements DU_LICH.Interfaces<HDV> {
     private HDV[] list;
-    private int soLuongHDV;
 
     public DSHDV() {
         this.list = new HDV[0];
-        this.soLuongHDV = 0;
     }
 
-    public DSHDV(HDV[] list, int soLuongHDV) {
+    public DSHDV(HDV[] list) {
         this.list = list;
-        this.soLuongHDV = soLuongHDV;
     }
 
     // Getter for compatibility
@@ -105,13 +103,18 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
     public void them(HDV obj) {
         if (obj == null)
             return;
-        if (!MaDuyNhat(obj.getMaHDV()))
-            return;
+        Scanner sc = new Scanner(System.in);
+        while (!MaDuyNhat(obj.getMaHDV())) {
+            System.out.println("Ma HDV da ton tai, vui long nhap ma khac!");
+            System.out.print("Nhap lai ma HDV: ");
+            int maHDV = Integer.parseInt(sc.nextLine());
+            obj.setMaHDV(maHDV);
+        }
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = obj;
     }
 
-    public void suaHDV(int maHDV) {
+    public void chinhSuaHDV(int maHDV) {
         HDV hdv = timTheoMa(maHDV);
         if (hdv == null) {
             System.out.println("Khong tim thay HDV voi ma: " + maHDV);
@@ -180,22 +183,6 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         }
     }
 
-    // Tim kiem theo kinh nghiem, tra ve mang ket qua
-    public HDV[] timKiemTheoKinhNghiem(double kinhNghiem) {
-        int count = 0;
-        for (HDV hdv : list) {
-            if (hdv != null && hdv.getKinhNghiem() == kinhNghiem)
-                count++;
-        }
-        HDV[] kq = new HDV[count];
-        int idx = 0;
-        for (HDV hdv : list) {
-            if (hdv != null && hdv.getKinhNghiem() == kinhNghiem)
-                kq[idx++] = hdv;
-        }
-        return kq;
-    }
-
     // Tim kiem theo ten, tra ve mang ket qua
     public HDV[] timKiemTheoTen(String tenHDV) {
         if (tenHDV == null)
@@ -235,7 +222,7 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
 
     public ThongKeKinhNghiem thongKeTheoKinhNghiem() {
         ThongKeKinhNghiem tk = new ThongKeKinhNghiem();
-        if (list.length == 0) {
+        if (list == null || list.length == 0) {
             tk.kinhNghiemValues = new double[0];
             tk.dem = new int[0];
             tk.soLoai = 0;

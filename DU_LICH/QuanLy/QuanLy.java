@@ -22,18 +22,18 @@ public class QuanLy {
     protected static DSPhuongTien dsPhuongTien;
 
     // Duong dan file (su dung duong dan tuong doi)
-    protected static final String PATH_QUOCGIA = "DU_LICH/Data/quocGia.txt";
-    protected static final String PATH_THANHPHO = "DU_LICH/Data/ThanhPho.txt";
-    protected static final String PATH_TOUR = "DU_LICH/TourDuLich/DSTour.txt";
-    protected static final String PATH_KHACHSAN = "DU_LICH/Data/KhachSan.txt";
-    protected static final String PATH_NHAHANG = "DU_LICH/Data/NhaHang.txt";
-    protected static final String PATH_KHACHHANG = "DU_LICH/Data/KhachHang.txt";
-    protected static final String PATH_HDV = "DU_LICH/Data/HDV.txt";
-    protected static final String PATH_KEHOACH = "DU_LICH/Data/KeHoachTour.txt";
-    protected static final String PATH_CHIPHI = "DU_LICH/Data/ChiPhiKHTour.txt";
-    protected static final String PATH_HOADON = "DU_LICH/Data/DSHoaDon.txt";
-    protected static final String PATH_CHITIET = "DU_LICH/Data/DSChiTietHD.txt";
-    protected static final String PATH_PHUONGTIEN = "DU_LICH/Data/PhuongTien.txt";
+    protected static final String PATH_QUOCGIA = "Data/quocGia.txt";
+    protected static final String PATH_THANHPHO = "Data/ThanhPho.txt";
+    protected static final String PATH_TOUR = "TourDuLich/DSTour.txt";
+    protected static final String PATH_KHACHSAN = "Data/KhachSan.txt";
+    protected static final String PATH_NHAHANG = "Data/NhaHang.txt";
+    protected static final String PATH_KHACHHANG = "Data/KhachHang.txt";
+    protected static final String PATH_HDV = "Data/HDV.txt";
+    protected static final String PATH_KEHOACH = "Data/KeHoachTour.txt";
+    protected static final String PATH_CHIPHI = "Data/ChiPhiKHTour.txt";
+    protected static final String PATH_HOADON = "Data/DSHoaDon.txt";
+    protected static final String PATH_CHITIET = "Data/DSChiTietHD.txt";
+    protected static final String PATH_PHUONGTIEN = "Data/PhuongTien.txt";
 
     public QuanLy() {
         this(true);
@@ -60,18 +60,18 @@ public class QuanLy {
         dsChiTietHD = new DSChiTietHD();
         dsPhuongTien = new DSPhuongTien();
 
-        try { dsQuocGia.loadFromFile(PATH_QUOCGIA);     } catch (Exception e) { System.out.println("Khong tai duoc QuocGia"); }
-        try { dsThanhPho.loadFromFile(PATH_THANHPHO);   } catch (Exception e) { System.out.println("Khong tai duoc ThanhPho"); }
-        try { dsTour.loadFromFile(PATH_TOUR);           } catch (Exception e) { System.out.println("Khong tai duoc Tour"); }
-        try { dsKhachSan.loadFromFile(PATH_KHACHSAN);   } catch (Exception e) { System.out.println("Khong tai duoc KhachSan"); }
-        try { dsNhaHang.loadFromFile(PATH_NHAHANG);     } catch (Exception e) { System.out.println("Khong tai duoc NhaHang"); }
-        try { dsKhachHang.loadFromFile(PATH_KHACHHANG); } catch (Exception e) { System.out.println("Khong tai duoc KhachHang"); }
-        try { dsHDV.loadFromFile(PATH_HDV);             } catch (Exception e) { System.out.println("Khong tai duoc HDV"); }
-        try { dsKeHoach.loadFromFile(PATH_KEHOACH);     } catch (Exception e) { System.out.println("Khong tai duoc KeHoachTour"); }
-        try { dsChiPhi.loadFromFile(PATH_CHIPHI);       } catch (Exception e) { System.out.println("Khong tai duoc ChiPhi"); }
-        try { dsHoaDon.loadFromFile(PATH_HOADON);       } catch (Exception e) { System.out.println("Khong tai duoc HoaDon"); }
-        try { dsChiTietHD.loadFromFile(PATH_CHITIET);   } catch (Exception e) { System.out.println("Khong tai duoc ChiTietHD"); }
-        try { dsPhuongTien.loadFromFile(PATH_PHUONGTIEN);}catch (Exception e) { System.out.println("Khong tai duoc PhuongTien"); }
+        try { dsQuocGia.loadFromFile(PATH_QUOCGIA);     } catch (Exception e) { System.out.println("Khong tai duoc QuocGia: " + e.getMessage()); }
+        try { dsThanhPho.loadFromFile(PATH_THANHPHO);   } catch (Exception e) { System.out.println("Khong tai duoc ThanhPho: " + e.getMessage()); }
+        try { dsTour.loadFromFile(PATH_TOUR);           } catch (Exception e) { System.out.println("Khong tai duoc Tour: " + e.getMessage()); }
+        try { dsKhachSan.loadFromFile(PATH_KHACHSAN);   } catch (Exception e) { System.out.println("Khong tai duoc KhachSan: " + e.getMessage()); }
+        try { dsNhaHang.loadFromFile(PATH_NHAHANG);     } catch (Exception e) { System.out.println("Khong tai duoc NhaHang: " + e.getMessage()); }
+        try { dsKhachHang.loadFromFile(PATH_KHACHHANG); } catch (Exception e) { System.out.println("Khong tai duoc KhachHang: " + e.getMessage()); }
+        try { dsHDV.loadFromFile(PATH_HDV);             } catch (Exception e) { System.out.println("Khong tai duoc HDV: " + e.getMessage()); }
+        try { dsKeHoach.loadFromFile(PATH_KEHOACH);     } catch (Exception e) { System.out.println("Khong tai duoc KeHoachTour: " + e.getMessage()); }
+        try { dsChiPhi.loadFromFile(PATH_CHIPHI);       } catch (Exception e) { System.out.println("Khong tai duoc ChiPhi: " + e.getMessage()); }
+        try { dsHoaDon.loadFromFile(PATH_HOADON);       } catch (Exception e) { System.out.println("Khong tai duoc HoaDon: " + e.getMessage()); }
+        try { dsChiTietHD.loadFromFile(PATH_CHITIET);   } catch (Exception e) { System.out.println("Khong tai duoc ChiTietHD: " + e.getMessage()); }
+        try { dsPhuongTien.loadFromFile(PATH_PHUONGTIEN);}catch (Exception e) { System.out.println("Khong tai duoc PhuongTien: " + e.getMessage()); }
     }
 
     // MENU CHINH - SIEU SACH

@@ -149,7 +149,7 @@ public class DSChiPhiKHTour {
                 }
             }
         } catch (IOException e) {
-            System.out.println("Loi doc file chi phi!");
+            System.out.println("Loi doc file chi phi: " + e.getMessage());
         }
     }
 }
