@@ -58,7 +58,7 @@ public class QuanLyHDV extends QuanLy {
                     }
                     try {
                         int ma = Integer.parseInt(input);
-                        dsHDV.chinhSuaHDV(ma);
+                        dsHDV.suaHDV(ma);
                     } catch (NumberFormatException e) {
                         System.out.println("Ma HDV phai la so nguyen!");
                     }
