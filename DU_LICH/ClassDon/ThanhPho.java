@@ -30,4 +30,10 @@ public class ThanhPho {
     public String toString() {
         return "ThanhPho{" + "maQG=" + maQuocGia + ", maTP=" + maTPho + ", ten=" + tenTPho + "}";
     }
+
+    public void hienThi() {
+        System.out.println("Ma quoc gia: " + maQuocGia);
+        System.out.println("Ma thanh pho: " + maTPho);
+        System.out.println("Ten thanh pho: " + tenTPho);
+    }
 }

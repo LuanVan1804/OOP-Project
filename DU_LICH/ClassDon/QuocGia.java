@@ -44,4 +44,19 @@ public class QuocGia {
         }
         return sb.toString();
     }
+
+    public void hienThi() {
+        System.out.println("Ma quoc gia: " + maQuocGia);
+        System.out.println("Ten nuoc: " + tenNuoc);
+        System.out.print("Danh sach thanh pho: ");
+        if (listTPhos == null || listTPhos.length == 0) {
+            System.out.println("Chua co thanh pho nao.");
+        } else {
+            for (int i = 0; i < listTPhos.length; i++) {
+                if (i > 0) System.out.print(", ");
+                System.out.print(listTPhos[i].getMaTPho() + "-" + listTPhos[i].getTenTPho());
+            }
+            System.out.println();
+        }
+    }
 }

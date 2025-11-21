@@ -115,8 +115,8 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = kh;
     }
-
-    public void chinhSuaKhachHang(int maKH) {
+    @Override
+    public void sua(int maKH) {
         KhachHang kh = timKiemKHTheoMa(maKH); // giả sử có phương thức tìm theo mã
         if (kh == null) {
             System.out.println("Khong tim thay khach hang voi ma: " + maKH);
@@ -151,13 +151,7 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         System.out.println("=== Cap nhat khach hang thanh cong! ===");
     }
 
-    @Override
-    public void sua(int maKH) {
-        // Khong dung trong flow moi; dung sua(int, KhachHang) tu lop quan ly.
-    }
 
-    // ---------------------- tim kiem khach hang theo ma (tra ve doi tuong)
-    // --------------------
     public KhachHang timKiemKHTheoMa(int maKH) {
         for (KhachHang kh : list) {
             if (kh.getMaKH() == maKH)

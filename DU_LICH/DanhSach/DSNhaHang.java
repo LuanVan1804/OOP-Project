@@ -125,8 +125,8 @@ public class DSNhaHang {
                 if (p.length < 4) { System.out.println("Bo qua dong khong hop le: " + line); continue; }
                 try {
                     NhaHang nh = new NhaHang(
-                        p[1].trim(),        // tenNhaHang
                         p[0].trim(),        // maNhaHang
+                        p[1].trim(),        // tenNhaHang
                         p[2].trim(),        // combo
                         Double.parseDouble(p[3].trim()) // giaCombo
                     );

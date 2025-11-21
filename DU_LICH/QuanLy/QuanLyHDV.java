@@ -19,7 +19,8 @@ public class QuanLyHDV extends QuanLy {
             System.out.println("3. Sua thong tin HDV");
             System.out.println("4. Xoa HDV");
             System.out.println("5. Tim kiem theo ten");
-            System.out.println("6. Thong ke theo kinh nghiem");
+            System.out.println("6. Tim kiem theo ma");
+            System.out.println("7. Thong ke theo kinh nghiem");
             System.out.println("0. Thoat (luu)");
             System.out.print("Chon: ");
             int chon = Integer.parseInt(sc.nextLine());
@@ -89,6 +90,22 @@ public class QuanLyHDV extends QuanLy {
                     break;
                 }
                 case 6: {
+                    System.out.print("Nhap ma HDV can tim: ");
+                    try {
+                        int ma = Integer.parseInt(sc.nextLine());
+                        HDV hdv = dsHDV.timTheoMa(ma);
+                        if (hdv == null) {
+                            System.out.println("Khong tim thay HDV voi ma: " + ma);
+                        } else {
+                            System.out.println("Thong tin HDV:");
+                            hdv.hienThiThongTinHDV();
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Ma HDV phai la so nguyen!");
+                    }
+                    break;
+                }
+                case 7: {
                     DSHDV.ThongKeKinhNghiem tk = dsHDV.thongKeTheoKinhNghiem();
                     if (tk.soLoai == 0) {
                         System.out.println("Danh sach HDV rong, khong the thong ke.");

@@ -228,12 +228,10 @@ public void thongKeTheoQuy() {
                 hd.setNgayLap(LocalDate.parse(p[7].trim()));
                 list = Arrays.copyOf(list, list.length + 1);
                 list[list.length - 1] = hd;
-                System.out.println("Da doc thanh cong HD: " + hd.getMaHD()); // DEBUG
             } catch (Exception e) {
                 System.out.println("Loi doc dong " + lineNum + ": " + line + " -> " + e.getMessage());
             }
         }
-        System.out.println("=== DA TAI XONG HOA DON: " + list.length + " hoa don ===");
     } catch (IOException e) {
         System.out.println("Loi mo file HoaDon: " + e.getMessage());
     }

@@ -22,18 +22,18 @@ public class QuanLy {
     protected static DSPhuongTien dsPhuongTien;
 
     // Duong dan file (su dung duong dan tuong doi)
-    protected static final String PATH_QUOCGIA = "Data/quocGia.txt";
-    protected static final String PATH_THANHPHO = "Data/ThanhPho.txt";
-    protected static final String PATH_TOUR = "TourDuLich/DSTour.txt";
-    protected static final String PATH_KHACHSAN = "Data/KhachSan.txt";
-    protected static final String PATH_NHAHANG = "Data/NhaHang.txt";
-    protected static final String PATH_KHACHHANG = "Data/KhachHang.txt";
-    protected static final String PATH_HDV = "Data/HDV.txt";
-    protected static final String PATH_KEHOACH = "Data/KeHoachTour.txt";
-    protected static final String PATH_CHIPHI = "Data/ChiPhiKHTour.txt";
-    protected static final String PATH_HOADON = "Data/DSHoaDon.txt";
-    protected static final String PATH_CHITIET = "Data/DSChiTietHD.txt";
-    protected static final String PATH_PHUONGTIEN = "Data/PhuongTien.txt";
+    protected static final String PATH_QUOCGIA = "D:\\doanOOP\\DU_LICH\\Data\\quocGia.txt";
+    protected static final String PATH_THANHPHO = "D:\\doanOOP\\DU_LICH\\Data\\ThanhPho.txt";
+    protected static final String PATH_TOUR = "D:\\doanOOP\\DU_LICH\\TourDuLich\\DSTour.txt";
+    protected static final String PATH_KHACHSAN = "D:\\doanOOP\\DU_LICH\\Data\\KhachSan.txt";
+    protected static final String PATH_NHAHANG = "D:\\doanOOP\\DU_LICH\\Data\\NhaHang.txt";
+    protected static final String PATH_KHACHHANG = "D:\\doanOOP\\DU_LICH\\Data\\KhachHang.txt";
+    protected static final String PATH_HDV = "D:\\doanOOP\\DU_LICH\\Data\\HDV.txt";
+    protected static final String PATH_KEHOACH = "D:\\doanOOP\\DU_LICH\\Data\\KeHoachTour.txt";
+    protected static final String PATH_CHIPHI = "D:\\doanOOP\\DU_LICH\\Data\\ChiPhiKHTour.txt";
+    protected static final String PATH_HOADON = "D:\\doanOOP\\DU_LICH\\Data\\DSHoaDon.txt";
+    protected static final String PATH_CHITIET = "D:\\doanOOP\\DU_LICH\\Data\\DSChiTietHD.txt";
+    protected static final String PATH_PHUONGTIEN = "D:\\doanOOP\\DU_LICH\\Data\\PhuongTien.txt";
 
     public QuanLy() {
         this(true);

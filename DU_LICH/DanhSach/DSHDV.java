@@ -112,8 +112,8 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = obj;
     }
-
-    public void chinhSuaHDV(int maHDV) {
+    @Override
+    public void sua(int maHDV) {
         HDV hdv = timTheoMa(maHDV);
         if (hdv == null) {
             System.out.println("Khong tim thay HDV voi ma: " + maHDV);
@@ -156,11 +156,6 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         }
 
         System.out.println("=== Cap nhat thanh cong! ===");
-    }
-
-    @Override
-    public void sua(int maHDV) {
-        // Khong su dung trong flow moi (tuong tac console se nam o lop quan ly)
     }
 
     // Xoa HDV theo ma (thuan du lieu, khong in)
