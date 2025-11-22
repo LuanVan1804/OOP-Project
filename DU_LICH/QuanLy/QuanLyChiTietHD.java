@@ -1,5 +1,6 @@
 package DU_LICH.QuanLy;
 
+import java.util.Arrays;
 import java.util.Scanner;
 import DU_LICH.ClassDon.*;
 
@@ -38,46 +39,90 @@ public class QuanLyChiTietHD extends QuanLy {
     private void xemChiTietDayDu(Scanner sc) {
         System.out.print("Nhap ma hoa don: ");
         String maHD = sc.nextLine().trim();
-        ChiTietHD ct = dsChiTietHD.tim(maHD);
-        if (ct == null) {
-            System.out.println("Khong tim thay chi tiet hoa don!");
+
+        // Lấy hóa đơn chính
+        HoaDon hd = dsHoaDon.timTheoMa(maHD);
+        if (hd == null) {
+            System.out.println("Khong tim thay hoa don!");
             return;
         }
 
-        HoaDon hd = dsHoaDon.timTheoMa(maHD);
-        KeHoachTour kht = dsKeHoach.timTheoMa(ct.getMaKHTour());
-        ChiPhiKHTour cp = dsChiPhi.timTheoMa(ct.getMaKHTour());
+        KeHoachTour kht = dsKeHoach.timTheoMa(hd.getMaKHTour());
+        ChiPhiKHTour cp = dsChiPhi.timTheoMa(hd.getMaKHTour());
 
-        System.out.println("┌──────────────────────────────────────────────────────────────────────┐");
-        System.out.println("│                       CHI TIET HOA DON DAY DU                        │");
-        System.out.println("├──────────────────────────────────────────────────────────────────────┤");
-        System.out.printf("│ Ma hoa don          : %-40s │%n", maHD);
-        if (hd != null) {
-            System.out.printf("│ Ngay lap            : %-40s │%n", hd.getNgayLap().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
-            System.out.printf("│ HDV phu trach       : %-40s │%n", dsHDV.timTheoMa(hd.getMaHDV()) != null ? dsHDV.timTheoMa(hd.getMaHDV()).getTenHDV() : hd.getMaHDV());
-            System.out.printf("│ KH dai dien         : %-40s │%n", dsKhachHang.timKiemKHTheoMa(hd.getMaKHDaiDien()) != null ? dsKhachHang.timKiemKHTheoMa(hd.getMaKHDaiDien()).getTenKH() : hd.getMaKHDaiDien());
+        // Lọc danh sách chi tiết hóa đơn theo maHD
+        ChiTietHD[] dsChiTiet = new ChiTietHD[0];
+        for (ChiTietHD ct : dsChiTietHD.getList()) {
+            if (ct != null && ct.getMaHD().equalsIgnoreCase(maHD)) {
+                dsChiTiet = Arrays.copyOf(dsChiTiet, dsChiTiet.length + 1);
+                dsChiTiet[dsChiTiet.length - 1] = ct;
+            }
         }
+
+        if (dsChiTiet.length == 0) {
+            System.out.println("Khong co chi tiet khach hang cho hoa don nay!");
+            return;
+        }
+
+        // Tính tổng
+        int khachNguoiLon = 0, khachTreEm = 0;
+        double tongTienVe = 0;
+        for (ChiTietHD ct : dsChiTiet) {
+            tongTienVe += ct.getThanhTien();
+            if ("NguoiLon".equalsIgnoreCase(ct.getLoaiVe())) khachNguoiLon++;
+            else if ("TreEm".equalsIgnoreCase(ct.getLoaiVe())) khachTreEm++;
+        }
+
+        // === HIỂN THỊ THÔNG TIN ĐẦY ĐỦ ===
+        System.out.println("┌────────────────────────────────────────────────────────────────────────────────────┐");
+        System.out.println("│                           CHI TIET HOA DON DAY DU                                  │");
+        System.out.println("├────────────────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ Ma hoa don          : %-56s │%n", maHD);
+        System.out.printf("│ Ngay lap            : %-56s │%n", 
+                hd.getNgayLap().format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        System.out.printf("│ HDV phu trach       : %-56s │%n", 
+                dsHDV.timTheoMa(hd.getMaHDV()) != null ? dsHDV.timTheoMa(hd.getMaHDV()).getTenHDV() : "Chua co");
+        System.out.printf("│ Khach dai dien      : %-56s │%n", 
+                dsKhachHang.timKiemKHTheoMa(hd.getMaKHDaiDien()) != null 
+                    ? dsKhachHang.timKiemKHTheoMa(hd.getMaKHDaiDien()).getTenKH() : "Chua co");
+
         if (kht != null) {
-            System.out.printf("│ Ten ke hoach        : %-40s │%n", kht.getTenKeHoach());
-            System.out.printf("│ Ma tour             : %-40s │%n", kht.getMaTour());
-            System.out.printf("│ Ngay di - ve        : %-40s │%n", 
-                    kht.getNgayDi() + " → " + kht.getNgayVe());
-        }
-        if (cp != null) {
-            System.out.printf("│ Nha hang            : %-40s │%n", cp.getMaNhaHang());
-            System.out.printf("│ Khach san           : %-40s │%n", cp.getMaKhachSan());
-            System.out.printf("│ Phuong tien         : %-40s │%n", cp.getMaPhuongTien());
+            System.out.printf("│ Ten ke hoach        : %-56s │%n", kht.getTenKeHoach());
+            System.out.printf("│ Ma tour             : %-56s │%n", kht.getMaTour());
+            System.out.printf("│ Ngay di - ve        : %-56s │%n", kht.getNgayDi() + " -> " + kht.getNgayVe());
         }
 
-        System.out.printf("│ So khach trong doan : %-40d │%n", ct.getSoKhach());
-        System.out.printf("│ Gia ve/khach        : %-40s │%n", String.format("%,.0f VND", ct.getGiaVe()));
-        System.out.printf("│ Tong tien ve        : %-40s │%n", String.format("%,.0f VND", ct.getTongTienVe()));
+        if (cp != null) {
+            System.out.printf("│ Nha hang            : %-56s │%n", cp.getMaNhaHang());
+            System.out.printf("│ Khach san           : %-56s │%n", cp.getMaKhachSan());
+            System.out.printf("│ Phuong tien         : %-56s │%n", cp.getMaPhuongTien());
+        }
+
+        System.out.println("├────────────────────────────────────────────────────────────────────────────────────┤");
+        System.out.printf("│ Tong so khach       : %-56d │%n", dsChiTiet.length);
+        System.out.printf("│   ├─ Nguoi lon      : %-56d │%n", khachNguoiLon);
+        System.out.printf("│   └─ Tre em         : %-56d │%n", khachTreEm);
+        System.out.printf("│ Tong tien ve        : %-56s │%n", String.format("%,.0f VND", tongTienVe));
 
         if (cp != null) {
-            double chiPhi = cp.getTongChi();
-            System.out.printf("│ Tong chi phi dich vu: %-40s │%n", String.format("%,.0f VND", chiPhi));
-            System.out.printf("│ TONG CONG (ve + dv) : %-40s │%n", String.format("%,.0f VND", ct.getTongTienVe() + chiPhi));
+            double chiPhiDV = cp.getTongChi();
+            System.out.printf("│ Chi phi dich vu     : %-56s │%n", String.format("%,.0f VND", chiPhiDV));
+            System.out.printf("│ TONG CONG (ve + DV) : %-56s │%n", String.format("%,.0f VND", tongTienVe + chiPhiDV));
         }
-        System.out.println("└──────────────────────────────────────────────────────────────────────┘");
+        System.out.println("├────────────────────────────────────────────────────────────────────────────────────┤");
+        System.out.println("│ DANH SÁCH KHÁCH HÀNG TRONG ĐOÀN                                                    │");
+        System.out.println("│ STT │ Ma KH   │ Loai ve     │ Gia ve ap dung       │ Thanh tien                    │");
+        System.out.println("├────────────────────────────────────────────────────────────────────────────────────┤");
+
+        for (int i = 0; i < dsChiTiet.length; i++) {
+            ChiTietHD ct = dsChiTiet[i];
+            String tenKH = dsKhachHang.timKiemKHTheoMa(ct.getMaKhachHang()) != null 
+                ? dsKhachHang.timKiemKHTheoMa(ct.getMaKhachHang()).getTenKH() 
+                : "Chua co ten";
+            System.out.printf("│ %3d │ %-7d │ %-11s │ %,18.0f │ %,18.0f │%n",
+                    (i+1), ct.getMaKhachHang(), ct.getLoaiVe(), ct.getGiaVe(), ct.getThanhTien());
+        }
+
+        System.out.println("└────────────────────────────────────────────────────────────────────────────────────┘");
     }
 }

@@ -17,6 +17,19 @@ public class DSTour {
         this.list = new Tour[100];
         this.soLuongTour = 0;
     }
+    //constructor co tham so:
+    public DSTour(int capacity) {
+        this.list = new Tour[capacity];
+        this.soLuongTour = 0;
+    }
+    //constructor sao chep
+    public DSTour(DSTour other) {
+        this.list = new Tour[other.list.length];
+        this.soLuongTour = other.soLuongTour;
+        for (int i = 0; i < other.soLuongTour; i++) {
+            this.list[i] = other.list[i];
+        }
+    }
 
     public Tour[] getList() {
         return list;

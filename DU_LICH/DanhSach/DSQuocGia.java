@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import DU_LICH.ClassDon.QuocGia;
 import DU_LICH.ClassDon.ThanhPho;
+import java.util.Arrays;
 
 public class DSQuocGia {
     private QuocGia[] list;
@@ -14,6 +15,21 @@ public class DSQuocGia {
     public DSQuocGia() {
         this.list = new QuocGia[0];
         this.currentCountryIndex = 0;
+    }
+
+    public DSQuocGia(QuocGia[] list) {
+        this.list = list == null ? new QuocGia[0] : Arrays.copyOf(list, list.length);
+        this.currentCountryIndex = 0;
+    }
+
+    public DSQuocGia(DSQuocGia other) {
+        if (other == null || other.list == null) {
+            this.list = new QuocGia[0];
+            this.currentCountryIndex = 0;
+        } else {
+            this.list = Arrays.copyOf(other.list, other.list.length);
+            this.currentCountryIndex = other.currentCountryIndex;
+        }
     }
 
     public QuocGia[] getList() { return list; }

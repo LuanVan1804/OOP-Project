@@ -16,6 +16,31 @@ public class ChiPhiKHTour {
         this.tienTour = 0.0;
     }
 
+    // Copy constructor
+    public ChiPhiKHTour(ChiPhiKHTour other) {
+        if (other == null) {
+            this.maKHTour = null;
+            this.maNhaHang = null;
+            this.maKhachSan = null;
+            this.maPhuongTien = null;
+            this.tongTienAn = 0.0;
+            this.tongTienPhong = 0.0;
+            this.tongTienPhuongTien = 0.0;
+            this.tienTour = 0.0;
+            this.tongChi = 0.0;
+        } else {
+            this.maKHTour = other.maKHTour;
+            this.maNhaHang = other.maNhaHang;
+            this.maKhachSan = other.maKhachSan;
+            this.maPhuongTien = other.maPhuongTien;
+            this.tongTienAn = other.tongTienAn;
+            this.tongTienPhong = other.tongTienPhong;
+            this.tongTienPhuongTien = other.tongTienPhuongTien;
+            this.tienTour = other.tienTour;
+            capNhatTongChi();
+        }
+    }
+
     public ChiPhiKHTour(String maKHTour, String maNhaHang, String maKhachSan, String maPhuongTien,
                         double tongTienAn, double tongTienPhong, double tongTienPhuongTien, double tienTour) {
         this.maKHTour = maKHTour;

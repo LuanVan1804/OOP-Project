@@ -16,6 +16,15 @@ public class DSHoaDon {
         list = new HoaDon[0];
     }
 
+    public DSHoaDon(HoaDon[] list) {
+        this.list = list == null ? new HoaDon[0] : Arrays.copyOf(list, list.length);
+    }
+
+    public DSHoaDon(DSHoaDon other) {
+        if (other == null || other.list == null) this.list = new HoaDon[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
+    }
+
     public int getSoLuong() { return list.length; }
     
     public HoaDon[] getList() { 
@@ -75,7 +84,7 @@ public class DSHoaDon {
         System.out.println("                                      DANH SACH HOA DON");
         System.out.println("==================================================================================================");
         System.out.printf("%-12s | %-12s | %-8s | %-8s | %-6s | %-6s | %-12s | %-18s%n",
-                "Ma HD", "Ma KH Tour", "Ma HDV", "Ma KH", "Khach", "So Ve", "Ngay Lap", "Tong Tien");
+            "Ma HD", "Ma KH Tour", "Ma HDV", "Ma KH", "Khach", "So Ve", "Ngay Lap", "Tong Tien");
         System.out.println("--------------------------------------------------------------------------------------------------");
         for (HoaDon hd : list) {
             if (hd != null) hd.hienThi();
@@ -109,82 +118,91 @@ public class DSHoaDon {
 
 
     // THỐNG KÊ NÂNG CAO THEO QUÝ (DOANH THU - CHI PHÍ - LỢI NHUẬN)
-public void thongKeTheoQuy() {
-    if (list.length == 0) {
-        System.out.println("Khong co du lieu hoa don de thong ke!");
-        return;
-    }
-
-    // 4 quý + tổng cộng
-    double[] doanhThu = new double[5];  // index 0-3: Q1-Q4, index 4: tổng
-    double[] chiPhi   = new double[5];
-    double[] loiNhuan = new double[5];
-
-    for (HoaDon hd : list) {
-        if (hd == null) continue;
-
-        LocalDate ngayLap = hd.getNgayLap();
-        if (ngayLap == null) continue;
-
-        int thang = ngayLap.getMonthValue();
-        int quy = (thang - 1) / 3; // 0: Q1 (1-3), 1: Q2 (4-6), 2: Q3 (7-9), 3: Q4 (10-12)
-
-        double tienVe = hd.getTongTien(); // Doanh thu từ vé
-
-        // Lấy chi phí từ ChiTietHD + ChiPhiKHTour (nếu có)
-        double chi = 0.0;
-        ChiTietHD ct = QuanLy.getDsChiTietHD().tim(hd.getMaHD());
-        if (ct != null) {
-            ChiPhiKHTour cp = QuanLy.getDsChiPhi().timTheoMa(ct.getMaKHTour());
-            if (cp != null) {
-                chi = cp.getTongChi(); // Tổng chi phí dịch vụ + tour
-            }
+    public void thongKeTheoQuy() {
+        if (list.length == 0) {
+            System.out.println("Khong co du lieu hoa don de thong ke!");
+            return;
         }
 
-        double loi = tienVe - chi;
+        // 4 quý + tổng cộng
+        double[] doanhThu = new double[5];  // index 0-3: Q1-Q4, index 4: tổng
+        double[] chiPhi   = new double[5];
+        double[] loiNhuan = new double[5];
 
-        // Cộng vào quý tương ứng
-        doanhThu[quy] += tienVe;
-        chiPhi[quy]   += chi;
-        loiNhuan[quy] += loi;
+        for (HoaDon hd : list) {
+            if (hd == null) continue;
 
-        // Cộng vào tổng cộng
-        doanhThu[4] += tienVe;
-        chiPhi[4]   += chi;
-        loiNhuan[4] += loi;
+            LocalDate ngayLap = hd.getNgayLap();
+            if (ngayLap == null) continue;
+
+            int thang = ngayLap.getMonthValue();
+            int quy = (thang - 1) / 3; // 0: Q1 (1-3), 1: Q2 (4-6), 2: Q3 (7-9), 3: Q4 (10-12)
+
+            double tienVe = hd.getTongTien(); // Doanh thu từ vé
+
+            // Lấy chi phí từ ChiTietHD + ChiPhiKHTour (nếu có)
+            double chi = 0.0;
+            ChiTietHD ct = QuanLy.getDsChiTietHD().tim(hd.getMaHD());
+            if (ct != null) {
+                ChiPhiKHTour cp = QuanLy.getDsChiPhi().timTheoMa(ct.getMaKHTour());
+                if (cp != null) {
+                    chi = cp.getTongChi(); // Tổng chi phí dịch vụ + tour
+                }
+            }
+
+            double loi = tienVe - chi;
+
+            // Cộng vào quý tương ứng
+            doanhThu[quy] += tienVe;
+            chiPhi[quy]   += chi;
+            loiNhuan[quy] += loi;
+
+            // Cộng vào tổng cộng
+            doanhThu[4] += tienVe;
+            chiPhi[4]   += chi;
+            loiNhuan[4] += loi;
+        }
+
+        // In bảng thống kê đẹp
+        System.out.println();
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
+        System.out.println("                   THONG KE DOANH THU - CHI PHÍ - LOI NHUAN THEO QUÝ");
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
+        System.out.printf("%-15s | %-15s | %-15s | %-15s | %-15s | %-15s%n",
+                "", "Quy 1", "Quy 2", "Quy 3", "Quy 4", "TONG CONG");
+        System.out.println("--------------------------------------------------------------------------------");
+
+        System.out.printf("%-15s | %,15.0f | %,15.0f | %,15.0f | %,15.0f | %,15.0f VND%n",
+                "DOANH THU", 
+                doanhThu[0], doanhThu[1], doanhThu[2], doanhThu[3], doanhThu[4]);
+
+        System.out.printf("%-15s | %,15.0f | %,15.0f | %,15.0f | %,15.0f | %,15.0f VND%n",
+                "CHI PHI", 
+                chiPhi[0], chiPhi[1], chiPhi[2], chiPhi[3], chiPhi[4]);
+
+        System.out.printf("%-15s | %,15.0f | %,15.0f | %,15.0f | %,15.0f | %,15.0f VND%n",
+                "LOI NHUAN", 
+                loiNhuan[0], loiNhuan[1], loiNhuan[2], loiNhuan[3], loiNhuan[4]);
+
+        System.out.println("--------------------------------------------------------------------------------");
+        System.out.println("* Quy 1: Thang 1-3 | Quy 2: Thang 4-6 | Quy 3: Thang 7-9 | Quy 4: Thang 10-12");
+        System.out.println("================================================================================\n");
     }
 
-    // In bảng thống kê đẹp
-    System.out.println();
-    System.out.println("════════════════════════════════════════════════════════════════════════════════");
-    System.out.println("                   THỐNG KÊ DOANH THU - CHI PHÍ - LỢI NHUẬN THEO QUÝ");
-    System.out.println("════════════════════════════════════════════════════════════════════════════════");
-    System.out.printf("%-15s | %-15s | %-15s | %-15s | %-15s | %-15s%n",
-            "", "Quý 1", "Quý 2", "Quý 3", "Quý 4", "TỔNG CỘNG");
-    System.out.println("--------------------------------------------------------------------------------");
-
-    System.out.printf("%-15s | %,15.0f | %,15.0f | %,15.0f | %,15.0f | %,15.0f VND%n",
-            "DOANH THU", 
-            doanhThu[0], doanhThu[1], doanhThu[2], doanhThu[3], doanhThu[4]);
-
-    System.out.printf("%-15s | %,15.0f | %,15.0f | %,15.0f | %,15.0f | %,15.0f VND%n",
-            "CHI PHÍ", 
-            chiPhi[0], chiPhi[1], chiPhi[2], chiPhi[3], chiPhi[4]);
-
-    System.out.printf("%-15s | %,15.0f | %,15.0f | %,15.0f | %,15.0f | %,15.0f VND%n",
-            "LỢI NHUẬN", 
-            loiNhuan[0], loiNhuan[1], loiNhuan[2], loiNhuan[3], loiNhuan[4]);
-
-    System.out.println("--------------------------------------------------------------------------------");
-    System.out.println("* Quý 1: Tháng 1-3 | Quý 2: Tháng 4-6 | Quý 3: Tháng 7-9 | Quý 4: Tháng 10-12");
-    System.out.println("================================================================================\n");
-}
-
+    // === SAVE TO FILE (rút gọn, không lưu giá vé và tổng tiền) ===
     public void saveToFile(String path) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
             for (HoaDon hd : list) {
                 if (hd != null) {
-                    bw.write(hd.toString());
+                    bw.write(String.join(",",
+                        hd.getMaHD(),
+                        hd.getMaKHTour(),
+                        String.valueOf(hd.getMaHDV()),
+                        String.valueOf(hd.getMaKHDaiDien()),
+                        String.valueOf(hd.getSoKhach()),
+                        String.valueOf(hd.getSoVe()),
+                        hd.getNgayLap().toString()
+                    ));
                     bw.newLine();
                 }
             }
@@ -193,47 +211,42 @@ public void thongKeTheoQuy() {
         }
     }
 
+    // === LOAD FROM FILE (chỉ đọc 7 cột) ===
     public void loadFromFile(String path) {
-    list = new HoaDon[0];
-    File f = new File(path);
-    if (!f.exists()) {
-        System.out.println("Khong tim thay file HoaDon: " + path);
-        return;
-    }
+        list = new HoaDon[0];
+        File f = new File(path);
+        if (!f.exists()) return;
 
-    try (BufferedReader br = new BufferedReader(new FileReader(f))) {
-        String line;
-        int lineNum = 0;
-        while ((line = br.readLine()) != null) {
-            lineNum++;
-            line = line.trim();
-            if (line.isEmpty()) continue;
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
 
-            String[] p = line.split(",", -1);  // -1 de giu phan tu rong
-            if (p.length < 8) {
-                System.out.println("Bo qua dong " + lineNum + " (qua it cot): " + line);
-                continue;
+                String[] p = line.split(",", -1);
+                if (p.length < 7) {
+                    System.out.println("Bo qua dong HoaDon sai: " + line);
+                    continue;
+                }
+
+                try {
+                    HoaDon hd = new HoaDon();
+                    hd.setMaHD(p[0].trim());
+                    hd.setMaKHTour(p[1].trim());
+                    hd.setMaHDV(Integer.parseInt(p[2].trim()));
+                    hd.setMaKHDaiDien(Integer.parseInt(p[3].trim()));
+                    hd.setSoKhach(Integer.parseInt(p[4].trim()));
+                    hd.setSoVe(Integer.parseInt(p[5].trim()));
+                    hd.setNgayLap(LocalDate.parse(p[6].trim()));
+
+                    list = Arrays.copyOf(list, list.length + 1);
+                    list[list.length - 1] = hd;
+                } catch (Exception e) {
+                    System.out.println("Loi doc HoaDon: " + line);
+                }
             }
-
-            try {
-                HoaDon hd = new HoaDon(
-                    p[0].trim(),
-                    p[1].trim(),
-                    Integer.parseInt(p[2].trim()),
-                    Integer.parseInt(p[3].trim()),
-                    Integer.parseInt(p[4].trim()),
-                    Integer.parseInt(p[5].trim()),
-                    Double.parseDouble(p[6].trim())
-                );
-                hd.setNgayLap(LocalDate.parse(p[7].trim()));
-                list = Arrays.copyOf(list, list.length + 1);
-                list[list.length - 1] = hd;
-            } catch (Exception e) {
-                System.out.println("Loi doc dong " + lineNum + ": " + line + " -> " + e.getMessage());
-            }
+        } catch (IOException e) {
+            System.out.println("Loi mo file HoaDon!");
         }
-    } catch (IOException e) {
-        System.out.println("Loi mo file HoaDon: " + e.getMessage());
     }
-}
 }

@@ -5,12 +5,22 @@ import java.io.IOException;
 
 import DU_LICH.ClassDon.QuocGia;
 import DU_LICH.ClassDon.ThanhPho;
+import java.util.Arrays;
 
 public class DSThanhPho {
     private ThanhPho[] list;
 
     public DSThanhPho() {
         this.list = new ThanhPho[0];
+    }
+
+    public DSThanhPho(ThanhPho[] list) {
+        this.list = list == null ? new ThanhPho[0] : Arrays.copyOf(list, list.length);
+    }
+
+    public DSThanhPho(DSThanhPho other) {
+        if (other == null || other.list == null) this.list = new ThanhPho[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
     }
 
     public ThanhPho[] getList() { return list; }

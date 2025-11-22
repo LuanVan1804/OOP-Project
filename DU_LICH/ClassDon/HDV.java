@@ -62,6 +62,25 @@ public class HDV {
         this.kinhNghiem = kinhNghiem;
     }
 
+    // Copy constructor
+    public HDV(HDV other) {
+        if (other == null) {
+            this.maHDV = 0;
+            this.tenHDV = "";
+            this.soDienThoai = "";
+            this.CCCD = "";
+            this.gioiTinh = "";
+            this.kinhNghiem = 0.0;
+        } else {
+            this.maHDV = other.maHDV;
+            this.tenHDV = other.tenHDV;
+            this.soDienThoai = other.soDienThoai;
+            this.CCCD = other.CCCD;
+            this.gioiTinh = other.gioiTinh;
+            this.kinhNghiem = other.kinhNghiem;
+        }
+    }
+
    @Override
     public String toString() {
         return String.format("HDV [Ma: %d, Ten: %s, SDT: %s, CCCD: %s, GT: %s, KN: %.1f nam]",

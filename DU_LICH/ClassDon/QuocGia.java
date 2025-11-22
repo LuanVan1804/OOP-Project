@@ -1,6 +1,8 @@
 
 package DU_LICH.ClassDon;
 
+import java.util.Arrays;
+
 public class QuocGia {
     private String tenNuoc;
     private String maQuocGia;
@@ -16,6 +18,26 @@ public class QuocGia {
         this.tenNuoc = tenNuoc;
         this.maQuocGia = maQuocGia;
     this.listTPhos = new ThanhPho[0];
+    }
+
+    // Full-arg constructor (including city list)
+    public QuocGia(String tenNuoc, String maQuocGia, ThanhPho[] listTPhos) {
+        this.tenNuoc = tenNuoc;
+        this.maQuocGia = maQuocGia;
+        this.listTPhos = listTPhos == null ? new ThanhPho[0] : Arrays.copyOf(listTPhos, listTPhos.length);
+    }
+
+    // Copy constructor
+    public QuocGia(QuocGia other) {
+        if (other == null) {
+            this.tenNuoc = "";
+            this.maQuocGia = "";
+            this.listTPhos = new ThanhPho[0];
+        } else {
+            this.tenNuoc = other.tenNuoc;
+            this.maQuocGia = other.maQuocGia;
+            this.listTPhos = other.listTPhos == null ? new ThanhPho[0] : Arrays.copyOf(other.listTPhos, other.listTPhos.length);
+        }
     }
 
     public String getTenNuoc() { return tenNuoc; }

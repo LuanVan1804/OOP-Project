@@ -20,6 +20,15 @@ public class DSKHTour {
         list = new KeHoachTour[0];
     }
 
+    public DSKHTour(KeHoachTour[] list) {
+        this.list = list == null ? new KeHoachTour[0] : Arrays.copyOf(list, list.length);
+    }
+
+    public DSKHTour(DSKHTour other) {
+        if (other == null || other.list == null) this.list = new KeHoachTour[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
+    }
+
     public int getSoLuong() { return list.length; }
     
     public KeHoachTour[] getList() { 

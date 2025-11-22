@@ -23,6 +23,15 @@ public class NhaHang {
         this.giaCombo = giaCombo;
     }
 
+    // Copy constructor
+    public NhaHang(NhaHang other) {
+        if (other == null) return;
+        this.maNhaHang = other.maNhaHang;
+        this.tenNhaHang = other.tenNhaHang;
+        this.Combo = other.Combo;
+        this.giaCombo = other.giaCombo;
+    }
+
     public String getMaNhaHang() {
         return maNhaHang;
     }

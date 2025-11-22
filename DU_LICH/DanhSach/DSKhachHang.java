@@ -18,6 +18,15 @@ public class DSKhachHang implements DU_LICH.Interfaces<KhachHang> {
         this.list = new KhachHang[0];
     }
 
+    public DSKhachHang(KhachHang[] list) {
+        this.list = list == null ? new KhachHang[0] : Arrays.copyOf(list, list.length);
+    }
+
+    public DSKhachHang(DSKhachHang other) {
+        if (other == null || other.list == null) this.list = new KhachHang[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
+    }
+
     // -------------------- load file --------------------
     @Override
     public void loadFromFile(String path) throws IOException {

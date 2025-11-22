@@ -31,6 +31,15 @@ public class PhuongTien {
         this.phiTheoNgay = phiTheoNgay;
     }
 
+    // Copy constructor
+    public PhuongTien(PhuongTien other) {
+        if (other == null) return;
+        this.bienKiemSoat = other.bienKiemSoat;
+        this.soChoNgoi = other.soChoNgoi;
+        this.loaiPhuongTien = other.loaiPhuongTien;
+        this.phiTheoNgay = other.phiTheoNgay;
+    }
+
     // Getter
     public String getBienKiemSoat() {
         return bienKiemSoat;

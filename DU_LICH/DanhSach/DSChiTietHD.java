@@ -11,6 +11,15 @@ public class DSChiTietHD {
         list = new ChiTietHD[0];
     }
 
+    public DSChiTietHD(ChiTietHD[] list) {
+        this.list = list == null ? new ChiTietHD[0] : Arrays.copyOf(list, list.length);
+    }
+
+    public DSChiTietHD(DSChiTietHD other) {
+        if (other == null || other.list == null) this.list = new ChiTietHD[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
+    }
+
     public int getSoLuong() { return list.length; }
     
     public ChiTietHD[] getList() {
@@ -61,21 +70,22 @@ public class DSChiTietHD {
         return null;
     }
 
+    // Trong phương thức hienThiDanhSach()
     public void hienThiDanhSach() {
         if (list.length == 0) {
-            System.out.println("Chua co chi tiet hoa don nao!");
+            System.out.println("Chưa có chi tiết hóa đơn nào!");
             return;
         }
-        System.out.println("====================================================================");
-        System.out.println("                       DANH SACH CHI TIET HOA DON");
-        System.out.println("====================================================================");
-        System.out.printf("%-12s | %-12s | %-10s | %-18s%n",
-                "Ma HD", "Ma KH Tour", "So Khach", "Tong Tien Ve");
-        System.out.println("--------------------------------------------------------------------");
+        System.out.println("==================================================================================================");
+        System.out.println("                          DANH SACH CHI TIET HOA DON (MOI KHACH 1 DONG)");
+        System.out.println("==================================================================================================");
+        System.out.printf("%-12s | %-12s | %-10s | %-15s | %-15s%n",
+                "Ma HD", "Ma KH Tour", "Loai Ve", "Gia Ve", "Thanh Tien");
+        System.out.println("--------------------------------------------------------------------------------------------------");
         for (ChiTietHD ct : list) {
             if (ct != null) ct.hienThiNgan();
         }
-        System.out.println("====================================================================");
+        System.out.println("==================================================================================================");
     }
 
     public void thongKe() {
@@ -83,63 +93,101 @@ public class DSChiTietHD {
             System.out.println("Khong co du lieu de thong ke!");
             return;
         }
+
+        int tongKhachNguoiLon = 0;
+        int tongKhachTreEm = 0;
         int tongKhach = 0;
         double tongDoanhThu = 0;
+
         for (ChiTietHD ct : list) {
             if (ct != null) {
-                tongKhach += ct.getSoKhach();
-                tongDoanhThu += ct.getTongTienVe();
+                tongKhach++;
+                tongDoanhThu += ct.getThanhTien();
+
+                if ("NguoiLon".equalsIgnoreCase(ct.getLoaiVe())) {
+                    tongKhachNguoiLon++;
+                } else if ("TreEm".equalsIgnoreCase(ct.getLoaiVe())) {
+                    tongKhachTreEm++;
+                }
             }
         }
-        System.out.println("============================ THONG KE CHI TIET HOA DON ===========================");
-        System.out.printf("Tong so chi tiet HD   : %,d%n", list.length);
-        System.out.printf("Tong so khach         : %,d%n", tongKhach);
-        System.out.printf("TONG DOANH THU VE     : %,15.0f VND%n", tongDoanhThu);
-        System.out.println("=================================================================================");
+
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
+        System.out.println("                   THONG KE CHI TIET HOA DON (THEO TUNG KHACH HANG)");
+        System.out.println("════════════════════════════════════════════════════════════════════════════════");
+        System.out.printf("Tong so dong chi tiet         : %,d%n", list.length);
+        System.out.printf("Tong so khach hang            : %,d khach%n", tongKhach);
+        System.out.printf("  ├─ Khach nguoi lon           : %,d khach%n", tongKhachNguoiLon);
+        System.out.printf("  └─ Khach tre em (<12 tuoi)   : %,d khach%n", tongKhachTreEm);
+        System.out.println("────────────────────────────────────────────────────────────────────────────────");
+        System.out.printf("TONG DOANH THU TU VE           : %,15.0f VND%n", tongDoanhThu);
+        System.out.println("================================================================================\n");
     }
 
+    // === SAVE TO FILE ===
     public void saveToFile(String path) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
             for (ChiTietHD ct : list) {
                 if (ct != null) {
-                    bw.write(ct.toString());
+                    // maHD, maKHTour, maKhachHang, loaiVe, thanhTien
+                    bw.write(String.join(",",
+                        ct.getMaHD(),
+                        ct.getMaKHTour(),
+                        String.valueOf(ct.getMaKhachHang()),
+                        ct.getLoaiVe(),
+                        String.valueOf((long)ct.getThanhTien())  // tránh .0
+                    ));
                     bw.newLine();
                 }
             }
         } catch (IOException e) {
-            System.out.println("Loi ghi file ChiTietHoaDon!");
+            System.out.println("Loi ghi file ChiTietHD: " + e.getMessage());
         }
     }
 
+    // === LOAD FROM FILE ===
     public void loadFromFile(String path) {
         list = new ChiTietHD[0];
+        File f = new File(path);
+        if (!f.exists()) return;
 
-        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
             String line;
             while ((line = br.readLine()) != null) {
                 line = line.trim();
-                if (line.isEmpty()) continue;
+                if (line.isEmpty() || line.startsWith("#")) continue;
+
                 String[] p = line.split(",");
-                if (p.length >= 3) {
-                    try {
-                        String maHD = p[0].trim();
-                        String maKHTour = p[1].trim();
-                        double giaVe = Double.parseDouble(p[2].trim());
+                if (p.length != 5) {
+                    System.out.println("Bo qua dong sai dinh dang ChiTietHD: " + line);
+                    continue;
+                }
 
-                        int[] dsKH = new int[p.length - 3];
-                        for (int i = 0; i < dsKH.length; i++) {
-                            dsKH[i] = Integer.parseInt(p[3 + i].trim());
-                        }
+                try {
+                    String maHD = p[0].trim();
+                    String maKHTour = p[1].trim();
+                    int maKH = Integer.parseInt(p[2].trim());
+                    String loaiVe = p[3].trim(); // NguoiLon hoặc TreEm
+                    double thanhTien = Double.parseDouble(p[4].trim());
 
-                        list = Arrays.copyOf(list, list.length + 1);
-                        list[list.length - 1] = new ChiTietHD(maHD, maKHTour, dsKH, giaVe);
-                    } catch (Exception e) {
-                        System.out.println("Loi dong file ChiTietHD: " + line);
-                    }
+                    // Tạo đối tượng mới (giá vé sẽ được suy ra từ thanhTien và loại vé)
+                    ChiTietHD ct = new ChiTietHD();
+                    ct = new ChiTietHD(maHD, maKHTour, maKH, loaiVe, thanhTien * 2); // giá cơ bản = thanhTien * 2 (vì trẻ em 50%)
+                    // Nhưng tốt hơn: không cần giá cơ bản → dùng constructor đơn giản hơn
+
+                    // Dùng constructor đầy đủ (khuyến nghị thêm constructor này vào ChiTietHD)
+                    ChiTietHD ctNew = new ChiTietHD(maHD, maKHTour, maKH, loaiVe, thanhTien * (loaiVe.equals("TreEm") ? 2 : 1));
+                    // → Nếu là trẻ em: thanhTien = 50% → giá cơ bản = thanhTien * 2
+
+                    list = Arrays.copyOf(list, list.length + 1);
+                    list[list.length - 1] = ctNew;
+
+                } catch (Exception e) {
+                    System.out.println("Loi doc dong ChiTietHD: " + line);
                 }
             }
         } catch (IOException e) {
-            System.out.println("Loi doc file ChiTietHD: " + e.getMessage());
+            System.out.println("Loi mo file ChiTietHD: " + e.getMessage());
         }
     }
 }

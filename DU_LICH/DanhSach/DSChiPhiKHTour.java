@@ -11,6 +11,15 @@ public class DSChiPhiKHTour {
         list = new ChiPhiKHTour[0];
     }
 
+    public DSChiPhiKHTour(ChiPhiKHTour[] list) {
+        this.list = list == null ? new ChiPhiKHTour[0] : Arrays.copyOf(list, list.length);
+    }
+
+    public DSChiPhiKHTour(DSChiPhiKHTour other) {
+        if (other == null || other.list == null) this.list = new ChiPhiKHTour[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
+    }
+
     public int getSoLuong() { return list.length; }
     
     public ChiPhiKHTour[] getList() {

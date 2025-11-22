@@ -25,6 +25,24 @@ public class DSKhachSan {
         this.soLuong = 0;
     }
 
+    public DSKhachSan(KhachSan[] arr) {
+        this();
+        if (arr != null) {
+            for (int i = 0; i < arr.length && soLuong < MAX; i++) {
+                if (arr[i] != null) dsKhachSan[soLuong++] = arr[i];
+            }
+        }
+    }
+
+    public DSKhachSan(DSKhachSan other) {
+        this();
+        if (other != null) {
+            for (int i = 0; i < other.soLuong && soLuong < MAX; i++) {
+                this.dsKhachSan[soLuong++] = other.dsKhachSan[i];
+            }
+        }
+    }
+
     // ================== CAC HAM HO TRO NGAY THANG ==================
     private static final String DATE_PATTERN = "dd/MM/yyyy"; // Dinh dang ngay trong file va nhap lieu
     private static final SimpleDateFormat SDF = new SimpleDateFormat(DATE_PATTERN, new Locale("vi", "VN"));

@@ -59,53 +59,49 @@ public class QuanLyHoaDon extends QuanLy {
             return;
         }
         hd.setMaKHTour(maKH);
-        hd.setGiaVe(kht.getGiaVe());
 
-        System.out.print("Nhap ma HDV: ");
-        try {
-            int maHDV = Integer.parseInt(sc.nextLine().trim());
-            if (dsHDV.timTheoMa(maHDV) == null) {
-                System.out.println("HDV khong ton tai!");
-                return;
-            }
-            hd.setMaHDV(maHDV);
-        } catch (Exception e) {
-            System.out.println("Ma HDV khong hop le!");
-            return;
-        }
+        // ... nhập HDV, khách đại diện ...
 
-        System.out.print("Nhap ma khach hang dai dien: ");
-        try {
-            int maKHang = Integer.parseInt(sc.nextLine().trim());
-            if (dsKhachHang.timKiemKHTheoMa(maKHang) == null) {
-                System.out.println("Khach hang khong ton tai!");
-                return;
-            }
-            hd.setMaKHDaiDien(maKHang);
-        } catch (Exception e) {
-            System.out.println("Ma khach hang khong hop le!");
-            return;
-        }
+        System.out.print("Nhap so khach nguoi lon: ");
+        int slNguoiLon = nhapSo(sc);
+        System.out.print("Nhap so khach tre em (duoi 12 tuoi): ");
+        int slTreEm = nhapSo(sc);
 
-        System.out.print("Nhap so khach: ");
-        hd.setSoKhach(nhapSo(sc));
+        int tongKhach = slNguoiLon + slTreEm;
+        hd.setSoKhach(tongKhach);
+        hd.setSoVe(tongKhach);
 
-        System.out.print("Nhap so ve dat: ");
-        int soVe = nhapSo(sc);
-        if (soVe > kht.getTongSoVe() - kht.getTongVeDaDat()) {
+        if (tongKhach > kht.getTongSoVe() - kht.getTongVeDaDat()) {
             System.out.println("Khong du ve! Con lai: " + (kht.getTongSoVe() - kht.getTongVeDaDat()));
             return;
         }
-        hd.setSoVe(soVe);
 
-        // Cap nhat so ve da dat trong ke hoach tour
-        kht.setTongVeDaDat(kht.getTongVeDaDat() + soVe);
+        double giaVeNguoiLon = kht.getGiaVe();
+
+        // Tạo chi tiết hóa đơn cho từng khách
+        System.out.println("Nhap ma khach hang (ID):");
+        for (int i = 0; i < tongKhach; i++) {
+            System.out.print("Khach thu " + (i+1) + " (ma KH): ");
+            int maKHang = nhapSo(sc);
+
+            String loai = (i < slNguoiLon) ? "NguoiLon" : "TreEm";
+
+            ChiTietHD ct = new ChiTietHD(
+                hd.getMaHD(),
+                hd.getMaKHTour(),
+                maKHang,
+                loai,
+                giaVeNguoiLon
+            );
+
+            QuanLy.getDsChiTietHD().them(ct);
+        }
+
+        // Cập nhật vé đã đặt
+        kht.setTongVeDaDat(kht.getTongVeDaDat() + tongKhach);
 
         if (dsHoaDon.them(hd)) {
-            System.out.println("Them hoa don thanh cong!");
-            hd.hienThi();
-        } else {
-            System.out.println("Them that bai (trung ma?)");
+            System.out.println("Them hoa don thanh cong! Tong tien: " + String.format("%,.0f", hd.getTongTien()) + " VND");
         }
     }
 

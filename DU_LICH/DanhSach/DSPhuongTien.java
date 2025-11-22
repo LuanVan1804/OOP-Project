@@ -25,6 +25,16 @@ public class DSPhuongTien {
         this.soLuongpt = Math.max(0, Math.min(soLuongpt, this.dspt.length));
     }
 
+    public DSPhuongTien(DSPhuongTien other) {
+        if (other == null) {
+            this.dspt = new PhuongTien[0];
+            this.soLuongpt = 0;
+        } else {
+            this.soLuongpt = other.soLuongpt;
+            this.dspt = Arrays.copyOf(other.dspt, other.dspt.length);
+        }
+    }
+
     public void them() {
         System.out.print("Nhap so luong phuong tien can them: ");
         int so;

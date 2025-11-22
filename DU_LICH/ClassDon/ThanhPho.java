@@ -17,6 +17,14 @@ public class ThanhPho {
         this.tenTPho = tenTPho;
     }
 
+    // Copy constructor
+    public ThanhPho(ThanhPho other) {
+        if (other == null) return;
+        this.maQuocGia = other.maQuocGia;
+        this.maTPho = other.maTPho;
+        this.tenTPho = other.tenTPho;
+    }
+
     public String getMaQuocGia() { return maQuocGia; }
     public void setMaQuocGia(String maQuocGia) { this.maQuocGia = maQuocGia; }
 

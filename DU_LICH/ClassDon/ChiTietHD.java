@@ -1,63 +1,59 @@
+// DU_LICH/ClassDon/ChiTietHD.java
 package DU_LICH.ClassDon;
 
 public class ChiTietHD {
     private String maHD;
     private String maKHTour;
-    private int[] dsMaKhachHang;  // Danh sach ma khach hang trong doan
-    private double giaVe;
-    private double tongTien;      // Tu tinh = so khach * gia ve (se cong chi phi o QuanLy)
+    private int maKhachHang;        // ID khách hàng
+    private String loaiVe;          // "NguoiLon" hoặc "TreEm"
+    private double giaVe;           // Giá vé áp dụng (người lớn hoặc trẻ em)
+    private double thanhTien;       // = giaVe (vì 1 khách 1 vé)
 
-    public ChiTietHD() {
-        this.dsMaKhachHang = new int[0];
-        this.tongTien = 0.0;
-    }
+    public ChiTietHD() {}
 
-    public ChiTietHD(String maHD, String maKHTour, int[] dsMaKhachHang, double giaVe) {
+    public ChiTietHD(String maHD, String maKHTour, int maKhachHang, String loaiVe, double giaVeCoBan) {
         this.maHD = maHD;
         this.maKHTour = maKHTour;
-        this.dsMaKhachHang = (dsMaKhachHang != null) ? dsMaKhachHang.clone() : new int[0];
-        this.giaVe = giaVe;
-        capNhatTongTien();
+        this.maKhachHang = maKhachHang;
+        this.loaiVe = loaiVe;
+        this.giaVe = loaiVe.equals("TreEm") ? giaVeCoBan * 0.5 : giaVeCoBan;
+        this.thanhTien = this.giaVe;
     }
 
-    // Getter & Setter
+    // Copy constructor
+    public ChiTietHD(ChiTietHD other) {
+        if (other == null) return;
+        this.maHD = other.maHD;
+        this.maKHTour = other.maKHTour;
+        this.maKhachHang = other.maKhachHang;
+        this.loaiVe = other.loaiVe;
+        this.giaVe = other.giaVe;
+        this.thanhTien = other.thanhTien;
+    }
+
+    // Getters
     public String getMaHD() { return maHD; }
-    public void setMaHD(String maHD) { this.maHD = maHD; }
-
     public String getMaKHTour() { return maKHTour; }
-    public void setMaKHTour(String maKHTour) { this.maKHTour = maKHTour; }
-
-    public int[] getDsMaKhachHang() { return dsMaKhachHang.clone(); }
-    public void setDsMaKhachHang(int[] dsMaKhachHang) {
-        this.dsMaKhachHang = (dsMaKhachHang != null) ? dsMaKhachHang.clone() : new int[0];
-        capNhatTongTien();
-    }
-
+    public int getMaKhachHang() { return maKhachHang; }
+    public String getLoaiVe() { return loaiVe; }
     public double getGiaVe() { return giaVe; }
-    public void setGiaVe(double giaVe) { this.giaVe = giaVe; capNhatTongTien(); }
+    public double getThanhTien() { return thanhTien; }
 
-    public int getSoKhach() { return dsMaKhachHang.length; }
-
-    public double getTongTienVe() { return tongTien; } // Chi tien ve
-    public double getTongTien() { return tongTien; }   // Se duoc override o QuanLy neu co chi phi
-
-    private void capNhatTongTien() {
-        this.tongTien = this.dsMaKhachHang.length * this.giaVe;
-    }
-
-    // Hien thi ngan gon (dung trong danh sach)
-    public void hienThiNgan() {
-        System.out.printf("%-12s | %-12s | %4d khach | %,15.0f VND%n",
-                maHD, maKHTour, getSoKhach(), tongTien);
-    }
-
+    // toString cho file
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(maHD).append(",").append(maKHTour).append(",").append(giaVe);
-        for (int maKH : dsMaKhachHang) {
-            sb.append(",").append(maKH);
-        }
-        return sb.toString();
+        return String.join(",", maHD, maKHTour, String.valueOf(maKhachHang), loaiVe, String.valueOf(giaVe));
+    }
+
+    // Hiển thị ngắn (dùng trong danh sách chi tiết)
+    public void hienThiNgan() {
+        System.out.printf("%-12s | %-12s | %-8s | %,15.0f | %,15.0f%n",
+                maHD, maKHTour, loaiVe, giaVe, thanhTien);
+    }
+
+    // Hiển thị đầy đủ (nếu cần)
+    public void hienThi() {
+        System.out.printf("Khach: %d | Loai ve: %-8s | Gia ve: %,15.0f | Thanh tien: %,15.0f%n",
+                maKhachHang, loaiVe, giaVe, thanhTien);
     }
 }

@@ -31,6 +31,16 @@ public class KhachSan {
         this.giaDatPhong = giaDatPhong;
     }
 
+    // Copy constructor
+    public KhachSan(KhachSan other) {
+        if (other == null) return;
+        this.maKhachSan = other.maKhachSan;
+        this.tenKhachSan = other.tenKhachSan;
+        this.NgayDen = other.NgayDen == null ? null : new Date(other.NgayDen.getTime());
+        this.NgayDi = other.NgayDi == null ? null : new Date(other.NgayDi.getTime());
+        this.giaDatPhong = other.giaDatPhong;
+    }
+
     public String getMaKhachSan() {
         return maKhachSan;
     }

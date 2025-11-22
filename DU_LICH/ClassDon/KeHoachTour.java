@@ -66,6 +66,33 @@ public class KeHoachTour {
     public double getTongChi() { return tongChi; }
     public void setTongChi(double tongChi) { this.tongChi = tongChi; }
 
+    // Copy constructor
+    public KeHoachTour(KeHoachTour other) {
+        if (other == null) {
+            this.maKHTour = null;
+            this.tenKeHoach = null;
+            this.maTour = null;
+            this.maHDV = null;
+            this.tongSoVe = 0;
+            this.giaVe = 0.0;
+            this.tongVeDaDat = 0;
+            this.ngayDi = null;
+            this.ngayVe = null;
+            this.tongChi = 0.0;
+        } else {
+            this.maKHTour = other.maKHTour;
+            this.tenKeHoach = other.tenKeHoach;
+            this.maTour = other.maTour;
+            this.maHDV = other.maHDV;
+            this.tongSoVe = other.tongSoVe;
+            this.giaVe = other.giaVe;
+            this.tongVeDaDat = other.tongVeDaDat;
+            this.ngayDi = other.ngayDi == null ? null : new Date(other.ngayDi.getTime());
+            this.ngayVe = other.ngayVe == null ? null : new Date(other.ngayVe.getTime());
+            this.tongChi = other.tongChi;
+        }
+    }
+
     // Ham nhap (khong nhap tongVeDaDat va tongChi)
     public void nhap() {
         System.out.print("Nhap Ma Ke Hoach Tour: ");
@@ -125,10 +152,10 @@ public class KeHoachTour {
         String di = (ngayDi != null) ? SDF.format(ngayDi) : "Chua co";
         String ve = (ngayVe != null) ? SDF.format(ngayVe) : "Chua co";
         double doanhThu = tongVeDaDat * giaVe;
-        System.out.printf("%-10s | %-20s | %-10s | %-23s | %4d/%-4d | %,12.0f | %,12.0f | %,12.0f%n",
+        System.out.printf("%-10s | %-20s | %-10s | %-23s | %4d/%-4d | %,12.0f | %,12.0f | %,12.0f| %,12.0f%n",
                 maKHTour, tenKeHoach.length() > 18 ? tenKeHoach.substring(0,18)+"..." : tenKeHoach,
                 maTour, di + " - " + ve, tongVeDaDat, tongSoVe,
-                doanhThu, tongChi, doanhThu - tongChi);
+                doanhThu, tongChi, doanhThu - tongChi, giaVe);
     }
 
     @Override

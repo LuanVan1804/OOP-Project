@@ -17,6 +17,11 @@ public class DSHDV implements DU_LICH.Interfaces<HDV> {
         this.list = list;
     }
 
+    public DSHDV(DSHDV other) {
+        if (other == null || other.list == null) this.list = new HDV[0];
+        else this.list = Arrays.copyOf(other.list, other.list.length);
+    }
+
     // Getter for compatibility
     public HDV[] getList() {
         return list;

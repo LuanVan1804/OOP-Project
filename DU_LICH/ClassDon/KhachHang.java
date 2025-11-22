@@ -25,6 +25,16 @@ public class KhachHang {
         this.gioiTinh = gioiTinh;
     }
 
+    // Copy constructor
+    public KhachHang(KhachHang other) {
+        if (other == null) return;
+        this.maKH = other.maKH;
+        this.tenKH = other.tenKH;
+        this.soDienThoai = other.soDienThoai;
+        this.CCCD = other.CCCD;
+        this.gioiTinh = other.gioiTinh;
+    }
+
     public int getMaKH() { return maKH; }
     public void setMaKH(int maKH) { this.maKH = maKH; }
 

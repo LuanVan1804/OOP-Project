@@ -20,6 +20,24 @@ public class DSNhaHang {
         this.soLuong = 0;
     }
 
+    public DSNhaHang(NhaHang[] arr) {
+        this();
+        if (arr != null) {
+            for (int i = 0; i < arr.length && soLuong < MAX; i++) {
+                if (arr[i] != null) dsNhaHang[soLuong++] = arr[i];
+            }
+        }
+    }
+
+    public DSNhaHang(DSNhaHang other) {
+        this();
+        if (other != null) {
+            for (int i = 0; i < other.soLuong && soLuong < MAX; i++) {
+                this.dsNhaHang[soLuong++] = other.dsNhaHang[i];
+            }
+        }
+    }
+
     public int getSoLuong() { return soLuong; }
 
     private int findIndexByMa(String ma) {
