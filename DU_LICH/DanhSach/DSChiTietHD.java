@@ -26,17 +26,30 @@ public class DSChiTietHD {
         return Arrays.copyOf(list, list.length);
     }
 
-    private boolean isMaHDExist(String maHD) {
+    // === KIỂM TRA TRÙNG CHI TIẾT: cùng maHD + cùng maKhachHang ===
+    private boolean isChiTietExist(String maHD, int maKhachHang) {
         for (ChiTietHD ct : list) {
-            if (ct != null && ct.getMaHD().equalsIgnoreCase(maHD)) return true;
+            if (ct != null 
+                && ct.getMaHD().equalsIgnoreCase(maHD) 
+                && ct.getMaKhachHang() == maKhachHang) {
+                return true;
+            }
         }
         return false;
     }
 
+    // === THÊM CHI TIẾT HÓA ĐƠN (ĐÃ SỬA LỖI LOGIC) ===
     public boolean them(ChiTietHD ct) {
-        if (ct == null || isMaHDExist(ct.getMaHD())) {
+        if (ct == null) {
             return false;
         }
+
+        if (isChiTietExist(ct.getMaHD(), ct.getMaKhachHang())) {
+            System.out.println("Canh bao: Khach hang " + ct.getMaKhachHang() + 
+                " da ton tai trong hoa don " + ct.getMaHD() + "!");
+            return false;
+        }
+
         list = Arrays.copyOf(list, list.length + 1);
         list[list.length - 1] = ct;
         return true;
@@ -73,17 +86,26 @@ public class DSChiTietHD {
     // Trong phương thức hienThiDanhSach()
     public void hienThiDanhSach() {
         if (list.length == 0) {
-            System.out.println("Chưa có chi tiết hóa đơn nào!");
+            System.out.println("Chua co chi tiet hoa don nao!");
             return;
         }
         System.out.println("==================================================================================================");
-        System.out.println("                          DANH SACH CHI TIET HOA DON (MOI KHACH 1 DONG)");
+        System.out.println("                   DANH SACH CHI TIET HOA DON (MOI KHACH 1 DONG)");
         System.out.println("==================================================================================================");
-        System.out.printf("%-12s | %-12s | %-10s | %-15s | %-15s%n",
-                "Ma HD", "Ma KH Tour", "Loai Ve", "Gia Ve", "Thanh Tien");
+        System.out.printf("%-8s | %-13s | %-11s | %15s | %15s%n",
+                "Ma HD", "Ma Khach Hang", "Loai Ve", "Gia Ve", "Thanh Tien");
         System.out.println("--------------------------------------------------------------------------------------------------");
+
         for (ChiTietHD ct : list) {
-            if (ct != null) ct.hienThiNgan();
+            if (ct != null) {
+                System.out.printf("%-8s | %-13d | %-11s | %,15.0f | %,15.0f%n",
+                    ct.getMaHD(),
+                    ct.getMaKhachHang(),
+                    ct.getLoaiVe(),
+                    ct.getGiaVe(),
+                    ct.getThanhTien()
+                );
+            }
         }
         System.out.println("==================================================================================================");
     }

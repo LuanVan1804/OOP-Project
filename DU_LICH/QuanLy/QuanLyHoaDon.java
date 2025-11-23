@@ -60,7 +60,12 @@ public class QuanLyHoaDon extends QuanLy {
         }
         hd.setMaKHTour(maKH);
 
-        // ... nhập HDV, khách đại diện ...
+        // Nhập HDV và khách đại diện
+        System.out.print("Nhap ma HDV phu trach: ");
+        hd.setMaHDV(nhapSo(sc));
+
+        System.out.print("Nhap ma khach hang dai dien: ");
+        hd.setMaKHDaiDien(nhapSo(sc));
 
         System.out.print("Nhap so khach nguoi lon: ");
         int slNguoiLon = nhapSo(sc);
@@ -78,13 +83,14 @@ public class QuanLyHoaDon extends QuanLy {
 
         double giaVeNguoiLon = kht.getGiaVe();
 
-        // Tạo chi tiết hóa đơn cho từng khách
-        System.out.println("Nhap ma khach hang (ID):");
+        System.out.println("Nhap danh sach khach hang (ma KH):");
         for (int i = 0; i < tongKhach; i++) {
-            System.out.print("Khach thu " + (i+1) + " (ma KH): ");
+            System.out.print("Khach thu " + (i + 1) + " - Nhap ma khach hang: ");
             int maKHang = nhapSo(sc);
 
-            String loai = (i < slNguoiLon) ? "NguoiLon" : "TreEm";
+            System.out.print("   Chon loai ve (1 - Nguoi lon, 2 - Tre em): ");
+            int chon = nhapSo(sc);
+            String loai = (chon == 2) ? "TreEm" : "NguoiLon";
 
             ChiTietHD ct = new ChiTietHD(
                 hd.getMaHD(),
@@ -101,7 +107,10 @@ public class QuanLyHoaDon extends QuanLy {
         kht.setTongVeDaDat(kht.getTongVeDaDat() + tongKhach);
 
         if (dsHoaDon.them(hd)) {
-            System.out.println("Them hoa don thanh cong! Tong tien: " + String.format("%,.0f", hd.getTongTien()) + " VND");
+            System.out.println("Them hoa don thanh cong! Tong tien: " + 
+                String.format("%,.0f VND", hd.getTongTien()));
+        } else {
+            System.out.println("Them that bai (trung ma?)");
         }
     }
 

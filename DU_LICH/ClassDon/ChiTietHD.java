@@ -47,8 +47,8 @@ public class ChiTietHD {
 
     // Hiển thị ngắn (dùng trong danh sách chi tiết)
     public void hienThiNgan() {
-        System.out.printf("%-12s | %-12s | %-8s | %,15.0f | %,15.0f%n",
-                maHD, maKHTour, loaiVe, giaVe, thanhTien);
+        System.out.printf("%-8s | %-13d | %-11s | %,15.0f | %,15.0f%n",
+                maHD, maKhachHang, loaiVe, giaVe, thanhTien);
     }
 
     // Hiển thị đầy đủ (nếu cần)
